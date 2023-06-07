@@ -1,10 +1,104 @@
 # DSA-reminders
 ### Data Structures &amp; Algorithms - my own way of understanding. 
 ###### <p style="font-size: 1px;">(If you found this randomly, take any info with a grain of salt as it's my learning process journey (with _very high probability_ of _mistakes_) &amp; reminders for myself rather than any meaning for teaching.)</p>
-
-
 ---
-1. **Quick Sort**
+1. **Fibonacci Sequence**
+- Time Complexity: O(n) (Linear) -> 1 `for` loop.
+- Math algorithm: sum up the two preceding numbers (starting from [[0, 1]](https://en.wikipedia.org/wiki/Fibonacci_sequence))
+- Most of the [results](https://byjus.com/maths/fibonacci-sequence) (0 - 9).
+- [Why do we start the loop from `2` instead of `0`](https://vhudyma-blog.eu/print-fibonacci-sequence-in-javascript).
+```
+const fibonacci = (n) => {
+  const fib = [0, 1]; // commonly starts from 0 & 1
+  for (let i = 2; i <= n; i++) {
+  // for loop populates the `fib` array with required sequence
+    fib[i] = fib[i - 1] + fib[i - 2];
+  };
+  return fib;
+}
+
+console.log(fibonacci(2)) // [0,1,1]
+console.log(fibonacci(3)) // [0,1,1,2]
+console.log(fibonacci(7)) // [0,1,1,2,3,5,8,13]
+```
+1.1 **Recursive Fibonacci Sequence**
+- Time Complexity O(2^n) -> Quadratic worst case time because there's 2 calls for each 1 `n`th number. Past `n=40` gets too laggy (2^40).
+- Iterative solution (#1) is better & faster than this recursive setup.
+```
+const recursiveFibonacci = (n) => {
+  if (n < 2) {
+    return n
+  }
+  return recursiveFibonacci(n - 1) + recursiveFibonacci(n - 2)
+}
+
+console.log(recursiveFibonacci(0)) // 0
+console.log(recursiveFibonacci(1)) // 1
+console.log(recursiveFibonacci(6)) // 8
+console.log(recursiveFibonacci(7)) // 13
+console.log(recursiveFibonacci(40)) // starts to get slow
+```
+1.2 **Recursive Fibonacci Sequence** #2
+- Time Complexity O(n) (Linear) -> for each number `n` there's `n` amount of recursive calls.
+- `.push` method has a Constant Time Complexity O(1).
+- I *guess* space complexity suffers a bit or not hm(?) - Actually it seem like it won't hurt any space constraints.
+```js
+const fibRec = (n) => {
+  if(n<2){
+    return [0,1];
+  }
+  let arr = fibRec(n-1);
+  arr.push(arr[arr.length-1]+arr[arr.length-2]);
+  return arr;
+};
+
+fibRec(8888); // super fast
+```
+1.2.1 **Recursive Fibonacci Sequence** #3 Memoization Approach
+- Time Complexity Linear O(n)
+- Still unknown (Spanish village lol) concept, I'd have to revisit.
+```
+const fibRec = (n, memo = {}) => {
+  if (n in memo) {
+    return memo[n];
+  }
+  
+  if (n < 2) {
+    return n;
+  }
+  
+  const result = fibRec(n - 1, memo) + fibRec(n - 2, memo);
+  memo[n] = result;
+  return result;
+};
+
+const fibonacciResult = fibRec(888); // Super fast again
+console.log(fibonacciResult); // The Fibonacci number at index 888
+```
+2. **Factorial of a Number**
+- Time Complexity O(n) Linear.
+- Math algorithm: multiplication of all numbers between `1` and non-negative integer `n` (denoted `n!`).
+- `0!` === `1`.
+- `5!` === `5*4*3*2*1` = `120`.
+```js
+const factorial = (n) => {
+  let result = 1;
+  for (let i = 2; i <= n; i++) {
+    result = result * i;
+  }
+  return result;
+}
+
+console.log(factorial(0)) // 1
+console.log(factorial(1)) // 1
+console.log(factorial(5)) // 120
+```
+3. **Prime Number**
+4. **Power of Two**
+5. **Linear Search**
+6. **Binary Search**
+7. **Insertion Sort**
+8. **Quick Sort**
 ```js
 const quickSort = arr => {
     if (arr.length <= 1) {
@@ -39,7 +133,7 @@ console.log('myArr:',myArr);
 - This won't mutate the original `myArr` since I'm not modifying it directly.
 - For descending order all I'd need is to swap `if (arr[i] < pivot) {` into `if (arr[i] > pivot) {`.
 
-1.1 **Quick Sort In Place**
+7.1 **Quick Sort In Place**
 ```js
 const quickSortInPlace = (arr, left = 0, right = arr.length-1) => {
     // if (left > right) { // does nothing, exits recursive calls prematurely
@@ -87,7 +181,10 @@ console.log('myArr:',myArr);
   9. Back in the `quickSortInPlace` function, the pivot index is obtained from the `partition` function. The function recursively calls `quickSortInPlace` for the left subarray (from `left` to `pivot - 1`) and the right subarray (from `pivot + 1` to `right`).
   10. The process continues until the subarrays have only one element or are invalid. At that point, the recursive calls stop, and the function returns the sorted array.
   11. Finally, the code creates an array `myArr` and calls `quickSortInPlace` with it. The sorted array is then printed to the `console.log`.
+8. **Merge Sort**
 
 ---
 My most helpful JavaScript based DSA course on YouTube by @Codevolution:
 #### https://www.youtube.com/playlist?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP
+NOTE#1: There's mistake in his Fibonacci Sequence so I'm fixing it on my own. His mistakes are both in his video: https://www.youtube.com/watch?v=tQjd29Rmo_A&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=7 where his `for` loop has a wrong condition of `i < n` instead of `i <= n` like his correct verison at https://replit.com/@Codevolution/JavaScript-Algorithms#math/fibonacci.js -> which however he kept the *wrong comments* but the code is fixed otherwise.
+  - As well as Recursive Fibonacci Sequence mistakes: https://youtu.be/wZNxLwqxu00?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=55 here he correctly shows expected returned value BUT at https://replit.com/@Codevolution/JavaScript-Algorithms#math/fibonacci-recursive.js -> he mistakenly changed argument of 3rd call from `6` to `7` but wrong expected result `8` in a comment instead should be `13`, because result `8` corresponds to Fibonacci of `6`.
