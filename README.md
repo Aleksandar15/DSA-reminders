@@ -85,15 +85,52 @@ const factorial = (n) => {
   let result = 1;
   for (let i = 2; i <= n; i++) {
     result = result * i;
-  }
+  };
   return result;
-}
+};
 
 console.log(factorial(0)) // 1
 console.log(factorial(1)) // 1
 console.log(factorial(5)) // 120
 ```
+2.1 **Recursive Factorial of a Number**
+- Time Complexity Linear O(n).
+- Base case must include `n===1` check (or `n<=1`), because otherwise it will run O(n+1) => "+1" unnecessarily.
+- Same time complexity as the iterative approach means the choice is only a preferation matter.
+```js
+function recursiveFactorial(n) {
+  if (n === 0 || n===1) {
+    return 1;
+  };
+  return n * recursiveFactorial(n - 1);
+};
+
+console.log(recursiveFactorial(0)) // 1
+console.log(recursiveFactorial(1)) // 1
+console.log(recursiveFactorial(5)) // 120
+```
 3. **Prime Number**
+- Math algorithm: a whole natural number that is divisible only by `1` or itself -> in order the result to be itself.
+- Also if it's divisible only by `1` like the number `1` itself is also considered not a Prime Number.
+- Examples of Prime Numbers: 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37.
+```js
+const isPrime = n => {
+    if (n<2) {
+        // return n;
+        return false;
+    };
+    // for (let i = 2; i <= n; i++) { // v2 to clarify the logic: going up to the number itself
+    for (let i = 2; i < n; i++) { // avoids dividing it by itself in a single go
+        // if (n % i === 0 && i !== n) { // v2 to clarify the logic: avoids dividing by itself
+        if (n % i === 0) {
+            // then it's not a Prime Number;
+            return false;
+        };
+    };
+    return true;
+};
+isPrime(11);
+```
 4. **Power of Two**
 5. **Linear Search**
 6. **Binary Search**
@@ -133,7 +170,7 @@ console.log('myArr:',myArr);
 - This won't mutate the original `myArr` since I'm not modifying it directly.
 - For descending order all I'd need is to swap `if (arr[i] < pivot) {` into `if (arr[i] > pivot) {`.
 
-7.1 **Quick Sort In Place**
+8.1 **Quick Sort In Place**
 ```js
 const quickSortInPlace = (arr, left = 0, right = arr.length-1) => {
     // if (left > right) { // does nothing, exits recursive calls prematurely
