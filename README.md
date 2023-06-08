@@ -206,6 +206,7 @@ console.log(isPowerOfTwoBitWise(5)) // false
 - Search Algorithm - given an array of `n` amount of elements and a target element `target`, find the index of `target` in the array. Return `-1` if the `target` element is *not found*.
 - Example: `arr = [-5, 8, 555, 10, 888]`; `target=10` -> should return 3 (index # 3).
 - By me `findIndex` method under the hood.
+- More info & visual explanation by freeCodeCamp [YouTube Video](https://youtu.be/8hly31xKli0?t=1070).
 ```js
 const linearSearch = (arr, target) => {
     for (let i = 0; i < arr.length-1; i++) {
@@ -223,10 +224,15 @@ console.log('linearSearch(myArr, 999):',linearSearch(myArr, 999));
 6. **Binary Search**
 - Time Complexity **O(logn)**
 - In every WHILE Loop's iteration the code reduces Input's Size by HALF hence the O(logn) ([more info](https://youtu.be/75jGy1xAhhs?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=444)).
-- So the disadvantage in it's speed is the fact that it needs at least a same-speed performative Sorting Algorithm otherwise it'd be useless.
+- DOWNSIDES: disadvantage in it's speed is the fact that it needs at least a same-speed performative Sorting Algorithm otherwise it'd be useless if the *Array is not sorted* already.
 - Search Algorithm - given a **sorted** array of `n` amount of elements and a target element `target`, find the index of `target` in the array. Return `-1` if the `target` element is *not found*.
 - Example: `arr = [-5, 8, 555, 10, 888]`; `target=10` -> should return 3 (index # 3).
   - ONLY **Sorted** array means: the `arr` argument must either be sorted or sort it first or use the alternative Linear Search Algorithm.
+- Still a little bit confusing as I can't wrap up the visual part of how is the Input Size reduced by HALF.
+  - ~Visual explanation~ Logical explanation by freeCodeCamp [YouTube Video](https://youtu.be/8hly31xKli0?t=2010).
+    - (At timestamp above^) Search Algorithms aren't only used for numbers Data Types but it could contain any kinds of Data Types as its items.
+  - Visual explanation in the same video timestamp at freeCodeCamp [YouTube Video](https://youtu.be/8hly31xKli0?t=2100).
+    - At 35:44 "We repeat this process until the `target` element is **found** OR until a sublist (Python terms; otherwise JavaScript:) subArray (split Array by HALF, each piece by piece) **contains only 1 single element** -> `if` `arr[middleIndex]` matches the `target` then we know it is the `middleIndex` we're looking for OTHERWISE return `-1` if it doesn't match (`target` is *not* found in the Array).
 ```js
 const binarySearch = (arr, target) => {
     if (arr.length === 0) {
