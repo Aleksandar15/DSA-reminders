@@ -201,7 +201,59 @@ console.log(isPowerOfTwoBitWise(2)) // true
 console.log(isPowerOfTwoBitWise(5)) // false
 ```
 5. **Linear Search**
+- Time Complexity **O(n)** Linear hence the name.
+- Algorithm Design Technique **Brute Force** ([more info](https://youtu.be/tCvSDnRsGnw?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=88)).
+- Search Algorithm - given an array of `n` amount of elements and a target element `target`, find the index of `target` in the array. Return `-1` if the `target` element is *not found*.
+- Example: `arr = [-5, 8, 555, 10, 888]`; `target=10` -> should return 3 (index # 3).
+- By me `findIndex` method under the hood.
+```js
+const linearSearch = (arr, target) => {
+    for (let i = 0; i < arr.length-1; i++) {
+        if (arr[i] === target) {
+            return i;
+        };
+    };
+    return -1;
+};
+const myArr = [-5, 8, 555, 10, 888];
+const target = 10;
+console.log('linearSearch(myArr, target):',linearSearch(myArr, target));
+console.log('linearSearch(myArr, 999):',linearSearch(myArr, 999));
+```
 6. **Binary Search**
+- Time Complexity **O(logn)**
+- In every WHILE Loop's iteration the code reduces Input's Size by HALF hence the O(logn) ([more info](https://youtu.be/75jGy1xAhhs?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=444)).
+- So the disadvantage in it's speed is the fact that it needs at least a same-speed performative Sorting Algorithm otherwise it'd be useless.
+- Search Algorithm - given a **sorted** array of `n` amount of elements and a target element `target`, find the index of `target` in the array. Return `-1` if the `target` element is *not found*.
+  - ONLY **Sorted** array means: the `arr` argument must either be sorted or sort it first or use the alternative Linear Search Algorithm.
+```js
+const binarySearch = (arr, target) => {
+    if (arr.length === 0) {
+        return -1;
+    };
+    
+    let leftIndex = 0;
+    let rightIndex = arr.length - 1;
+    while (leftIndex <= rightIndex) {
+        const middleIndex = Math.floor((leftIndex + rightIndex) / 2);
+        if (target === arr[middleIndex]) {
+            return middleIndex;
+        };
+        // In every WHILE Loop's iteration this code reduces Input's Size by HALF hence the O(logn)
+        if (target < arr[middleIndex]) {
+            rightIndex = middleIndex - 1;
+        } else {
+            leftIndex = middleIndex + 1;
+        };
+    };
+    return -1;
+};
+// const myArr = [-5, 8, 555, 10, 888]; // Doesn't work because it's not sorted (returns -1 ALWAYS)
+const mySortedArr = [-5, 8, 10, 555, 888];
+const target = 10;
+console.log('binarySearch(mySortedArr, target):',binarySearch(mySortedArr, target)); // 2
+console.log('binarySearch(mySortedArr, 999):',binarySearch(mySortedArr, 999)); // -1
+```
 7. **Insertion Sort**
 8. **Quick Sort**
 ```js
