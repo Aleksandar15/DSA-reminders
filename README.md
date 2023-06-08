@@ -1,6 +1,6 @@
 # DSA-reminders
 ### Data Structures &amp; Algorithms - my own way of understanding. 
-###### <p style="font-size: 1px;">(If you found this randomly, take any info with a grain of salt as it's my learning process journey (with _very high probability_ of _mistakes_) &amp; reminders for myself rather than any meaning for teaching.)</p>
+###### <p style="font-size: 1px;">(If you found this randomly, take any info with a grain of salt as it's my learning process journey (with _high probability_ of _mistakes_) &amp; reminders for myself rather than any meaning for teaching.)</p>
 ---
 1. **Fibonacci Sequence**
 - Time Complexity: O(n) (Linear) -> 1 `for` loop.
@@ -36,7 +36,7 @@ console.log(recursiveFibonacci(0)) // 0
 console.log(recursiveFibonacci(1)) // 1
 console.log(recursiveFibonacci(6)) // 8
 console.log(recursiveFibonacci(7)) // 13
-console.log(recursiveFibonacci(40)) // starts to get slow
+console.log(recursiveFibonacci(40)) // 102334155 // starts to get slow
 ```
 1.2 **Recursive Fibonacci Sequence** #2
 - Time Complexity O(n) (Linear) -> for each number `n` there's `n` amount of recursive calls.
@@ -52,11 +52,17 @@ const fibRec = (n) => {
   return arr;
 };
 
-fibRec(8888); // super fast
+// fibRec(8888); // super fast; as well as:
+const fibArray = fibRec(8888); // super fast
+console.log('fibArray[8888]:',fibArray[8888]); // Infinity // but the Algorithm remains super fast
 ```
 1.2.1 **Recursive Fibonacci Sequence** #3 Memoization Approach
 - Time Complexity Linear O(n)
-- Still unknown (Spanish village lol) concept, I'd have to revisit.
+- Still unknown (Spanish village lol) concept, I'd have to revisit / review.
+- Notes:
+- `const fibonacciResult = fibRec(8888);` runs as fast with `8888` as `888` however there's Chrome's _Range Error: Maximum call stack size exceeded._ -> Otherwise there's no infinitive loop or anything; everything is smooth.
+  - The reason why #1.2 doesn't run into *Range Error* is because it returns **Array** of elements (numbers) incrementing up to the `n` number but somehow looking for the index in this code #1.2.1 is running into *Range Error*.
+    - Altough I see at #1.2 I do can access the `8888`th index which is `Infinity` (hence why it seem to cause *Range Error* in here (#1.2.1) when _not_ returning an `array`, but instead an **index**; new foundings).
 ```
 const fibRec = (n, memo = {}) => {
   if (n in memo) {
