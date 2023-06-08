@@ -110,9 +110,11 @@ console.log(recursiveFactorial(1)) // 1
 console.log(recursiveFactorial(5)) // 120
 ```
 3. **Prime Number**
+- Time Complexity O(n).
 - Math algorithm: a whole natural number that is divisible only by `1` or itself -> in order the result to be itself.
 - Also if it's divisible only by `1` like the number `1` itself is also considered not a Prime Number.
 - Examples of Prime Numbers: 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37.
+- Explanation of the "v2" logic below: if number divides by itself it *always* evaluates to truthy condition hence why it won't work unless I ignore the `i !== n` case or the "original" logic being: the loop not even reaching up to `n` (condition: `i<n`).
 ```js
 const isPrime = n => {
     if (n<2) {
@@ -129,9 +131,75 @@ const isPrime = n => {
     };
     return true;
 };
-isPrime(11);
+// isPrime(11);
+console.log('isPrime(11):',isPrime(11)); // true
+console.log('isPrime(10):',isPrime(10)); // false
+console.log('isPrime(15):',isPrime(15)); // false
+```
+3.1 **Prime Number** for math experts solutions:
+- Time Complexity O(sqrt(n)).
+- Weird how there's 0 google results "O(n) vs O(sqrt(n))" -> instead all the results are against O(log n) which is faster than O(sqrt(n)). By that logic the O(sqrt(n)) is between both of them hence why it is faster/better approach than O(n) solution at #3.
+- Luckily there's this [video](https://youtu.be/cbHMQxOuIUw?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=392) of the series by @codevolution -> saying: if `n=100` -> code will be checking until `10` -> if `n=10000` -> code will check until `100`. => By that logic it's squared times faster (?) than O(n).
+- Named as "Optimized Primality Test".
+- THE LOGIC: Integers larger than the square root don't need to be checked -> whenever `n=a*b` -> one of the two factors `a` OR `b` is less than OR equal to the square root of `n`.
+- Examples: `n=24`, `a=4` and `b=6` -> square root of `24` is `4.89` -> `4` is less than `4.89` === `a` is less than the square root of `n` (or of course with swapped values `a=6` and `b=4` same logic applies.).
+```js
+// same code just modified `for` loop's condition
+// ...
+for (let i = 2; i <= Math.sqrt(n); i++) {
+// ...
 ```
 4. **Power of Two**
+- Time Complexity O(logn)
+- The code `n=n/2` execution causes to reduce input's size by half.
+- Math algorithm - given a positive integer `n`, determine if the number is a power of `2` or not. An integer is a "power of two" if tehre exists an integer `x` such that `n === 2^x`.
+- Examples:
+  - `1` is power of two because 2^0 is considered `true` in math.
+  - `2` is power of two because 2^1 === 2.
+  - `5` is *not* power of two because there's no base number that can be multiplied by itself the amount of exponent `x` times .
+  - `8` is power of two because `2^3` === `8`.
+  - As well as 1, 2, 4, 8, 16, 32, 64, 128, 256, 512 and more.
+```js
+const isPowerOfTwo = n => {
+    if (n < 1) {
+        return false;
+    };
+    while (n > 1) {
+        if (n % 2 !== 0) {
+            // if `n` modulus `2` is not result of `0`
+            return false;
+        };
+        // otherwise divide `n` (since we now know it is divisible) by `2` & check again (repeat the loop)
+        n = n/2;
+    };
+    // exiting the loop -> means `n` is now `1` and the remainder has always been `0` (always divisible by `2`)
+    return true;
+};
+console.log(isPowerOfTwo(1)) // true
+console.log(isPowerOfTwo(2)) // true
+console.log(isPowerOfTwo(5)) // false
+```
+4.1 **Power of Two** Bitwise Solution
+- Explanations:
+  - In binary a number that is a "power of two", except for 1, ends with `0`:
+  - 1 -> 1
+  - 2 -> 10
+  - 3 -> 100
+  - 4 -> 1000
+- That's from @codevolution on [YouTube](https://youtu.be/SZRG1bmDlx8?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=420), but I still don't understand anything. Needs review.
+- Unknown process to me. By the way that's all in binary representation.
+```js
+function isPowerOfTwoBitWise(n) {
+  if (n < 1) {
+    return false;
+  };
+  return (n & (n - 1)) === 0;
+};
+
+console.log(isPowerOfTwoBitWise(1)) // true
+console.log(isPowerOfTwoBitWise(2)) // true
+console.log(isPowerOfTwoBitWise(5)) // false
+```
 5. **Linear Search**
 6. **Binary Search**
 7. **Insertion Sort**
