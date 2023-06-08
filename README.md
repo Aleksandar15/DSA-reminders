@@ -225,6 +225,7 @@ console.log('linearSearch(myArr, 999):',linearSearch(myArr, 999));
 - In every WHILE Loop's iteration the code reduces Input's Size by HALF hence the O(logn) ([more info](https://youtu.be/75jGy1xAhhs?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=444)).
 - So the disadvantage in it's speed is the fact that it needs at least a same-speed performative Sorting Algorithm otherwise it'd be useless.
 - Search Algorithm - given a **sorted** array of `n` amount of elements and a target element `target`, find the index of `target` in the array. Return `-1` if the `target` element is *not found*.
+- Example: `arr = [-5, 8, 555, 10, 888]`; `target=10` -> should return 3 (index # 3).
   - ONLY **Sorted** array means: the `arr` argument must either be sorted or sort it first or use the alternative Linear Search Algorithm.
 ```js
 const binarySearch = (arr, target) => {
@@ -254,7 +255,42 @@ const target = 10;
 console.log('binarySearch(mySortedArr, target):',binarySearch(mySortedArr, target)); // 2
 console.log('binarySearch(mySortedArr, 999):',binarySearch(mySortedArr, 999)); // -1
 ```
+6.1 **Recursive Binary Search**
+- Time Complexity **O(logn)**
+  - The `if else` inside the `search` helper function _again_ reduces the Input's Size by HALF.
+- The function body is taking a different approach in that it will rely on a **helper function** that'd be called recursively ([more info](https://youtu.be/EFXWgZJZqL8?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=200)).
+- The process is a bit confusing to me in the fact that `search` helper function takes in 4 Arguments -> but it clarifies once I wrap up my thoughts in that there's already 2 Arguments in the non-recursive way, so the extra 2 Arguments are the `leftIndex` and `rightIndex` because this `search` helper function holds the whole logic.
+  - Now the `search` helper function must call itself inside the `if else` conditions.
+- Search Algorithm that, again, **must only** be searching in an already **sorted** array, else sort it myself first.
+```js
+const recursiveBinarySearch = (arr, target) => {
+  return search(arr, target, 0, arr.length - 1);
+};
+
+const search = (arr, target, leftIndex, rightIndex) => {
+  if (leftIndex > rightIndex) {
+    return -1;
+  };
+
+  let middleIndex = Math.floor((leftIndex + rightIndex) / 2)
+  if (target === arr[middleIndex]) {
+    return middleIndex;
+  };
+
+  // This condition again reduces the Input's size by HALF.
+  if (target < arr[middleIndex]) {
+    return search(arr, target, leftIndex, middleIndex - 1);
+  } else {
+    return search(arr, target, middleIndex + 1, rightIndex);
+  };
+};
+
+console.log(recursiveBinarySearch([-5, 8, 10, 555, 888], 10)); // 2
+console.log(recursiveBinarySearch([-5, 8, 10, 555, 888], 666)); // -1
+console.log(recursiveBinarySearch([-5, 8, 10, 555, 888], 888)); // 4
+```
 7. **Insertion Sort**
+
 8. **Quick Sort**
 ```js
 const quickSort = arr => {
