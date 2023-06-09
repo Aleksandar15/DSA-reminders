@@ -358,13 +358,16 @@ bubbleSort(arr);
 console.log('FINALIZED arr:', arr); // [-88, -55, 5, 8, 555, 888]
 ```
 8. **Insertion Sort**
-- Time Complexity
+- Time Complexity **O(n^2) Quadratic**
+  - A `while` loop nested inside `for` loop.
+  - [6:15](https://youtu.be/OxUF23k7IcM?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=375)]: "As the number of elements in the Array increases -> the Number of Comparisons (# Amount of Comparisons) inceases by square of that number.".
 - Visual Explanation of Insertion Sort at the [YouTube Video](https://youtu.be/Wu_mDUIsTVE?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=100)'s timestamp by @Codevolution.
   - 2:10 starting at index `1` we have the element at the index `1` which is called ***Number TO Insert*** or ***NTI*** for short in his graph. -> The ***Sorted Element*** is represented as ***SE*** for short.
   - And in his next video at [this timestamp](https://youtu.be/OxUF23k7IcM?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=48) he repeats: "In Assertion Sort the first element is assumed to be sorted & we need to **traverse** the ***unsorted part of the Array**".
 - I honestly don't understand Insertion Sort very well, I'd need to rewatch the video OR review the code myself & write my own notes of code breakdown.
+- Sorting Algorithm - Given an array of integers, sort the array.
 ```                   js
-function insertionSort(arr) {
+const insertionSort = (arr) => {
   for (let i = 1; i < arr.length; i++) { // i = 1 -> because 1st element is assumed to be sorted
     let numberToInsert = arr[i]; // assigned with LET so that they can be re-assigned
     let j = i - 1; // assigned with LET so that they can be re-assigned
@@ -391,7 +394,19 @@ console.log('FINALIZED arr:', arr);
   - 4:32 "The way to derive/to calculate this Time Complexity is Complex & out of scope for this video series".
   - 5:15 "If you don't have any Space Complexity Constrains (Auxiliary Space Constrains) you can go with this Regular Quick Sort instead of the In-Place Quick Sort OR Merge Sort Algorithm (below)".
 - Algorithm Design Technique: **Divide and Conquer** ([more info](https://youtu.be/tCvSDnRsGnw?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=125)).
-- Sorting Algorithm.
+  - Hence the piece of code `if (arr.length <= 1)` Base Case for the recursive calls suggests Array is Already Sorted -> if there's only 1 element remaining inside the Array (as is the similar case with Merge Sort Algorithm's [explanations](https://youtu.be/qInXNtKaf4Q?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=66)).
+  - Scroll down to 1:08 where the explanation for Quick Sort is written ***as to why there has to be 1 element remaining***.
+    - I see a similar logic like the Bubble Sort's notes I wrote about a possible `isArraySorted` function (or `isArrayAlreadySorted` helper function).
+- Sorting Algorithm - Given an array of integers, sort the array.
+- Quick Sort idea by @codevolution [YouTube Video](https://youtu.be/ceqwscS_muA?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=42):
+ - 0:42 Identify the `pivot` element in the Array (choose one of the options as pivot):
+   - Pick first element as `pivot`.
+   - Pick last element as `pivot` (Our Approach).
+   - Pick a random element as `pivot`.
+   - Pick median as `pivot`.
+ - 1:08 What role does the `pivot` plays? You traverse the Array from the **first** element to the **last** but **ONE** element remaining (1 element remaining), and you (`.push`) put everything that's smaller than the `pivot` element into the `leftArray` AND everything that's greater than the `pivot` element into the `rightArray`. -> Repeat the process until for the individual `leftArray` AND `rightArray` until there's an Array of `length` 1 length.
+ - 1:37 ***An Array of `length` 1 is sorted by definition.***
+ - 1:44 When that **Base Condition** is reached (`if (arr.length <= 1)`) -> concatenate the `leftArray` + `pivot` + `rightArray` respectively in the **same order.**
 - EXTRAS:
 - ChatGPT says: "To mitigate the chance of worst-case behavior, various optimizations and techniques can be applied, such as choosing a random pivot, using median-of-three pivot selection, or implementing hybrid sorting algorithms that switch to a different sorting method for smaller subarrays."
   - Which Google results I've found:
@@ -400,7 +415,7 @@ console.log('FINALIZED arr:', arr);
 - GeeksForGeeks also call the Space Complexity as Auxiliary Space Complexity (sometimes even omitting the "Complexity" word).
 ```js
 const quickSort = arr => {
-    if (arr.length <= 1) {
+    if (arr.length <= 1) { // Base Case for the recursive calls
     // if there's 1 item inside the array -> then it's "already sorted".
         return arr;
     };
@@ -484,12 +499,55 @@ console.log('myArr:',myArr);
   10. The process continues until the subarrays have only one element or are invalid. At that point, the recursive calls stop, and the function returns the sorted array.
   11. Finally, the code creates an array `myArr` and calls `quickSortInPlace` with it. The sorted array is then printed to the `console.log`.
 10. **Merge Sort**
+- Time Complexity **O(nlogn)** Logarithmic Sorting is the Best Sorting Time Complexity you can find.
 - Algorithm Design Technique: **Divide and Conquer** ([more info](https://youtu.be/tCvSDnRsGnw?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=125)).
-- Sorting Algorithm
+- Sorting Algorithm - Given an array of integers, sort the array.
+- Merge Sort idea by @codevolution [YouTube Video](https://youtu.be/qInXNtKaf4Q?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=42):
+  - 0:42 First divide the Array into **subArray** each containing **only 1 element** -> ***An Array with one element remaining considered sorted by definition.***
+  - 0:53 Step 2: Repeteadly merge the **subArrays** to produce new **Sorted subArrays** until there's only **1 subArray remaining** -> which will be the **Sorted Array** by the same definition/same logic.
+- Explaining The Process:
+- Visual explanation by [@codevolution YouTube Video at timestamp](https://youtu.be/qInXNtKaf4Q?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=66).
+  - 1:23 There's 2 Part Process in Merge Sort:
+  - 1:25 **1st you divide the Array until you are left with subArrays that contain *only* 1 element** remaining -> the logic for that is to split the Array in the Middle until you have an Array of length `1` (keep splitting the Array into middle and then use `Math.floor` for `middleIndex` (the same case is with the Quick Sort Algorithm).
+  - 2:36 2nd Step: We **merge** the individual subArrays into new subArrays while **ensuring** the **elements are sorted**.
+  - 2:50 Here's how it works: We take the 2 Arrays and a **temporary empty Array** to hold the Elements as they are Sorted (I guess to hold the sorted Arrays(?)).
 ```js
+const mergeSort = (arr) => {
+  if (arr.length < 2) {
+    return arr;
+  };
+  const middleIndex = Math.floor(arr.length / 2);
+  const leftArr = arr.slice(0, middleIndex);
+  const rightArr = arr.slice(middleIndex);
+  return merge(mergesort(leftArr), mergesort(rightArr));
+};
 
+const merge = (leftArr, rightArr) => {
+  const sortedArr = [];
+  while (leftArr.length && rightArr.length) {
+    if (leftArr[0] <= rightArr[0]) {
+      sortedArr.push(leftArr.shift());
+    } else {
+      sortedArr.push(rightArr.shift());
+    };
+  };
+  const resultArr = [...sortedArr, ...leftArr, ...rightArr];
+  return resultArr;
+};
+const arr = [5, 8, -55, -88, 555, 888]; // will get mutated if I don't make a copy 
+inside `mergeSort` which might need a Deep Copy (iterating over each element's).
+mergeSort(arr);
+console.log('FINALIZED arr:', arr);
 ```
-
+11. Cartesian Product
+- Helpful [YouTube video](https://www.youtube.com/watch?v=C2HuBFYgyM8&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=29&pp=iAQB) by @codevolution.
+- Misc Problems of Time Complexity (Miscellaneous Problems of Time Complexity).
+12. Climbing Staircase
+- Helpful [YouTube video](https://www.youtube.com/watch?v=jrY7eONLHZs&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=31&pp=iAQB) by @codevolution.
+- Misc Problems of Time Complexity (Miscellaneous Problems of Time Complexity).
+13. Tower of Hanoi
+- Helpful [YouTube video](https://www.youtube.com/watch?v=_dt773ImwFw&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=33&pp=iAQB) by @codevolution.
+- Misc Problems of Time Complexity (Miscellaneous Problems of Time Complexity).
 ---
 My most helpful JavaScript based DSA course on YouTube by @Codevolution:
 #### https://www.youtube.com/playlist?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP
