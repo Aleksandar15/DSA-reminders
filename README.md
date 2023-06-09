@@ -336,6 +336,7 @@ console.log(recursiveBinarySearch([-5, 8, 10, 555, 888], 888)); // 4
   - "*We begin by going through the Array **at least once**, we **check** (`if (arr[i] > arr[i + 1]`) if any adjacent elements are out of order, if they're not -> we **exit** the `do while` loop since the Array **is already sorted**. If we did **swap** elements -> we go through the Array **again** to make sure there's no more **swapping** required -> if we encounter a **swap** then repeat the process -> if we don't encounter a **swapp** then the Array has been **already sorted***.".
   - Aha-moments by me: use cases in real life for this piece of code (the `if` condition) can be used as `isArraySorted` function checker OR helper function for Binary Search Algorithm which **only** works **`if`** the Array **is already sorted**:
     - But *of course* don't use this poor Bubble Sort, but rather some of the better Sorting Algorithms below -> here I'm only talking about piece of the code that can be used as **is Array already sorted** helper function, but omit the *swapping* part of the code.
+  - I'm also wondering if I can use this very same Bubble Sort part of the code that **checks if the Array is already sorted** as a helper function inside Quick Sort Algorithm -> as to avoid the Worst Case Time Complexity O(n^2) Quadratic inside the Quick Sort Algorithm?
 ```       js
 const bubbleSort = (arr) => {
   let swapped;
@@ -359,12 +360,44 @@ console.log('FINALIZED arr:', arr); // [-88, -55, 5, 8, 555, 888]
 8. **Insertion Sort**
 - Time Complexity
 - Visual Explanation of Insertion Sort at the [YouTube Video](https://youtu.be/Wu_mDUIsTVE?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=100)'s timestamp by @Codevolution.
+  - 2:10 starting at index `1` we have the element at the index `1` which is called ***Number TO Insert*** or ***NTI*** for short in his graph. -> The ***Sorted Element*** is represented as ***SE*** for short.
+  - And in his next video at [this timestamp](https://youtu.be/OxUF23k7IcM?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=48) he repeats: "In Assertion Sort the first element is assumed to be sorted & we need to **traverse** the ***unsorted part of the Array**".
+- I honestly don't understand Insertion Sort very well, I'd need to rewatch the video OR review the code myself & write my own notes of code breakdown.
 ```                   js
-
+function insertionSort(arr) {
+  for (let i = 1; i < arr.length; i++) { // i = 1 -> because 1st element is assumed to be sorted
+    let numberToInsert = arr[i]; // assigned with LET so that they can be re-assigned
+    let j = i - 1; // assigned with LET so that they can be re-assigned
+    while (j >= 0 && arr[j] > numberToInsert) {
+      arr[j + 1] = arr[j];
+      j = j - 1;
+    };
+    arr[j + 1] = numberToInsert;
+  };
+};
+const arr = [5, 8, -55, -88, 555, 888]; // will get mutated if I don't make a copy 
+inside `insertionSort` which might need a Deep Copy (iterating over each element's).
+insertionSort(arr);
+console.log('FINALIZED arr:', arr);
 ```
 9. **Quick Sort**
-- - Algorithm Design Technique: **Divide and Conquer** ([more info](https://youtu.be/tCvSDnRsGnw?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=125)).
+- Time Complexity Worst Case **O(n^2) Quadratic** -> "_this happens when they Array is already sorted_" ([explanation](https://youtu.be/lWLTHsQnHDI?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=222)) - he says; so I'm wondering if I can use the Bubble's Sort part of the code that checks if the Array is already sorted -> as to avoid the Worst Case Time Complexity in this Quick Sort Algorithm?
+  - 4:00 "You end up comparing with **every other element** and that's why it is Quadratic Time Complexity".
+- Time Complexity Average Case **O(nlogn) Linearithmic**
+  - 4:04 "Quick Sort Algorithm is a popular Algorithm because of it's Averaga Case Complexity Linearithmic O(nlogn)".
+  - 4:20 "We recursively divide the Array into smaller Arrays (subArrays) which is **O(logn)**" -> Highlights this part of the code `[...quickSort(leftArr), pivot, ...quickSort(rightArr)]`.
+  - 4:23 "We also have a `for` loop which is **O(n)**."
+  - 4:28 "Combine the two and we have **O(nlogn)**".
+  - 4:32 "The way to derive/to calculate this Time Complexity is Complex & out of scope for this video series".
+  - 5:15 "If you don't have any Space Complexity Constrains (Auxiliary Space Constrains) you can go with this Regular Quick Sort instead of the In-Place Quick Sort OR Merge Sort Algorithm (below)".
+- Algorithm Design Technique: **Divide and Conquer** ([more info](https://youtu.be/tCvSDnRsGnw?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=125)).
 - Sorting Algorithm.
+- EXTRAS:
+- ChatGPT says: "To mitigate the chance of worst-case behavior, various optimizations and techniques can be applied, such as choosing a random pivot, using median-of-three pivot selection, or implementing hybrid sorting algorithms that switch to a different sorting method for smaller subarrays."
+  - Which Google results I've found:
+  - [Advanced Quick Sort (Hybrid Algorithm)](https://www.geeksforgeeks.org/advanced-quick-sort-hybrid-algorithm) by GeeksForGeeks.
+  - [QuickSort using Random Pivoting](https://www.geeksforgeeks.org/quicksort-using-random-pivoting) by GeeksForGeeks.
+- GeeksForGeeks also call the Space Complexity as Auxiliary Space Complexity (sometimes even omitting the "Complexity" word).
 ```js
 const quickSort = arr => {
     if (arr.length <= 1) {
@@ -400,6 +433,9 @@ console.log('myArr:',myArr);
 - For descending order all I'd need is to swap `if (arr[i] < pivot) {` into `if (arr[i] > pivot) {`.
 
 9.1 **Quick Sort In Place**
+- Time Complexity Worst Case **O(n^2)** Quadratic
+- Time Complexity Average Case **O(nlogn)** Linearithmic
+- Both the ***Regular* Quick Sort** and **In-Place Quick Sort** Algorithms have the same average-case time complexity of O(n log(n)), but the in-place quick sort has a better space complexity of O(log(n)) compared to the regular quick sort's potential **O(n) Space Complexity**.
 ```js
 const quickSortInPlace = (arr, left = 0, right = arr.length-1) => {
     // if (left > right) { // does nothing, exits recursive calls prematurely
@@ -451,6 +487,7 @@ console.log('myArr:',myArr);
 - Algorithm Design Technique: **Divide and Conquer** ([more info](https://youtu.be/tCvSDnRsGnw?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=125)).
 - Sorting Algorithm
 ```js
+
 ```
 
 ---
