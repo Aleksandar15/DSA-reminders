@@ -515,6 +515,15 @@ console.log('myArr:',myArr);
   - 1:25 **1st you divide the Array until you are left with subArrays that contain *only* 1 element** remaining -> the logic for that is to split the Array in the Middle until you have an Array of length `1` (keep splitting the Array into middle and then use `Math.floor` for `middleIndex` (the same case is with the Quick Sort Algorithm).
   - 2:36 2nd Step: We **merge** the individual subArrays into new subArrays while **ensuring** the **elements are sorted**.
   - 2:50 Here's how it works: We take the 2 Arrays and a **temporary empty Array** to hold the Elements as they are Sorted (I guess to hold the sorted Arrays(?)).
+- I've googled a bunch to confirm if the group thinking inside the comment section was right & results are confusing how many GOOGLE TOP RESULTS shows using `.shift` method AND there's scarcity amount of Merge Sort JavaScript results ***even when I'm specific in my searches*** using advanced google searching method like wrapping my search terms in a strings -> I'm wondering how people even got a job at FAANG if Google's TOP RESULTs have mistakes:
+  - https://www.doabledanny.com/merge-sort-javascript uses `.shift`.
+    - Additionally saying the `merge` algorithm runs in O(n+m) (or O(n + m)).
+  - https://stackabuse.com/merge-sort-in-javascript uses `.shift.
+  - A good one below:
+  - https://medium.com/@renxburnett/merge-sort-in-javascript-849cf7527450 uses 3 `while` loops like my # 10.0.1 solution; but doesn't mention nothing against `.shift`.
+    - Also the author calls this one of the hardest coding challenge he came across.
+- The worst mystery is that google search results for `"is shift method inside a loop expensive"` AND the more broad `"is o(n) inside a loop expensive"` shows no focused results; only side-topics.
+  - Not even google results for `"javascript merge sort with pointers"` doesn't show any results.
 - **MISTAKEN CODE BELOW BY AUTHOR @codevolution HAS MISTAKES AS IT IS O(n^2) Quadratic and NOT O(nlogn) Linearithmic!** (Scroll below for my own solution.)
 ```js
 const mergeSort = (arr) => {
