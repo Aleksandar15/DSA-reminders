@@ -4,6 +4,7 @@
 ---
 1. **Fibonacci Sequence**
 - Time Complexity: O(n) (Linear) -> 1 `for` loop.
+- Algorithm Design Technique: **Dynamic Programming** ([more info](https://youtu.be/tCvSDnRsGnw?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=160)) "which is very similar to ***Divide and Conquery*** the *only difference is you break it down into smaller but overlapping sub problems*.
 - Math algorithm: sum up the two preceding numbers (starting from [[0, 1]](https://en.wikipedia.org/wiki/Fibonacci_sequence))
 - Most of the [results](https://byjus.com/maths/fibonacci-sequence) (0 - 9).
 - [Why do we start the loop from `2` instead of `0`](https://vhudyma-blog.eu/print-fibonacci-sequence-in-javascript).
@@ -231,6 +232,7 @@ console.log('linearSearch(myArr, 999):',linearSearch(myArr, 999)); // -1
 6. **Binary Search**
 - Time Complexity **O(logn)**
 - In every WHILE Loop's iteration the code reduces Input's Size by HALF hence the O(logn) ([more info](https://youtu.be/75jGy1xAhhs?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=444)).
+- Algorithm Design Technique: **Divide and Conquer** ([more info](https://youtu.be/tCvSDnRsGnw?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=125)).
 - DOWNSIDES: disadvantage in it's speed is the fact that it needs at least a same-speed performative Sorting Algorithm otherwise it'd be useless if the *Array is not sorted* already.
 - Search Algorithm - given a **sorted** array of `n` amount of elements and a target element `target`, find the index of `target` in the array. Return `-1` if the `target` element is *not found*.
 - Example: `arr = [-5, 8, 555, 10, 888]`; `target=10` -> should return 3 (index # 3).
@@ -320,7 +322,7 @@ console.log(recursiveBinarySearch([-5, 8, 10, 555, 888], 666)); // -1
 console.log(recursiveBinarySearch([-5, 8, 10, 555, 888], 888)); // 4
 ```
 7. **Bubble Sort**
-- Time Complexity O(n^2) Quadratic
+- Time Complexity **O(n^2) Quadratic**
   - Bubble Sort is a [poor](https://youtu.be/gqMjdM8FsrE?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=40) Sorting Algorithm & it's only used for introduction into understanding the fundamentals of Sorting Algorithms. Should almost never be used unless asked about it in an interview.
 - Sorting Algorithm: Given an array of integers, sort the array.
   - Example: `arr = [5,8,-55,-88,555,888]` -> `bubbleSort(arr)` => should return `[-88, -55, 5, 8 , 555, 888]`.
@@ -355,8 +357,14 @@ bubbleSort(arr);
 console.log('FINALIZED arr:', arr); // [-88, -55, 5, 8, 555, 888]
 ```
 8. **Insertion Sort**
+- Time Complexity
+- Visual Explanation of Insertion Sort at the [YouTube Video](https://youtu.be/Wu_mDUIsTVE?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=100)'s timestamp by @Codevolution.
+```                   js
 
+```
 9. **Quick Sort**
+- - Algorithm Design Technique: **Divide and Conquer** ([more info](https://youtu.be/tCvSDnRsGnw?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=125)).
+- Sorting Algorithm.
 ```js
 const quickSort = arr => {
     if (arr.length <= 1) {
@@ -439,7 +447,11 @@ console.log('myArr:',myArr);
   9. Back in the `quickSortInPlace` function, the pivot index is obtained from the `partition` function. The function recursively calls `quickSortInPlace` for the left subarray (from `left` to `pivot - 1`) and the right subarray (from `pivot + 1` to `right`).
   10. The process continues until the subarrays have only one element or are invalid. At that point, the recursive calls stop, and the function returns the sorted array.
   11. Finally, the code creates an array `myArr` and calls `quickSortInPlace` with it. The sorted array is then printed to the `console.log`.
-8. **Merge Sort**
+10. **Merge Sort**
+- Algorithm Design Technique: **Divide and Conquer** ([more info](https://youtu.be/tCvSDnRsGnw?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=125)).
+- Sorting Algorithm
+```js
+```
 
 ---
 My most helpful JavaScript based DSA course on YouTube by @Codevolution:
