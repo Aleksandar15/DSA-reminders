@@ -675,9 +675,38 @@ sortedArr.push(leftArr[leftPointer] <= rightArr[rightPointer] ? leftArr[0] : rig
 // ...
 ```
 11. Cartesian Product
+- Time Complexity **O(n*m)** (*@codevolution calls it O(mn)*).
+  - Rare Time Complexity.
+  - `arr1` is of `length` `n` AND `arr2` is of `length` `m`.
+  - However if the **`length` of the both Arrays** matches then it's **O(n^2) Quadratic Time Complexity** ([more info](https://youtu.be/XPpnW-WsDmQ?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=213)).
+  - So which one is faster?
+  - https://stackoverflow.com/questions/35855978/is-omn-in-on2:
+  - Seems like stackoverflow also calls it **O(mn) Matrix Time Complexity** (O(m*n)).
+  - "It's a matter of if `m` is greater than `n`: if `m > n`, then **O(n^2) is faster**; else if `m < n`, then **O(mn) is faster.".**
+  - (By me: I guess this is some Matrix Algorithm, but seems like a similar rules apply here.)
 - Helpful [YouTube video](https://www.youtube.com/watch?v=C2HuBFYgyM8&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=29&pp=iAQB) by @codevolution.
 - Misc Problems of Time Complexity (Miscellaneous Problems of Time Complexity).
 - Misc Problem - Given two finite non-empty sets, find their Cartesian Product.
+- Examples:
+- `const A = ['1A', '2A'];`
+- `const B = ['1B', '2B', '3B'];`
+- RESULTS: AxB `= [['1A', '1B',], ['1A', 2B'], ['1A', '3B'], ['2A', '1B'], ['2A', '2B'], ['2A', '3B']];`
+- **SOLUTION:**
+```js
+const cartesianProduct = (arr1, arr2) => {
+  const result = []
+  for (let i = 0; i < arr1.length; i++) {
+    for (let j = 0; j < arr2.length; j++) {
+      result.push([arr1[i], arr2[j]])
+    }
+  }
+  return result
+}
+
+const arr1 = [1, 2]
+const arr2 = [3, 4, 5]
+console.log(cartesianProduct(arr1, arr2)) // [[1, 3], [1, 4], [1, 5], [2, 3], [2, 4], [2, 5]]
+```
 12. Climbing Staircase
 - Helpful [YouTube video](https://www.youtube.com/watch?v=jrY7eONLHZs&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=31&pp=iAQB) by @codevolution.
 - Misc Problems of Time Complexity (Miscellaneous Problems of Time Complexity).
