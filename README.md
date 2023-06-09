@@ -352,7 +352,7 @@ const bubbleSort = (arr) => {
     }
   } while (swapped);
 };
-const arr = [5, 8, -55, -88, 555, 888]; // will get mutated if I don't make copy a
+const arr = [5, 8, -55, -88, 555, 888]; // will get mutated if I don't make a copy
 // inside `bubbleSort` which might need a Deep Copy (iterating over each elements).
 bubbleSort(arr);
 console.log('FINALIZED arr:', arr); // [-88, -55, 5, 8, 555, 888]
@@ -379,7 +379,7 @@ const insertionSort = (arr) => {
   };
 };
 const arr = [5, 8, -55, -88, 555, 888]; // will get mutated if I don't make a copy 
-inside `insertionSort` which might need a Deep Copy (iterating over each element's).
+// inside `insertionSort` which might need a Deep Copy (iterating over each elements).
 insertionSort(arr);
 console.log('FINALIZED arr:', arr);
 ```
@@ -499,7 +499,11 @@ console.log('myArr:',myArr);
   10. The process continues until the subarrays have only one element or are invalid. At that point, the recursive calls stop, and the function returns the sorted array.
   11. Finally, the code creates an array `myArr` and calls `quickSortInPlace` with it. The sorted array is then printed to the `console.log`.
 10. **Merge Sort**
-- Time Complexity **O(nlogn)** Logarithmic Sorting is the Best Sorting Time Complexity you can find.
+- Time Complexity **O(nlogn)** Logarithmic Sorting is the Best Sorting Time Complexity you can build code-wise ([6:58](https://youtu.be/wXZyuJqNk9U?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=420)). -> BUT ***WARNING:*** There's a **mistake** on the Video Creator part (@codevolution) using `.shift` (O(n)) inside a loop becomes O(n^2) Quadratic Time Complexity && is confirmed the comments in the Video Hyperlinked below:
+  - His breakdown at [6:20](https://youtu.be/wXZyuJqNk9U?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=380):
+  - 6:20 Recursively divide the Input size into halves(/divide the problem into halves) this is Time Complexity O(logn).
+  - 6:30 Second part we merge the Arrays and this contains a `while` loop -> if there's a loop the Time Complexity is Linear O(n) -> **HERE's where the author is wrong; missing to see the expensive `.shift` inside the `while` loop**.
+  - 6:40 Our solution is a combination of the two: O(nlogn) Linearithmic Time Complexity also called Loglinear (names I found in Google; not by Creator).
 - Algorithm Design Technique: **Divide and Conquer** ([more info](https://youtu.be/tCvSDnRsGnw?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=125)).
 - Sorting Algorithm - Given an array of integers, sort the array.
 - Merge Sort idea by @codevolution [YouTube Video](https://youtu.be/qInXNtKaf4Q?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=42):
@@ -511,9 +515,10 @@ console.log('myArr:',myArr);
   - 1:25 **1st you divide the Array until you are left with subArrays that contain *only* 1 element** remaining -> the logic for that is to split the Array in the Middle until you have an Array of length `1` (keep splitting the Array into middle and then use `Math.floor` for `middleIndex` (the same case is with the Quick Sort Algorithm).
   - 2:36 2nd Step: We **merge** the individual subArrays into new subArrays while **ensuring** the **elements are sorted**.
   - 2:50 Here's how it works: We take the 2 Arrays and a **temporary empty Array** to hold the Elements as they are Sorted (I guess to hold the sorted Arrays(?)).
+- **MISTAKEN CODE BELOW BY AUTHOR @codevolution HAS MISTAKES AS IT IS O(n^2) Quadratic and NOT O(nlogn) Linearithmic!** (Scroll below for my own solution.)
 ```js
 const mergeSort = (arr) => {
-  if (arr.length < 2) {
+  if (arr.length <= 1) {
     return arr;
   };
   const middleIndex = Math.floor(arr.length / 2);
@@ -526,18 +531,134 @@ const merge = (leftArr, rightArr) => {
   const sortedArr = [];
   while (leftArr.length && rightArr.length) {
     if (leftArr[0] <= rightArr[0]) {
-      sortedArr.push(leftArr.shift());
+      sortedArr.push(leftArr.shift()); // .shift Becomes O(n^2) Quadratic Time Complexity mistake by Video Creator @codevolution
     } else {
-      sortedArr.push(rightArr.shift());
+      sortedArr.push(rightArr.shift()); // .shift Becomes O(n^2) Quadratic Time Complexity mistake by Video Creator @codevolution
     };
   };
   const resultArr = [...sortedArr, ...leftArr, ...rightArr];
   return resultArr;
 };
 const arr = [5, 8, -55, -88, 555, 888]; // will get mutated if I don't make a copy 
-inside `mergeSort` which might need a Deep Copy (iterating over each element's).
-mergeSort(arr);
+// inside `mergeSort` which might need a Deep Copy (iterating over each elements).
 console.log('FINALIZED arr:', arr);
+```
+10.0.1 **UPDATED CODE TO FIX HIS MISTAKES:** (but it's quite redundant I see)
+```js
+const mergeSort = (arr) => {
+  // Base case: if the array is empty or contains only one element, it is already sorted
+  if (arr.length <= 1) { // I prefer over "< 2"
+    return arr;
+  }
+
+  const middleIndex = Math.floor(arr.length / 2);
+  // Split the Array into 2 halves
+  const leftArr = arr.slice(0, middleIndex);
+  const rightArr = arr.slice(middleIndex);
+
+  // Merge the sorted halved Arrays (which are recursively sorted themselves; hence the nested recursive calls)
+  return merge(mergeSort(leftArr), mergeSort(rightArr));
+};
+
+const merge = (leftArr, rightArr) => {
+  const sortedArr = [];
+  let leftPointer = 0;
+  let rightPointer = 0;
+
+  // Compare elements from the left and right arrays and merge them in sorted order
+  while (leftPointer < leftArr.length && rightPointer < rightArr.length) {
+    // console.count('1st while runs');
+    if (leftArr[leftPointer] <= rightArr[rightPointer]) {
+      sortedArr.push(leftArr[leftPointer]);
+      leftPointer++;
+    } else {
+      sortedArr.push(rightArr[rightPointer]);
+      rightPointer++;
+    }
+  }
+
+  // Add the remaining elements from the left or/and right array (these run but not always)
+  while (leftPointer < leftArr.length) {
+    // console.count('2nd while runs');
+    sortedArr.push(leftArr[leftPointer]);
+    leftPointer++;
+  }
+
+  while (rightPointer < rightArr.length) {
+    // console.count('3rd while runs');
+    sortedArr.push(rightArr[rightPointer]);
+    rightPointer++;
+  }
+
+  return sortedArr;
+};
+
+const arr = [5, 8, -55, -88, 555, 888]; // will get mutated if I don't make a copy 
+// inside `mergeSort` which might need a Deep Copy (iterating over each elements).
+// mergeSort(arr);
+// console.log('FINALIZED arr:', arr);
+// // To avoid modifying the original Array OF INTEGERS let's pass a SHALLOW COPY
+// // (otherwise more complex Arrays would need a DEEP COPY or using Immer.js):
+const sortedArr = mergeSort([...arr]); // Create a copy to avoid mutation
+console.log('ORIGINAL arr:', arr);
+console.log('Sorted Array:', sortedArr);
+```
+10.0.2 To shorthen the redundant `while` loops (creating overheads) in the # 10.0.1 code but logic remains the same:
+- NOTE I have to re-google to confirm if using `.concat` over Spread Syntax is more efficient/faster in a large Arrays.
+```js
+const mergeSort = (arr) => {
+  // Base case: if the array is empty or contains only one element, it is already sorted
+  if (arr.length <= 1) { // I prefer over "< 2"
+    return arr;
+  }
+
+  const middleIndex = Math.floor(arr.length / 2);
+  const leftArr = arr.slice(0, middleIndex);
+  const rightArr = arr.slice(middleIndex);
+
+  return merge(mergeSort(leftArr), mergeSort(rightArr));
+};
+
+const merge = (leftArr, rightArr) => {
+  const sortedArr = [];
+  let [leftPointer, rightPointer] = [0, 0]; // this one liner is equivalent to:
+  // let leftPointer = 0; // and "leftArr[leftPoitner++]" increments it
+  // let rightPointer = 0; // and "rightArr[rightPointer++]" increments it
+
+  // Compare elements from the left and right arrays and merge them in sorted order
+  while (leftPointer < leftArr.length && rightPointer < rightArr.length) {
+    // One Liner:
+    sortedArr.push(leftArr[leftPointer] <= rightArr[rightPointer] ? leftArr[leftPointer++] : rightArr[rightPointer++]);
+    // Alternative To:
+    // if (leftArr[leftPointer] <= rightArr[rightPointer]) {
+      // sortedArr.push(leftArr[leftPointer++]); // works
+      // // // but below DOESN'T work (fills the Array with UNDEFINED elements randomly):
+      // // leftPointer++;
+      // // sortedArr.push(leftArr[leftPointer]);
+    // } else {
+      // sortedArr.push(rightArr[rightPointer++]); // works
+      // // // but below DOESN'T work (fills the Array with UNDEFINED elementsrandomly):
+      // // rightPointer++;
+      // // sortedArr.push(rightArr[rightPointer]);
+    // }
+  }
+
+  // return sortedArr.concat(leftArr.slice(leftPointer)).concat(rightArr.slice(rightPointer)); // works
+  return [...sortedArr, ...leftArr.slice(leftPointer), ...rightArr.slice(rightPointer)]; // works as fine
+};
+
+const arr = [5, 8, -55, -88, 555, 888];
+const sortedArr = mergeSort([...arr]); // Create a SHALLOW COPY to avoid mutation of integers, but complex Arrays require DEEP COPY
+console.log('ORIGINAL arr:', arr);
+console.log('Sorted Array:', sortedArr);
+```
+- NOTES Dangerous Code Spontaniously Found
+- I noticed in my testing it will crash my YouTube tab & all it's nearby tabs if I modify **only** the line of code above as:
+- (I feel like I hacked myself lol && Everytime I run code above with modified line below it either refreshes random tabs or kills random tabs.)
+```
+// ...
+sortedArr.push(leftArr[leftPointer] <= rightArr[rightPointer] ? leftArr[0] : rightArr[rightPointer++]);
+// ...
 ```
 11. Cartesian Product
 - Helpful [YouTube video](https://www.youtube.com/watch?v=C2HuBFYgyM8&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=29&pp=iAQB) by @codevolution.
@@ -548,6 +669,16 @@ console.log('FINALIZED arr:', arr);
 13. Tower of Hanoi
 - Helpful [YouTube video](https://www.youtube.com/watch?v=_dt773ImwFw&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=33&pp=iAQB) by @codevolution.
 - Misc Problems of Time Complexity (Miscellaneous Problems of Time Complexity).
+---
+### DEFINITIONS & EXTRAS
+- **Traverse** definition: In programming, _Array traversing_ or to **traverse** typically refers to the act of iterating or moving through a data structure, such as an array, list, tree, or graph, in order to access or process its elements. -> Traversing a data structure involves visiting each element or node in a systematic manner according to a specific order or pattern.
+- Algorithm Design Techniques Variety by @codevolution at [4:00](https://youtu.be/tCvSDnRsGnw?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=240) YouTube Video.
+  - Brute Force
+  - Greedy
+  - Divide and Conquer
+  - Dynamic Programming
+  - Backtracking
+  - etc. (A few more exist but these are most important.)
 ---
 My most helpful JavaScript based DSA course on YouTube by @Codevolution:
 #### https://www.youtube.com/playlist?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP
