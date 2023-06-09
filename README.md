@@ -282,7 +282,8 @@ console.log('binarySearch(mySortedArr, 999):',binarySearch(mySortedArr, -5),'ind
       - Because (*into the 2nd `while` loop:*) when the `middleIndex=0` AND `rightIndex=1` AND `leftIndex=0` (hasn't changed since its initial `0`), then it checked `target=8` against item `-5` (at index `0` **because** `middleIndex=0`) and it didn't matched and -> because `target=8 < arr[middleIndex(0)]=-5` condition was **falsy** statement then -> the `else` expression had ran setting/re-assigning the `leftIndex=middleIndex(0) + 1` which made `leftIndex=1` AND `rightIndex` remained `1` => Next, `middleIndex = Math.floor((leftIndex(1) + rightIndex(1)) / 2)` === `middleIndex = Math.floor(1+1) / 2)` === `middleIndex=1` -> the `target=8 < arr[middleIndex(1)]=8` condition is **truthy** now and `return middleIndex(1)` expression had been ran which returned index `1`. 😊
         - ADDITIONALLY I also noticed that `while (leftIndex <= rightIndex)` condition came useful because my `leftIndex` and `rightIndex` were `1` both (the same index number!)! :) ✔
     - My whole point here being: ***to clarify my confusion about `middleIndex` as it doesn't always refer to the "real middle of the subArray" in a sense that I thought: 'why can't I always divide the previous `middleIndex` by `2` and then asssign it to the new `middleIndex`?'; so I need to remove from my head the wrong logical thinking that `middleIndex=middleIndex/2` is happening on every iteration because, that was a WRONG Logic on my part of trying to understand the flow!*** 👍
-- The `while (leftIndex <= rightIndex)` serves for when the `leftIndex === rightIndex` meaning it's the only 1 remaining item: code will still check if the `target` matches against the **Array's item** positioned at `middleIndex` (now being `0` **as well as both the `leftIndex=0` and `rightIndex=0`** if the `target` was the **very first item in the Array** OR all 3 of them being the value that equals to `arr.length-1` -> if the `target` was the **last item in the Array** (that's the **only 2 cases scenarios** when there's **only** 1 item left to be checked against)) by comparing `target === arr[middleIndex]` if the condition is **truthy** then `return middleIndex` OR if not then exit the `while` loop (then return `-1`).
+      - `pivotIndex` maybe could have been another good name instead of `middleIndex`.
+- The `while (leftIndex <= rightIndex)` serves for when the `leftIndex === rightIndex` meaning it's the only 1 remaining item: code will still check if the `target` matches against the **Array's item** positioned at `middleIndex` (now being `0` **as well as both the `leftIndex=0` and `rightIndex=0`** if the `target` was the **very first item in the Array** OR all 3 of them being the value that equals to `arr.length-1` -> if the `target` was the **last item in the Array** (that's the **only 2 cases scenarios** when there's **only** 1 item left to be checked against)) by comparing `target === arr[middleIndex]` if the condition is **truthy** then `return middleIndex` OR if not then exit the `while` loop (then return `-1`) as there's no more items left to be checked against.
 
 6.1 **Recursive Binary Search**
 - Time Complexity **O(logn)**
@@ -319,7 +320,40 @@ console.log(recursiveBinarySearch([-5, 8, 10, 555, 888], 666)); // -1
 console.log(recursiveBinarySearch([-5, 8, 10, 555, 888], 888)); // 4
 ```
 7. **Bubble Sort**
-
+- Time Complexity O(n^2) Quadratic
+  - Bubble Sort is a [poor](https://youtu.be/gqMjdM8FsrE?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=40) Sorting Algorithm & it's only used for introduction into understanding the fundamentals of Sorting Algorithms. Should almost never be used unless asked about it in an interview.
+- Sorting Algorithm: Given an array of integers, sort the array.
+  - Example: `arr = [5,8,-55,-88,555,888]` -> `bubbleSort(arr)` => should return `[-88, -55, 5, 8 , 555, 888]`.
+- The logic as per @Codevolution [YouTube Video](https://youtu.be/gqMjdM8FsrE?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=80):
+  - Compare adjacent elements (neighbouring items) in the Array && swap the positions `if` they are **not** in the intended order.
+  - Repeat the instruction as you step through each element in the Array.
+  - Once you step through the whole Array with no Swaps -> it means: ***the Array is sorted***.
+- The `for` loop's condition `i < arr.length -1` stops at `-1` because the code `if (arr[i] > arr[i+1])` comparison check is being made against `arr[i+1]` ([more info](https://youtu.be/xdCgW2a3r_Q?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=117)) -> there's no need ot comapre the last sorted element against an element outside the array (like he says).
+- The logic behind `swapped` in the same video timestamp at [YouTube Video](https://youtu.be/xdCgW2a3r_Q?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=183).
+- The whole code summary in the same video [timestamp at 4:00](https://youtu.be/xdCgW2a3r_Q?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=240).
+  - "*We begin by going through the Array **at least once**, we **check** (`if (arr[i] > arr[i + 1]`) if any adjacent elements are out of order, if they're not -> we **exit** the `do while` loop since the Array **is already sorted**. If we did **swap** elements -> we go through the Array **again** to make sure there's no more **swapping** required -> if we encounter a **swap** then repeat the process -> if we don't encounter a **swapp** then the Array has been **already sorted***.".
+  - Aha-moments by me: use cases in real life for this piece of code (the `if` condition) can be used as `isArraySorted` function checker OR helper function for Binary Search Algorithm which **only** works **`if`** the Array **is already sorted**:
+    - But *of course* don't use this poor Bubble Sort, but rather some of the better Sorting Algorithms below -> here I'm only talking about piece of the code that can be used as **is Array already sorted** helper function, but omit the *swapping* part of the code.
+```       js
+const bubbleSort = (arr) => {
+  let swapped;
+  do {
+    swapped = false;
+    for (let i = 0; i < arr.length - 1; i++) {
+      if (arr[i] > arr[i + 1]) { // swap ">" with "<" => and there's descending ordering
+        let temp = arr[i];
+        arr[i] = arr[i + 1];
+        arr[i + 1] = temp;
+        swapped = true;
+      }
+    }
+  } while (swapped);
+};
+const arr = [5, 8, -55, -88, 555, 888]; // will get mutated if I don't make copy a
+// inside `bubbleSort` which might need a Deep Copy (iterating over each elements).
+bubbleSort(arr);
+console.log('FINALIZED arr:', arr); // [-88, -55, 5, 8, 555, 888]
+```
 8. **Insertion Sort**
 
 9. **Quick Sort**
