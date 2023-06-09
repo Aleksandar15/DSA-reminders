@@ -20,6 +20,7 @@ const fibonacci = (n) => {
 console.log(fibonacci(2)) // [0,1,1]
 console.log(fibonacci(3)) // [0,1,1,2]
 console.log(fibonacci(7)) // [0,1,1,2,3,5,8,13]
+console.log(fibonacci(8888) // remains super fast
 ```
 1.1 **Recursive Fibonacci Sequence**
 - Time Complexity O(2^n) -> Quadratic worst case time because there's 2 calls for each 1 `n`th number. Past `n=40` gets too laggy (2^40).
@@ -27,9 +28,9 @@ console.log(fibonacci(7)) // [0,1,1,2,3,5,8,13]
 ```
 const recursiveFibonacci = (n) => {
   if (n < 2) {
-    return n
-  }
-  return recursiveFibonacci(n - 1) + recursiveFibonacci(n - 2)
+    return n;
+  };
+  return recursiveFibonacci(n - 1) + recursiveFibonacci(n - 2);
 }
 
 console.log(recursiveFibonacci(0)) // 0
@@ -78,7 +79,7 @@ const fibRec = (n, memo = {}) => {
   return result;
 };
 
-const fibonacciResult = fibRec(888); // Super fast again
+const fibonacciResult = fibRec(888); // Super fast again as well as 8888
 console.log(fibonacciResult); // The Fibonacci number at index 888
 ```
 2. **Factorial of a Number**
@@ -224,8 +225,8 @@ const linearSearch = (arr, target) => {
 };
 const myArr = [-5, 8, 555, 10, 888];
 const target = 10;
-console.log('linearSearch(myArr, target):',linearSearch(myArr, target));
-console.log('linearSearch(myArr, 999):',linearSearch(myArr, 999));
+console.log('linearSearch(myArr, target):',linearSearch(myArr, target)); // 3
+console.log('linearSearch(myArr, 999):',linearSearch(myArr, 999)); // -1
 ```
 6. **Binary Search**
 - Time Complexity **O(logn)**
@@ -249,9 +250,13 @@ const binarySearch = (arr, target) => {
     let rightIndex = arr.length - 1;
     while (leftIndex <= rightIndex) {
         const middleIndex = Math.floor((leftIndex + rightIndex) / 2);
+        
+        console.log('leftIndex:',leftIndex,'& rightIndex:',rightIndex,'& sum/2 == middleIndex:',middleIndex,' & arr.length:', arr.length);
+        console.log('target(item):',target,'& arr[middleIndex]:',arr[middleIndex]); // it can become a bit confusing if I try to track the items with my eyes (remove this log if it's too confusing (too many items)).
         if (target === arr[middleIndex]) {
             return middleIndex;
         };
+        
         // In every WHILE Loop's iteration this code reduces Input's Size by HALF hence the O(logn)
         if (target < arr[middleIndex]) {
             rightIndex = middleIndex - 1;
@@ -264,9 +269,21 @@ const binarySearch = (arr, target) => {
 // const myArr = [-5, 8, 555, 10, 888]; // Doesn't work because it's not sorted (returns -1 ALWAYS)
 const mySortedArr = [-5, 8, 10, 555, 888];
 const target = 10;
-console.log('binarySearch(mySortedArr, target):',binarySearch(mySortedArr, target)); // 2
-console.log('binarySearch(mySortedArr, 999):',binarySearch(mySortedArr, 999)); // -1
+console.log('binarySearch(mySortedArr, target):',binarySearch(mySortedArr, target),'index.'); // 2
+console.log('binarySearch(mySortedArr, 999):',binarySearch(mySortedArr, 999),'index.'); // -1
+console.log('binarySearch(mySortedArr, 888):',binarySearch(mySortedArr, 8),'index.'); // 1 // very important for understanding (read explanations below)
+console.log('binarySearch(mySortedArr, 999):',binarySearch(mySortedArr, -5),'index.); // 0
 ```
+- The Pocess (still a bit confusing visually):
+- The way the `.length` is shortened by a HALF is because either the left or right limits are re-assigned OR the `leftIndex` and `rightIndex` respectively TO either `middleIndex + 1` or `middleIndex - 1` respectively **ok?** 
+  - So I need to cut off the wrong logic from my mind that I'm imagining as if the code is adding `+ 1` or subtracting `- 1` respectively, instead what the **most important part** is that the code _partially_ does that **but on top of** `middleIndex` (with its `Math.floor` magic), hence the **halving logic!**
+    - The `middleIndex`'s `Math.floor` magic works with either or with `Math.ceil` as well as correctly! But a more common/best practice is to use `Math.floor`.
+    - With that realization I noticed that when I'm using `Math.ceil` it rather increments the `middleIndex` **up to, but not** `arr.length` (hence the `arr.length-1` initial assignment to `rightIndex`), but then when I'm using `Math.floor` it decreases, but it's not decrementing like always, rather it will vary up and/or down but the original/initial `middleIndex` is the **limit**, say an example where I'm looking for `target=8` (which is at index `1` in the provided Array) in the code above the `middleIndex` goes from `2` to `0` and to `1` at which point `target=8` matches -> because:
+      - Because (*into the 2nd `while` loop:*) when the `middleIndex=0` AND `rightIndex=1` AND `leftIndex=0` (hasn't changed since its initial `0`), then it checked `target=8` against item `-5` (at index `0` **because** `middleIndex=0`) and it didn't matched and -> because `target=8 < arr[middleIndex(0)]=-5` condition was **falsy** statement then -> the `else` expression had ran setting/re-assigning the `leftIndex=middleIndex(0) + 1` which made `leftIndex=1` AND `rightIndex` remained `1` => Next, `middleIndex = Math.floor((leftIndex(1) + rightIndex(1)) / 2)` === `middleIndex = Math.floor(1+1) / 2)` === `middleIndex=1` -> the `target=8 < arr[middleIndex(1)]=8` condition is **truthy** now and `return middleIndex(1)` expression had been ran which returned index `1`. 😊
+        - ADDITIONALLY I also noticed that `while (leftIndex <= rightIndex)` condition came useful because my `leftIndex` and `rightIndex` were `1` both (the same index number!)! :) ✔
+    - My whole point here being: ***to clarify my confusion about `middleIndex` as it doesn't always refer to the "real middle of the subArray" in a sense that I thought: 'why can't I always divide the previous `middleIndex` by `2` and then asssign it to the new `middleIndex`?'; so I need to remove from my head the wrong logical thinking that `middleIndex=middleIndex/2` is happening on every iteration because, that was a WRONG Logic on my part of trying to understand the flow!*** 👍
+- The `while (leftIndex <= rightIndex)` serves for when the `leftIndex === rightIndex` meaning it's the only 1 remaining item: code will still check if the `target` matches against the **Array's item** positioned at `middleIndex` (now being `0` **as well as both the `leftIndex=0` and `rightIndex=0`** if the `target` was the **very first item in the Array** OR all 3 of them being the value that equals to `arr.length-1` -> if the `target` was the **last item in the Array** (that's the **only 2 cases scenarios** when there's **only** 1 item left to be checked against)) by comparing `target === arr[middleIndex]` if the condition is **truthy** then `return middleIndex` OR if not then exit the `while` loop (then return `-1`).
+
 6.1 **Recursive Binary Search**
 - Time Complexity **O(logn)**
   - The `if else` inside the `search` helper function _again_ reduces the Input's Size by HALF.
@@ -301,9 +318,11 @@ console.log(recursiveBinarySearch([-5, 8, 10, 555, 888], 10)); // 2
 console.log(recursiveBinarySearch([-5, 8, 10, 555, 888], 666)); // -1
 console.log(recursiveBinarySearch([-5, 8, 10, 555, 888], 888)); // 4
 ```
-7. **Insertion Sort**
+7. **Bubble Sort**
 
-8. **Quick Sort**
+8. **Insertion Sort**
+
+9. **Quick Sort**
 ```js
 const quickSort = arr => {
     if (arr.length <= 1) {
@@ -338,7 +357,7 @@ console.log('myArr:',myArr);
 - This won't mutate the original `myArr` since I'm not modifying it directly.
 - For descending order all I'd need is to swap `if (arr[i] < pivot) {` into `if (arr[i] > pivot) {`.
 
-8.1 **Quick Sort In Place**
+9.1 **Quick Sort In Place**
 ```js
 const quickSortInPlace = (arr, left = 0, right = arr.length-1) => {
     // if (left > right) { // does nothing, exits recursive calls prematurely
