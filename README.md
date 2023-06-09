@@ -515,15 +515,18 @@ console.log('myArr:',myArr);
   - 1:25 **1st you divide the Array until you are left with subArrays that contain *only* 1 element** remaining -> the logic for that is to split the Array in the Middle until you have an Array of length `1` (keep splitting the Array into middle and then use `Math.floor` for `middleIndex` (the same case is with the Quick Sort Algorithm).
   - 2:36 2nd Step: We **merge** the individual subArrays into new subArrays while **ensuring** the **elements are sorted**.
   - 2:50 Here's how it works: We take the 2 Arrays and a **temporary empty Array** to hold the Elements as they are Sorted (I guess to hold the sorted Arrays(?)).
-- I've googled a bunch to confirm if the group thinking inside the comment section was right & results are confusing how many GOOGLE TOP RESULTS shows using `.shift` method AND there's scarcity amount of Merge Sort JavaScript results ***even when I'm specific in my searches*** using advanced google searching method like wrapping my search terms in a strings -> I'm wondering how people even got a job at FAANG if Google's TOP RESULTs have mistakes:
+- I've googled a bunch to confirm if the group thinking inside the comment section was right & results are confusing how many GOOGLE TOP RESULTS shows using `.shift` method AND there's scarcity amount of Merge Sort JavaScript results ***even when I'm specific in my searches*** using advanced google searching method like wrapping my search terms in a strings -> I'm wondering how people even got a job at FAANG if Google's TOP RESULTs "`merge sort javascript`" have mistakes:
   - https://www.doabledanny.com/merge-sort-javascript uses `.shift`.
     - Additionally saying the `merge` algorithm runs in O(n+m) (or O(n + m)).
   - https://stackabuse.com/merge-sort-in-javascript uses `.shift.
+  - https://www.tutorialspoint.com/how-to-implement-merge-sort-in-javascript uses `.shift`.
   - A good one below:
   - https://medium.com/@renxburnett/merge-sort-in-javascript-849cf7527450 uses 3 `while` loops like my # 10.0.1 solution; but doesn't mention nothing against `.shift`.
     - Also the author calls this one of the hardest coding challenge he came across.
-- The worst mystery is that google search results for `"is shift method inside a loop expensive"` AND the more broad `"is o(n) inside a loop expensive"` shows no focused results; only side-topics.
-  - Not even google results for `"javascript merge sort with pointers"` doesn't show any results.
+  - https://medium.com/analytics-vidhya/implement-merge-sort-algorithm-in-javascript-7402b7271887 uses 3 `while` loops like my # 10.0.1.
+  - https://javascript.plainenglish.io/javascript-merge-sort-3205891ac060 uses my # 10.0.2
+- The worst mystery is that google search results for `"is shift method inside a loop expensive"` AND the more broad `"is o(n) inside a loop expensive"` shows no _focused_ results; only side-topics.
+- Not even google results for `"javascript merge sort with pointers"` doesn't show any *focused* results (I'm frustrated, but I'll ignore it for now without deep diving into this topic (_I can't even if I wanted to_, there's 0 focused google search result & ChatGPT agreeing with everything I say)).
 - **MISTAKEN CODE BELOW BY AUTHOR @codevolution HAS MISTAKES AS IT IS O(n^2) Quadratic and NOT O(nlogn) Linearithmic!** (Scroll below for my own solution.)
 ```js
 const mergeSort = (arr) => {
@@ -552,7 +555,7 @@ const arr = [5, 8, -55, -88, 555, 888]; // will get mutated if I don't make a co
 // inside `mergeSort` which might need a Deep Copy (iterating over each elements).
 console.log('FINALIZED arr:', arr);
 ```
-10.0.1 **UPDATED CODE TO FIX HIS MISTAKES:** (but it's quite redundant I see)
+10.0.1 **UPDATED CODE TO FIX HIS MISTAKES:** (but it's quite redundant `while` loops I see)
 ```js
 const mergeSort = (arr) => {
   // Base case: if the array is empty or contains only one element, it is already sorted
@@ -641,14 +644,16 @@ const merge = (leftArr, rightArr) => {
     // Alternative To:
     // if (leftArr[leftPointer] <= rightArr[rightPointer]) {
       // sortedArr.push(leftArr[leftPointer++]); // works
-      // // // but below DOESN'T work (fills the Array with UNDEFINED elements randomly):
-      // // leftPointer++;
+      // // // but below:
+      // // // leftPointer++; // DOESN'T work here (fills the Array with UNDEFINED elementsrandomly):
       // // sortedArr.push(leftArr[leftPointer]);
+      // // leftPointer++; // works if it's here
     // } else {
       // sortedArr.push(rightArr[rightPointer++]); // works
-      // // // but below DOESN'T work (fills the Array with UNDEFINED elementsrandomly):
-      // // rightPointer++;
+      // // // but below:
+      // // // rightPointer++; // DOESN'T work here (fills the Array with UNDEFINED elementsrandomly):
       // // sortedArr.push(rightArr[rightPointer]);
+      // // rightPointer++; // works if it's here
     // }
   }
 
@@ -672,12 +677,46 @@ sortedArr.push(leftArr[leftPointer] <= rightArr[rightPointer] ? leftArr[0] : rig
 11. Cartesian Product
 - Helpful [YouTube video](https://www.youtube.com/watch?v=C2HuBFYgyM8&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=29&pp=iAQB) by @codevolution.
 - Misc Problems of Time Complexity (Miscellaneous Problems of Time Complexity).
+- Misc Problem - Given two finite non-empty sets, find their Cartesian Product.
 12. Climbing Staircase
 - Helpful [YouTube video](https://www.youtube.com/watch?v=jrY7eONLHZs&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=31&pp=iAQB) by @codevolution.
 - Misc Problems of Time Complexity (Miscellaneous Problems of Time Complexity).
 13. Tower of Hanoi
 - Helpful [YouTube video](https://www.youtube.com/watch?v=_dt773ImwFw&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=33&pp=iAQB) by @codevolution.
 - Misc Problems of Time Complexity (Miscellaneous Problems of Time Complexity).
+---
+# DATA STRUCTURES
+#### There's [video series](https://www.youtube.com/watch?v=poGEVboh9Rw&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=36&pp=iAQB) by @codevolution about DS continuation from the Algorithms of the full DSA playlist.
+1. Arrays
+
+2. Objects
+
+3. Sets
+
+4. Maps
+
+5. Stack
+
+6. Queue
+
+7. Circular Queue
+
+8. Linked Lists
+
+9. Linked List with Tail
+- Has Head Pointers & Tail Pointers. 
+- NOTES:
+- There's Linked List Stack; Linked List Queue; Doubly Linked List.
+10. Hash Tables
+- NOTES:
+- Hash Table Collisions
+11. Trees
+
+12. Binary Search Tree
+
+13. Graph
+- NOTES:
+- There's multiple exercises Adjacency Matrix of a Graph; Adjacency List of a Graph; Graph Add Vertex and Edge; Graph Display and HasEdge; Graph Remove Edge and Vortex.
 ---
 ### DEFINITIONS & EXTRAS
 - **Traverse** definition: In programming, _Array traversing_ or to **traverse** typically refers to the act of iterating or moving through a data structure, such as an array, list, tree, or graph, in order to access or process its elements. -> Traversing a data structure involves visiting each element or node in a systematic manner according to a specific order or pattern.
