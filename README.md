@@ -852,7 +852,23 @@ towerOfHanoi(2, 'A', 'C', 'B','F'); // Return value doesn't matter it's the cons
   - (_I slightly modified the MDN's definition and I may submit a PRs contribution since theirs is a bit confusing._)
 - Searching for a specific Value in an Object is **Linear Time Complexity O(n)** Worst Case Scenario we have to search over all the properties inside that Object.
 3. Set Data Structure
-
+- 1. Set is a Data Structure that can hold a collection of Values -> Values **must** be unique.
+  2. Set can contain a mix of different Data Types -> we can store Strings, Booleans, Numbers or even Objects (or rather Objects Pointers).
+  3. Sets are dynamically szed -> we don't have to declare the size of the Set before creating it.
+  4. Sets do ~**not**~ maintain the insertion order -> meaning an Item Inserted First **doesn't** necessarily mean it's the first item in the Set.
+    - Turns out he was wrong; as per in the comments && [MDN: iteration over a **Set** visits elements in **insertion order**](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set#iterating_sets).
+  6. Sets are iterables -> they can be used within a [`for...of`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of) loop.
+- Sets VS Arrays:
+  - Arrays **can** contain **duplicate** values whereas Sets **can't hold duplicate values** (_which can be a positive thing_).
+  - Insertion order is maintained within Arrays but insertion order is **not** guaranteed with Sets.
+  - Searching and Deleting an Item in a **Set** is **faster** than Arrays.
+- **Create a Set** Syntax example `const set = new Set([555, 888, 'Aleksandar'])`.
+  - `for (const item of set) { console.log('item:', item) }`.
+- **Add a new value** using [`.add`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/add) method **ONLY** if there isn't an item with the same value already in the Set -> meaning a **duplicate value** will be **ignored**.
+- **Check if a value exists** in the Set using [`.has`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/has) method `return`s `Boolean`.
+- **Delete a value** from the Set using [`.delete`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/delete) method `return`s `Boolean`.
+- **Check the amount of items** in the set using [`.size`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/size) method `return`s `Number` of items in the Set.
+- **Delete all values** from the Set using [`.clear`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/clear) method `return`s `undefined` and removes all the items from the Set Object.
 4. Map Data Structure
 
 5. Stack Data Structure
