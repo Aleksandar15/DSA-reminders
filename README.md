@@ -515,7 +515,12 @@ console.log('myArr:',myArr);
   - 1:25 **1st you divide the Array until you are left with subArrays that contain *only* 1 element** remaining -> the logic for that is to split the Array in the Middle until you have an Array of length `1` (keep splitting the Array into middle and then use `Math.floor` for `middleIndex` (the same case is with the Quick Sort Algorithm).
   - 2:36 2nd Step: We **merge** the individual subArrays into new subArrays while **ensuring** the **elements are sorted**.
   - 2:50 Here's how it works: We take the 2 Arrays and a **temporary empty Array** to hold the Elements as they are Sorted (I guess to hold the sorted Arrays(?)).
-- I've googled a bunch to confirm if the group thinking inside the comment section was right & results are confusing how many GOOGLE TOP RESULTS shows using `.shift` method AND there's scarcity amount of Merge Sort JavaScript results ***even when I'm specific in my searches*** using advanced google searching method like wrapping my search terms in a strings -> I'm wondering how people even got a job at FAANG if Google's TOP RESULTs "`merge sort javascript`" have mistakes:
+- I've googled a bunch to confirm if the group thinking inside the comment section was right & results are confusing how many GOOGLE TOP RESULTS shows using `.shift` method AND there's scarcity amount of Merge Sort JavaScript results ***even when I'm specific in my searches*** using advanced google searching method like wrapping my search terms in a strings 
+- **UPDATE:**
+- - -> **[Using any of the Array methods with Linear Time Complexity O(n) inside of a Loop becomes a Quadratic Time Complexity O(n^2)](https://youtu.be/txjmvEPlAtU?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=396)** (_Video by @codevolution about Array Data Structure_).
+  - Which he himself confirms that his Merge Sort indeed was a mistake using `.shift` method inside of a `while` loop! (*he confirms indirectly*.)
+- *Update ends here, the rest continue from before:*
+- -> I'm wondering how people even got a job at FAANG if Google's TOP RESULTs "`merge sort javascript`" have mistakes:
   - https://www.doabledanny.com/merge-sort-javascript uses `.shift`.
     - Additionally saying the `merge` algorithm runs in O(n+m) (or O(n + m)).
   - https://stackabuse.com/merge-sort-in-javascript uses `.shift.
@@ -794,34 +799,82 @@ towerOfHanoi(2, 'A', 'C', 'B','F'); // Return value doesn't matter it's the cons
 ---
 # DATA STRUCTURES
 #### There's [video series](https://www.youtube.com/watch?v=poGEVboh9Rw&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=36&pp=iAQB) by @codevolution about DS continuation from the Algorithms of the full DSA playlist.
-1. Arrays
+- Learning about Data Structure helps to gain a more knowledge about things we are already using such as ([3:33](https://youtu.be/poGEVboh9Rw?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=213)):
+  1. Document Object Model or DOM uses **Tree Data Structure**.
+  2. Browser's back and forward button uses **Stack Data Structure.**
+  3. Operating Systems or OS Job Scheduling uses **Queue Data Structure.**
+- Inbuilt or **Built-In Data Structures** in JavaScript are:
+  1. Arrays Data Structure
+  2. Objects Data Structure
+  3. Sets Data Structure
+  4. Maps Data Structure
+- Custom Data Structures in JavaScript _are created using Built-in Data Structure_ and are:
+  1. Stacks Data Structure
+  2. Queues Data Structure
+  3. Circucal Queues Data Structure
+  4. Linked Lists Data Structure
+  5. Hash Tables Data Structure
+  6. Trees Data Structure
+  7. Graphs Data Structure
+1. Array Data Structure
+- An Array is a  Data Structure that can hold a collection of values with a mix of different data types such as Strings, Booleans, Numbers, or even Objects themselves (*well the pointers of the Object in the actuallity*).
+- Accessing element using square brackets such as syntax `arr[0]`. Constant Time Complexity O(1)
+- [`.push`](https://youtu.be/txjmvEPlAtU?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=180) Method **adds** an element to the **back** of the Array. Constant Time Complexity O(1)
+- `.pop` method **removes** an element from the **back** of the Array. Constant Time Complexity O(1)
+- `.unshift` Method **adds** an Element to the **front** of the Array. Linear Time Complexity O(n)
+- `.shift` method **removes** an elemenet from the **front** of the Array. Linear Time Complexity O(n)
+- Other Array Methods:
+- `.map` Linear Time Complexity O(n)
+- `.filter` Linear Time Complexity O(n)
+- `.forEach` Linear Time Complexity O(n)
+- `.reduce` Linear Time Complexity O(n)
+- `.concat` Linear Time Complexity O(n)
+- `.slice` Linear Time Complexity O(n)
+- `.splice` Linear Time Complexity O(n)
+- -> **[Using any of the methods above of Linear Time Complexity O(n) inside of a Loop becomes a Quadratic Time Complexity O(n^2)](https://youtu.be/txjmvEPlAtU?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=396)**
+  - Which he himself confirms that his Merge Sort indeed was a mistake using `.shift` method inside of a `while` loop! (*he confirms indirectly*.)
+    - He @codevolution says "the interviewer won't be happy with that" -> yet he gives me such a mistaken/misleading solution in the Merge Sort Algorithm lol!
+- To iterate over all the Elements in an Array we can use [`for...of`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of) Array Loop.
+2. Object Data Structure
+- An Object is an unordered collection of key-value pairs. -> The Keys must either be a String or Symbol Data Type whereas the Values can be of any Data Types.
+- To **access** a value or to **retrieve** a value we can use the corresponding Key -> this can be achieved using the Dot Notations or Bracket Notations.
+  - Syntax example `obj['name']` or `obj.name`. -> **Constant Time Complexity O(1)**
+- To **add** a **key-value** pairs this very same syntax is used to add key-value pairs to the Object.
+  - Syntax example `obj['name']='Aleksandar'`. -> **Constant Time Complexity O(1)**
+- To **delete** a key-value pair we can use [`delete`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/delete) operator.
+  - Syntax example `delete obj['name']`. -> **Constant Time Complexity O(1)** -> since the `delete` keyword replaces the key-value pair with `undefined` (***or actually that was the case ONLY with Arrays***).
+- Object property can be a function that is called a method.
+- We can invoke/call a function from an Object's property -> That's also called a method invocations.
+- Object Methods:
+- [`Object.keys`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys) returns an Array of Keys as its Elements. -> **Linear Time Complexity O(n)** -> iterates over all the enumerable Keys in the Object.
+- [`Object.values`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/values) returns an Array of Values as its Elements. -> **Linear Time Complexity O(n)** -> iterates over all the enumerable Keys in the Object.
+- [`Object.entries`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries) returns a nested Arrays inside of an Array which each nested Array holds 2 items **key-value** pairs respectively -> **Key** at index `0` (first item) and **Value** at index `1` (second item). -> **Linear Time Complexity O(n)** -> iterates over all the enumerable Keys in the Object.
+  - (_I slightly modified the MDN's definition and I may submit a PRs contribution since theirs is a bit confusing._)
+- Searching for a specific Value in an Object is **Linear Time Complexity O(n)** Worst Case Scenario we have to search over all the properties inside that Object.
+3. Set Data Structure
 
-2. Objects
+4. Map Data Structure
 
-3. Sets
+5. Stack Data Structure
 
-4. Maps
-
-5. Stack
-
-6. Queue
+6. Queue Data Structure
 
 7. Circular Queue
 
-8. Linked Lists
+8. Linked List Data Structure
 
-9. Linked List with Tail
+9. Linked List with Tail Data Structure
 - Has Head Pointers & Tail Pointers. 
 - NOTES:
 - There's Linked List Stack; Linked List Queue; Doubly Linked List.
-10. Hash Tables
+10. Hash Table Data Structure
 - NOTES:
 - Hash Table Collisions
-11. Trees
+11. Tree Data Structure
 
-12. Binary Search Tree
+12. Binary Search Tree Data Structure
 
-13. Graph
+13. Graph Data Structure
 - NOTES:
 - There's multiple exercises Adjacency Matrix of a Graph; Adjacency List of a Graph; Graph Add Vertex and Edge; Graph Display and HasEdge; Graph Remove Edge and Vortex.
 ---
