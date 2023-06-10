@@ -738,7 +738,6 @@ const climbingStaircase = (n) => {
   return numberOfWays[n - 1];
 };
 
-
 console.log(1+':', climbingStaircase(1)); // 1
 console.log(2+':', climbingStaircase(2)); // 2
 console.log(3+':', climbingStaircase(3)); // 3
@@ -746,8 +745,52 @@ console.log(4+':', climbingStaircase(4)); // 5
 console.log(5+':', climbingStaircase(5)); // 8
 ```
 13. Tower of Hanoi
+- Time Complexity **O(2^n) Exponential Time Complexity *is pretty bad I see*.**
+- Time Complexity is understood by a pattern ([5:25](https://youtu.be/bLHxrvDvL_8?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=333)) -> but for deriving the Time Complexity you can Google **Master Theorem** helps to calculate Time Complexity when Recursion is involved.
+  - 6:10 the trend is **2^n-1** -> which the **Worst Case Time Complexity is O(2^n).** 
+  - Since it has a Time Complexity O(2^n) it gets too slow once Disks amount is `n=15` or above.
+    - It's funny though, and I like the fact how `console.log`s keep printing -> a pretty gamey experience to be honest.
 - Helpful [YouTube video](https://www.youtube.com/watch?v=_dt773ImwFw&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=33&pp=iAQB) by @codevolution.
 - Misc Problems of Time Complexity (Miscellaneous Problems of Time Complexity).
+- Misc Problem - Objective of the Puzzle is to move the entire stack to the **last rod**, obeying the following rules:
+  - **Only** one disk may be moved at a time.
+  - Each move consists of taking the **upper disk** from one of the **stacks** and **placing** it on **top** of **another stack** or an **empty rod.**
+  - **No** disk may be placed on **top** of a **disk** that is **smaller**.
+- Visual Explanation at a [timestamp](https://youtu.be/_dt773ImwFw?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=50).
+- The [steps](https://youtu.be/_dt773ImwFw?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=100):
+  - Step 1: Shift `n-1` disks from `A` to `B`, using `C` (when required). -> *By me: why using `C` I don't understand?*
+  - Step 2: Shift **last** disk from `A` directly to `C`.
+  - Step 3: Shift `n-1` disks from `B` to `C`, using `A` (when required). -> *By me: why using `A` I don't understand?*
+  - 2:00 is Visual Explanations using 3 Disks instead of 2 Disks. -> Same logic applies here.
+  - 3:00 Nope I personally don't understand anything. Needs review / revisit on my part.
+- The solution code explanations:
+  - [1:05](https://youtu.be/bLHxrvDvL_8?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=63) Solution code is using recursive approach.
+  - 1:10 The **Base Case** is the second step "Shift **last** disk from `A` to `C`". -> Code-wise: `if (n===1)`.
+  - 2:00 The **Recursiive Calls** is handled by step one "Shift `n-1` disks from `A` to `B`, using `C` (when required)".
+    - The code is: `towerOfHanoi(n-1, fromRod, usingRod, toRod)`; meaning when called as:
+    - `towerOfHanoi(3, 'A', 'C', 'B')` -> Move `n-1` Disk from `'A'` to `'B'` using `'C'`.
+  - 3:00 Finally step 3 -> "Shift `n-1` disks from `B` to `C`, using `A` (when required)"
+    - The code is: `towerOfHanoi(n-1, usingRod, toRod, fromRod)`; meaning when called as:
+    - `towerOfHanoi(3, 'A', 'C', 'B')` -> Move `n-1` Disk from `'B'` to `'C'` using `'A'`.
+- `Return` value doesn't matter here rather it's the `console.log`s that matters in this gamey code of what seems to be a Puzzle Game code or a Mathematical Puzzle Game code to be precise.
+```js
+const towerOfHanoi = (n, fromRod, toRod, usingRod) => {
+    // Base case is the Step 2
+    if (n === 1) {
+        // Step 2
+        console.log(`Move disk 1 from ${fromRod} to ${toRod}`);
+        return;
+    };
+    // Step 1
+    towerOfHanoi(n-1, fromRod, usingRod, toRod);
+    console.log(`Move disk ${n} from ${fromRod} to ${toRod}`);
+    // Step 3
+    towerOfHanoi(n-1, usingRod, toRod, fromRod);
+};
+
+towerOfHanoi(2, 'A', 'C', 'B','F'); // Return value doesn't matter it's the console.log that matters
+// Since it is of Time Complexity O(2^n) it gets too slow once Disks amount is 15 or more.
+```
 ---
 # DATA STRUCTURES
 #### There's [video series](https://www.youtube.com/watch?v=poGEVboh9Rw&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=36&pp=iAQB) by @codevolution about DS continuation from the Algorithms of the full DSA playlist.
