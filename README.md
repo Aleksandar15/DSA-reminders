@@ -836,7 +836,7 @@ towerOfHanoi(2, 'A', 'C', 'B','F'); // Return value doesn't matter it's the cons
     - He @codevolution says "the interviewer won't be happy with that" -> yet he gives me such a mistaken/misleading solution in the Merge Sort Algorithm lol!
 - To iterate over all the Elements in an Array we can use [`for...of`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of) Array Loop.
 2. Object Data Structure
-- An Object is an unordered collection of key-value pairs. -> The Keys must either be a String or Symbol Data Type whereas the Values can be of any Data Types.
+- An **Object** is an **unordered** collection of key-value pairs. -> The Keys must either be a String or Symbol Data Type whereas the Values can be of any Data Types.
 - To **access** a value or to **retrieve** a value we can use the corresponding Key -> this can be achieved using the Dot Notations or Bracket Notations.
   - Syntax example `obj['name']` or `obj.name`. -> **Constant Time Complexity O(1)**
 - To **add** a **key-value** pairs this very same syntax is used to add key-value pairs to the Object.
@@ -857,20 +857,59 @@ towerOfHanoi(2, 'A', 'C', 'B','F'); // Return value doesn't matter it's the cons
   3. Sets are dynamically szed -> we don't have to declare the size of the Set before creating it.
   4. Sets do ~**not**~ maintain the insertion order -> meaning an Item Inserted First **doesn't** necessarily mean it's the first item in the Set.
     - Turns out he was wrong; as per in the comments && [MDN: iteration over a **Set** visits elements in **insertion order**](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set#iterating_sets).
-  6. Sets are iterables -> they can be used within a [`for...of`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of) loop.
-- Sets VS Arrays:
+    - In the ECMAScript 2015 specification and later versions (**ES6+**), the **insertion order** is **maintained** in **Set objects**.
+  6. Sets are iterables -> Set can be used within a [`for...of`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of) loop.
+- (_Differences between Array and Set_) Sets VS Arrays:
   - Arrays **can** contain **duplicate** values whereas Sets **can't hold duplicate values** (_which can be a positive thing_).
-  - Insertion order is maintained within Arrays but insertion order is **not** guaranteed with Sets.
+  - Insertion order is maintained within Arrays but insertion order is ~**not**~ guaranteed with Sets.
+    - Turns out he was wrong; as per in the comments && [MDN: iteration over a **Set** visits elements in **insertion order**](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set#iterating_sets).
+    - In the ECMAScript 2015 specification and later versions (**ES6+**), the **insertion order** is **maintained** in **Set objects**.
   - Searching and Deleting an Item in a **Set** is **faster** than Arrays.
 - **Create a Set** Syntax example `const set = new Set([555, 888, 'Aleksandar'])`.
   - `for (const item of set) { console.log('item:', item) }`.
-- **Add a new value** using [`.add`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/add) method **ONLY** if there isn't an item with the same value already in the Set -> meaning a **duplicate value** will be **ignored**.
-- **Check if a value exists** in the Set using [`.has`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/has) method `return`s `Boolean`.
-- **Delete a value** from the Set using [`.delete`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/delete) method `return`s `Boolean`.
-- **Check the amount of items** in the set using [`.size`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/size) method `return`s `Number` of items in the Set.
-- **Delete all values** from the Set using [`.clear`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/clear) method `return`s `undefined` and removes all the items from the Set Object.
+- **Add a new value** using [`.add`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/add) method **ONLY** if there isn't an item with the same value already in the Set -> meaning a **duplicate value** will be **ignored**. -> Average **Constant Time Complexity O(1)**.
+  - However, in the **worst case scenario** where the **hash** function used by the Set has **poor distribution**, the time complexity can be **O(n)**, where `n` is the number of elements in the Set.
+- **Check if a value exists** in the Set using [`.has`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/has) method `return`s `Boolean`. -> Average **Constant Time Complexity O(1)** as Set typically involves a **constant lookup time**.
+  - In the worst case scenario, where there are many **collisions**, the time complexity can be **O(n)**.
+- **Delete a value** from the Set using [`.delete`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/delete) method `return`s `Boolean`. -> Average **Constant Time Complexity O(1)**.
+  - However, in the worst case scenario, where the **hash** function leads to a large number of **collisions**, the time complexity can be **O(n)**.
+- **Check the amount of items** in the Set using [`.size`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/size) method `return`s `Number` of items in the Set. -> **Constant Time Complexity O(1)** as the **`size` value** is usually **stored** as a **property** and **ONLY updated internally** whenever **elements** are **added** or **removed**.
+- **Delete all values** from the Set using [`.clear`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/clear) method `return`s `undefined` and removes all the items from the Set Object. -> **Constant Time Complexity O(1).**
 4. Map Data Structure
+- [**The Map object holds key-value pairs and remembers the original insertion order of the keys. Any value (both Objects and Primitive Data Type Values) may be used as either a Key or a Value.**](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
+- It means that **Maps are Ordered** Objects OR collections of key-value pairs. (*While Objects are **unordered.***)
+- Map's key-value pairs can both be of **any** Data Type.
+- To **access a value** or to **retrieve a value** we can use the corresponding Key.
+- Maps are iterable -> Map can be used within a [`for...of`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of) loop.
+- (Differences between Object and Map) Maps vs Objects:
+- Objects are **unordered** whereas Maps are **ordered.**
+- Keys in Objects can only be String or Symbol data type whereas in Maps Keys can be of **any** Data Type.
+- An Object has a **prototype** and may contain a few default Keys which may collide with our own Keys if we're **not** careful. VS Maps on the other hand does **not** contain any Keys by default.
+- Objects are **not** iterables whereas Maps are **iterables**.
+- The number of items in an Object must be determined manually whereas it is readily available with the **size** property in a Map
+  - Wait he [said](https://youtu.be/XOpKmpRh69Y?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=80) that Map does **not** contain any Keys by default so how does Map contains `size` key AKA `size` property **now** all of a sudden? (***Possible mistakes by video creator @codevolution.***)
+- Apart from storing data we can attach functionality to an Object whereas Maps are **restricted** to **storing data only.**
+- **Create** a Map Object syntax `const map = new Map([['name', 'Aleksandar'], ['points', 888]])`.
+  - This Syntax is very similar with the Nested Arrays represent **key-value pairs** much like what `Object.entries` `return`s when used on Objects Data Structure.
+    - Nested Arrays [**must** be of `length` **2**](https://youtu.be/XOpKmpRh69Y?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=195).
+      - Otherwise I tested I've added 3rd item and the 3rd item is being ignored **no** Errors **nor** issues so that's fine.
+- `for...of` loop on Map syntax:
+```js
+const map = new Map([['name', 'Aleksandar'], ['points', 888]]);
 
+for (const [key, value] of map) {
+  console.log(`${key}: ${value}`);
+};
+```
+- **Add a new** key-value pair in the Set using [`.set`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/set) method `return`s the `Map` object itself. -> **Linear Time Complexity O(1)**.
+  - Time Complexity might degrade to **O(n)** if there are many collisions in the **hash table** Data Structure (*I guess* -> This is because resolving collisions may involve traversing a chain or list of elements with the same index.).
+- **Check** if a Key exist in the Map using [`.has`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/has) method `return`s `Boolean` value. -> **Linear Time Complexity O(1)**.
+  - Time Complexity might degrade to **O(n)** if there are many collisions in the **hash table** Data Structure (*I guess* -> This is because resolving collisions may involve traversing a chain or list of elements with the same index.).
+- **Delete** a key-value pair from the Map using [`.delete`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/has) method `return`s `Boolean` value. -> **Linear Time Complexity O(1)**.
+  - Time Complexity might degrade to **O(n)** if there are many collisions in the **hash table** Data Structure (*I guess* -> This is because resolving collisions may involve traversing a chain or list of elements with the same index.).
+- **Check the amount of** key-value pairs in the Map using [`.size`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/size) method `return`s `Number` of key-value pairs in the Map. -> **Linear Time Complexity O(1)** as the **`size` value** is usually **stored** as a **property** and **ONLY updated internally** whenever **key-value pairs** are **added** or **removed**. -> therefore `size` does not involve any iteration or travesal on the key-value pairs stored in the Maps.
+- **Delete all** the key-value pairs in the Map using [`clear`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/clear) method `return`s `undefined` and removes all the key-value pairs in the Map. -> **Linear Time Complexity O(1)**.
+  - **Key-value pairs** are called **elements** or **items** in MDN are **referred** to as the **key-value pairs.**
 5. Stack Data Structure
 
 6. Queue Data Structure
