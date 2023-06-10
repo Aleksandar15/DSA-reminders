@@ -694,22 +694,57 @@ sortedArr.push(leftArr[leftPointer] <= rightArr[rightPointer] ? leftArr[0] : rig
 - **SOLUTION:**
 ```js
 const cartesianProduct = (arr1, arr2) => {
-  const result = []
+  const result = [];
   for (let i = 0; i < arr1.length; i++) {
     for (let j = 0; j < arr2.length; j++) {
-      result.push([arr1[i], arr2[j]])
-    }
-  }
-  return result
-}
+      result.push([arr1[i], arr2[j]]);
+    };
+  };
+  return result;
+};
 
-const arr1 = [1, 2]
-const arr2 = [3, 4, 5]
-console.log(cartesianProduct(arr1, arr2)) // [[1, 3], [1, 4], [1, 5], [2, 3], [2, 4], [2, 5]]
+const arr1 = [1, 2];
+const arr2 = [3, 4, 5];
+console.log(cartesianProduct(arr1, arr2)); // [[1, 3], [1, 4], [1, 5], [2, 3], [2, 4], [2, 5]]
 ```
 12. Climbing Staircase
+- Time Complexity **O(n)** Linear (1 single `for` loop).
 - Helpful [YouTube video](https://www.youtube.com/watch?v=jrY7eONLHZs&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=31&pp=iAQB) by @codevolution.
 - Misc Problems of Time Complexity (Miscellaneous Problems of Time Complexity).
+- Misc Problem - Given a staircase of `n` steps, count the number of distinct ways to climb to the top. -> You can either climb 1 step or 2 steps at a time.
+- Examples:
+- `n=1`, `climbingStaircase(1)` = `1` -> there's **only 1** way to climb to the top: (1)
+- `n=2`, `climbingStaircase(2)` = `2` -> there are **2** ways to climb: (1,1) "1 at a time" OR (2) "2 steps at once"
+- `n=3`, `climbingStaircase(3)` = `3` -> there are **3** ways to climb: (1,1,1) (1 at a time) OR (1,2) OR (2,1)
+- `n=4`, `climbingStaircase(4)` = `5` -> there are **5** ways to climb to the top: (1,1,1,1) OR (1,1,2) OR (1,2,1) OR (2,1,1) OR (2,2)
+- Climbing Staircase idea breakdown:
+- At any given time you can climb either 1 step or 2 steps at a time.
+- If you have to climb to step `n`, you can **only** climb from step `n-1` or `n-2` there's no other way.
+- Calculate the way you cna climb to `n-1` and `n-2` steps and **add the two**.
+- `climbingStaircase(n)` = `climbingStaircase(n-1) + climbingStaircase(n-2)` -> Same pattern as Fibonacci sequence.
+- The numbers of ways to climb `n` is equal to the number of ways to climb `n-1` + the number of ways to climb `n-2`.
+```js
+const climbingStaircase = (n) => {
+  const numberOfWays = [1, 2];
+
+  // Start at i=2 -> since Arrays are 0 indexed (and we already know about 0 and 1)
+  for (let i = 2; i <= n; i++) {
+    numberOfWays[i] = numberOfWays[i - 1] + numberOfWays[i - 2];
+    console.log("LOOP numberOfWays:", numberOfWays);
+  };
+
+  console.log("FINAL numberOfWays:", numberOfWays);
+
+  return numberOfWays[n - 1];
+};
+
+
+console.log(1+':', climbingStaircase(1)); // 1
+console.log(2+':', climbingStaircase(2)); // 2
+console.log(3+':', climbingStaircase(3)); // 3
+console.log(4+':', climbingStaircase(4)); // 5
+console.log(5+':', climbingStaircase(5)); // 8
+```
 13. Tower of Hanoi
 - Helpful [YouTube video](https://www.youtube.com/watch?v=_dt773ImwFw&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=33&pp=iAQB) by @codevolution.
 - Misc Problems of Time Complexity (Miscellaneous Problems of Time Complexity).
