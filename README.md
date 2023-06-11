@@ -933,10 +933,11 @@ for (const [key, value] of map) {
   - `size()` - **Get** the **amount** of items in the Stack (*`return`s number of items in the Stack*).
   - `print()` - **Visualize** the items in the Stack.
 - I'm personally confused about [**Stack Array**](https://replit.com/@Codevolution/JavaScript-Data-Structures#stack-array.js) VS **[Stack Object](https://replit.com/@Codevolution/JavaScript-Data-Structures#stack-object.js)** Data Structure both are on repl.it -> but I just can't differentiate them nor does the video by @codevolution explains the differences rather **only** talks about Stack Arrays huh?!?
+  - So! Stack Array is still made up of Array Literals `[]` under the hood and using the `Class` keywords in the overal implementation (*behind the scenes it is using function prototype inheritance*).
   - [6:06](https://youtu.be/SbjATifB2M8?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=366) Stack vs Array:
     - An Array is an indexed List that allows **random read and write operations** *whereas* a Stack implements the LIFO pricinples
     - Insertion `.push` method and `.pop` method Time Complexity (1) Constant VS Array have Linear O(n) if you choose to insert or remove an item from index `0`.
-##### IMPLEMENTATION CODE STACK DATA STRUCTURE ([replit / repl.it](https://replit.com/@Codevolution/JavaScript-Data-Structures#stack-array.js)):
+##### IMPLEMENTATION CODE STACK ARRAY DATA STRUCTURE ([replit / repl.it](https://replit.com/@Codevolution/JavaScript-Data-Structures#stack-array.js)):
 ```js
 class Stack {
   constructor() {
@@ -980,7 +981,74 @@ console.log(stack.peek()); // Print the last item on TOP of the Stack. (should b
 stack.print(); // Print all the items in the Stack again.
 ```
 6. Queue Data Structure
+- The Queue Data Structure is a Sequential collection of items that follow the principle of FIFO First In First Out.
+- The first item inserted into the Queue is first item to be removed.
+- A Queue of people -> people enter the Queue at one end (**rear/tail**) and leave the Queue from the other end (**Front/head**). (*Aha-moments for me.*)
+- Queue is an abstract Data Type. It is defined by its behavior rather than being a mathematical model.
+- The Queue Data Structure supports 2 main operations:
+  1. Enqueue, which **adds** an item to the **rear/tail** of the collection
+  2. Dequeue, which **removes** an item from the **front/head** of the collection.
+  - [Visual explanation by @codevolution YouTube Video](https://youtu.be/ex8EHl5fq1o?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=79).
+- Queue usages when we have to process in an orderly fashion, for example:
+  - Printers trying to print multiple documents.
+  - CPU task scheduling.
+  - Callback Queue in JavaScript runtime environment to determine the order in which our code executes.
+##### Queue Implementation Breakdown
+- Queue must support at least 2 operations:
+  - `enqueue(item)`, which **adds** an item to the **rear/tail** of the collection
+  - `dequeue()`, which **removes** an item from the **front/head** of the collection.
+- And a few more operations / queue methods:
+  - `peek()` - **get** the value of the item at the front of the Queue without removing it.
+  - `isEmpty()` - **check** if the Queue is empty.
+  - `size()` - **get** the number of items in the queue (*count the total amount of items in the Queue*).
+  - `print()` - **visualize** the items in the Queue.
+##### Queue Array Implementation Code-Wise
+- Queue Array or Array Queue is still made up for Array literal `[]`.
+```js
+class Queue {
+  constructor() {
+    this.items = [];
+  }
 
+  enqueue(element) {
+    this.items.push(element);
+  }
+
+  dequeue() {
+    return this.items.shift();
+  }
+
+  peek() {
+    if (!this.isEmpty()) {
+      return this.items[0];
+    }
+    return null;
+  }
+
+  isEmpty() {
+    return this.items.length === 0;
+  }
+
+  size() {
+    return this.items.length;
+  }
+
+  print() {
+    console.log(this.items.toString());
+  }
+}
+
+const queue = new Queue();
+console.log(queue.isEmpty());
+queue.enqueue(10);
+queue.enqueue(20);
+queue.enqueue(30);
+console.log(queue.size());
+queue.print();
+console.log(queue.dequeue());
+console.log(queue.peek());
+queue.print();
+```
 7. Circular Queue
 
 8. Linked List Data Structure
