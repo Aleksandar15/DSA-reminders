@@ -911,7 +911,74 @@ for (const [key, value] of map) {
 - **Delete all** the key-value pairs in the Map using [`clear`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/clear) method `return`s `undefined` and removes all the key-value pairs in the Map. -> **Linear Time Complexity O(1)**.
   - **Key-value pairs** are called **elements** or **items** in MDN are **referred** to as the **key-value pairs.**
 5. Stack Data Structure
+- The Stack Data Strucutre is a Sequential Collection of items that follows the **LIFO** Principle of Last In First Out.
+- The **last** item **inserted** into the stack is **first** item to be **removed**.
+- **ANALOGY** Stack of Plates: The **last** plate placed on **top** of the **stack** is also the **first** plate **removed** from the stack.
+- Stack is an abstract Data Type. It is **defined** by its **behavior** rather than being a **mathematical** model.
+- The Stack Data Structure supports two main operations:
+  1. **`Push`** which **adds** an item to the collection.
+  2. **`Pop`** which **removes** the most **recently** added item from the collection.
+- Stack Usage / Stack Data Structure Use Cases:
+ - Browser history tracking.
+ - Undo operation when typing (sytanx `CTRL + Z`).
+ - Expression conversions such as infix to postfix (I don't understand these new programming terms).
+ - Call Stack in JavaScript Runtime Environment (/ *CallStack JavaScript Runtime Environment*).
+#### Implementating Stack Data Structure Implementation
+- Stack **must** support at least those **2** operations methods:
+  - `push(item)` - **Add** an item to the **top** of the Stack. -> Constant Time Complexity **O(1)** ([6:30:](https://youtu.be/SbjATifB2M8?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=390)).
+  - `pop()` - **Remove** the **top most** item from the Stack. -> Constant Time Complexity **O(1)** ([6:30:](https://youtu.be/SbjATifB2M8?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=390)).
+- Apart from these 2 operations we need to implement a few more operations:
+  - `peek()` - **Get** the value of the **top item** **without** **removing** it.
+  - `isEmpty()` - **Check** if the Stack is **empty**.
+  - `size()` - **Get** the **amount** of items in the Stack (*`return`s number of items in the Stack*).
+  - `print()` - **Visualize** the items in the Stack.
+- I'm personally confused about [**Stack Array**](https://replit.com/@Codevolution/JavaScript-Data-Structures#stack-array.js) VS **[Stack Object](https://replit.com/@Codevolution/JavaScript-Data-Structures#stack-object.js)** Data Structure both are on repl.it -> but I just can't differentiate them nor does the video by @codevolution explains the differences rather **only** talks about Stack Arrays huh?!?
+  - [6:06](https://youtu.be/SbjATifB2M8?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=366) Stack vs Array:
+    - An Array is an indexed List that allows **random read and write operations** *whereas* a Stack implements the LIFO pricinples
+    - Insertion `.push` method and `.pop` method Time Complexity (1) Constant VS Array have Linear O(n) if you choose to insert or remove an item from index `0`.
+##### IMPLEMENTATION CODE STACK DATA STRUCTURE ([replit / repl.it](https://replit.com/@Codevolution/JavaScript-Data-Structures#stack-array.js)):
+```js
+class Stack {
+  constructor() {
+    this.items = [];
+  }
 
+  push(element) {
+    this.items.push(element);
+  }
+
+  pop() {
+    return this.items.pop();
+  }
+
+  peek() {
+    return this.items[this.items.length - 1];
+  }
+
+  isEmpty() {
+    return this.items.length === 0;
+  }
+
+  size() {
+    return this.items.length;
+  }
+
+  print() {
+    console.log(this.items.toString());
+  }
+}
+
+const stack = new Stack(); // create new Stack
+console.log(stack.isEmpty()); // check if Stack is Empty
+stack.push(20);
+stack.push(10);
+stack.push(30); // add 3 items onto the Stack
+console.log(stack.size()); // check number of items in a Stack
+stack.print(); // Print the items in the Stack
+console.log(stack.pop()); // Removes an item from the end of the Stack
+console.log(stack.peek()); // Print the last item on TOP of the Stack. (should be 10 because 30 has been POPped off.)
+stack.print(); // Print all the items in the Stack again.
+```
 6. Queue Data Structure
 
 7. Circular Queue
