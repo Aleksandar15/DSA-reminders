@@ -1093,7 +1093,7 @@ console.log(queue.peek());
 queue.print();
 ```
 ##### Object Queue or Queue Object Implementation Code
-- `if(!item) return;` -> this is the line to fix the bugs if AND/OR when when `queue.dequeue()` is called without an argument (*meaning @codevolution has [bugs](https://www.youtube.com/watch?v=ba15sgOiAOg&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=46) in his explanations.).
+- `if(!item) return;` -> this is the line to fix the bugs if AND/OR when when `queue.dequeue()` is called without an argument (*meaning @codevolution has [bugs](https://www.youtube.com/watch?v=ba15sgOiAOg&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=45) in his explanations.).
 - Additionally, as per the concerns in the comments, I had added a private reset method `resetIndices` that resets the `head` and `tail` to `0` if the queue ever completely empties.
 ```js
 class Queue {
@@ -1122,6 +1122,9 @@ class Queue {
   };
 
   peek() {
+    if (!this.isEmpty()) {
+      console.log("Queue is empty");
+    };
     return this.items[this.front];
   };
 
@@ -1134,6 +1137,9 @@ class Queue {
   };
 
   print() {
+    if (!this.isEmpty()) {
+      console.log("Queue is empty");
+    };
     console.log(this.items);
   };
   
@@ -1155,7 +1161,165 @@ console.log(queue.peek());
 console.log(queue.isEmpty());
 queue.print();
 ```
-7. Circular Queue
+7. Circular Queue Data Structure
+- Circular Queue is an extended version of a regular Queue.
+- The size of the Queue is fixed and a single block of memory is used as if the first item is connected to the last item.
+- Circular Queue also referred to as **Circular Buffer** or **Ring Buffer** also follows the **FIFO** principle.
+- A Ciruclar Queue will **reuse** the **empty block** created **during** the **dequeue** operation.
+- When working with Queues of fixed maximum size, a Circular Queue is a great implementation choice.
+- The Circular Queue Data Structure supported 2 main operations:
+  - Enqueue which **adds** an item to the **rear/tail** of the collection.
+  - Dequeue which **removes** an item from the **front/head** of the collection
+    - Again so **tail** definitions is the **back** of the collection, and **head** definitions is the **front** of the collection.
+- Circular Queue Visualization [video](https://youtu.be/ngNJps_RUg8?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=69) by @codevolution on YouTube.
+- Circular Queue Usage:
+  1. Clock
+  2. Streaming Data to act as a Buffer (*lookup Buffer definition*).
+  3. Traffic lights.
+##### 7.1 One way of Circular Queue Implementation (*below will be a shorter way yet still same functionality*)
+```js
+class CircularQueue {
+  constructor(capacity) {
+    this.items = new Array(capacity);
+    this.rear = -1;
+    this.front = -1;
+    this.currentLength = 0;
+    this.capacity = capacity;
+  }
+
+  isFull() {
+    return this.currentLength === this.capacity;
+  }
+
+  isEmpty() {
+    return this.currentLength === 0;
+  }
+
+  size() {
+    return this.currentLength;
+  }
+
+  enqueue(item) {
+    if (!this.isFull()) {
+      this.rear = (this.rear + 1) % this.capacity;
+      this.items[this.rear] = item;
+      this.currentLength += 1;
+      if (this.front === -1) {
+        this.front = this.rear;
+      }
+    }
+  }
+
+  dequeue() {
+    if (this.isEmpty()) {
+      return null;
+    }
+    const item = this.items[this.front];
+    this.items[this.front] = null;
+    this.front = (this.front + 1) % this.capacity;
+    this.currentLength -= 1;
+    if (this.isEmpty()) {
+      this.front = -1;
+      this.rear = -1;
+    }
+    return item;
+  }
+
+  peek() {
+    if (!this.isEmpty()) {
+      return this.items[this.front];
+    }
+    return null;
+  }
+
+  print() {
+    if (this.isEmpty()) {
+      console.log("Queue is empty");
+    } else {
+      let i;
+      let str = "";
+      for (i = this.front; i !== this.rear; i = (i + 1) % this.capacity) {
+        str += this.items[i] + " ";
+      }
+      str += this.items[i];
+      console.log(str);
+    }
+  }
+}
+
+const queue = new CircularQueue(5);
+console.log(queue.isEmpty());
+queue.enqueue(10);
+queue.enqueue(20);
+queue.enqueue(30);
+queue.enqueue(40);
+queue.enqueue(50);
+console.log(queue.size());
+queue.print();
+console.log(queue.isFull());
+console.log(queue.dequeue());
+console.log(queue.peek());
+queue.print();
+queue.enqueue(60);
+queue.print();
+```
+##### 7.2 Second way _- as per in the comments and not my own code because I'm still learning -_ there's a much shorter code for Circular Queue Data Structure.
+- I don't understand the parts that uses `% this.size` modulus calculations? Needs revisit/review.
+```js
+class CircularQueue{
+    constructor(size){ // "size" or "capacity" is just a naming conventions
+        this.items = new Array(size)
+        this.size = size
+        this.currentLength = 0
+        this.rear = 0
+        this.front = 0
+    }
+    isFull(){
+        return this.currentLength === this.size
+    }
+    isEmpty(){
+        return this.currentLength === 0
+    }
+    enqueue(element){
+        if(!this.isFull()){
+            this.items[this.rear] = element
+            this.currentLength++
+            this.rear = (this.rear + 1) % this.size
+        }
+    }
+    dequeue(){
+        if(this.isEmpty()){
+            return null;
+        }
+        const item = this.items[this.front]
+        this.items[this.front] = null
+        this.front = (this.front + 1) % this.size
+        this.currentLength--
+        if(this.isEmpty()){
+            this.front = 0
+        }
+        return item;
+    }
+    peek(){
+        return this.items[this.front]
+    }
+}
+```
+#### EXPLANATIONS of the V2:
+- Since I don't understand the parts that uses `% this.size` modulus calculations? -> There's this ChatGPT explanations:
+Let's say we have a circular queue with a capacity of 5, represented by an array with indices 0 to 4. The `this.size` is set to 5 to match the capacity of the queue.
+
+Initially, the `rear` and `front` indices are both set to `-1`.
+When we enqueue an element, the `rear` index is incremented by 1: `this.rear = (this.rear + 1) % this.size`.
+- When `this.rear` reaches `4` (the maximum index), the modulo operation will be `4 % 5`, which results in `4`.
+- When `this.rear` exceeds `4` and becomes `5`, the modulo operation will be `5 % 5`, which results in `0`.
+- This effectively wraps the `rear` index back to the beginning of the array, creating a circular behavior.
+Similarly, when we dequeue an element, the `front` index is incremented by 1: `this.front = (this.front + 1) % this.size`.
+- When `this.front` reaches `4` (the maximum index), the modulo operation will be `4 % 5`, which results in `4`.
+- When `this.front` exceeds `4` and becomes `5`, the modulo operation will be `5 % 5`, which results in `0`.
+- This wraps the `front` index back to the beginning of the array, maintaining the circular behavior.
+
+By using the modulus operator `%` with `this.size`, the indices will always stay within the range of the array, ensuring that the circular behavior of the queue is maintained. It allows the indices to effectively wrap around to the beginning of the array when they reach the end, avoiding any index out-of-bounds errors.
 
 8. Linked List Data Structure
 
