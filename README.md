@@ -980,6 +980,49 @@ console.log(stack.pop()); // Removes an item from the end of the Stack
 console.log(stack.peek()); // Print the last item on TOP of the Stack. (should be 10 because 30 has been POPped off.)
 stack.print(); // Print all the items in the Stack again.
 ```
+##### IMPLEMENTATION CODE STACK ARRAY DATA STRUCTURE ([replit / repl.it](https://replit.com/@Codevolution/JavaScript-Data-Structures#stack-array.js))
+```js
+class Stack {
+  constructor() {
+    this.items = [];
+  };
+
+  push(element) {
+    this.items.push(element);
+  };
+
+  pop() {
+    return this.items.pop();
+  };
+
+  peek() {
+    return this.items[this.items.length - 1];
+  };
+
+  isEmpty() {
+    return this.items.length === 0;
+  };
+
+  size() {
+    return this.items.length;
+  };
+
+  print() {
+    console.log(this.items.toString());
+  };
+};
+
+const stack = new Stack();
+console.log(stack.isEmpty());
+stack.push(20);
+stack.push(10);
+stack.push(30);
+console.log(stack.size());
+stack.print();
+console.log(stack.pop());
+console.log(stack.peek());
+stack.print();
+```
 6. Queue Data Structure
 - The Queue Data Structure is a Sequential collection of items that follow the principle of FIFO First In First Out.
 - The first item inserted into the Queue is first item to be removed.
@@ -1047,6 +1090,69 @@ console.log(queue.size());
 queue.print();
 console.log(queue.dequeue());
 console.log(queue.peek());
+queue.print();
+```
+##### Object Queue or Queue Object Implementation Code
+- `if(!item) return;` -> this is the line to fix the bugs if AND/OR when when `queue.dequeue()` is called without an argument (*meaning @codevolution has [bugs](https://www.youtube.com/watch?v=ba15sgOiAOg&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=46) in his explanations.).
+- Additionally, as per the concerns in the comments, I had added a private reset method `resetIndices` that resets the `head` and `tail` to `0` if the queue ever completely empties.
+```js
+class Queue {
+  constructor() {
+    this.items = {};
+    this.front = 0;
+    this.rear = 0;
+  };
+
+  enqueue(element) {
+    this.items[this.rear] = element;
+    this.rear++;
+  };
+
+  dequeue() {
+    const item = this.items[this.front];
+    if(!item) return; // this is the line to correct the bugs if when when "queue.dequeue()".
+    delete this.items[this.front];
+    this.front++;
+    
+    if (this.isEmpty()) {
+     this.resetIndices(); // Call the resetIndices method if the queue becomes completely empty
+    };
+    
+    return item;
+  };
+
+  peek() {
+    return this.items[this.front];
+  };
+
+  size() {
+    return this.rear - this.front;
+  };
+
+  isEmpty() {
+    return this.rear - this.front === 0;
+  };
+
+  print() {
+    console.log(this.items);
+  };
+  
+  resetIndices() {
+    this.front = 0;
+    this.rear = 0;
+  };
+}
+
+const queue = new Queue();
+console.log(queue.isEmpty());
+queue.enqueue(10);
+queue.enqueue(20);
+queue.enqueue(30);
+console.log(queue.size());
+queue.print();
+console.log(queue.dequeue());
+console.log(queue.peek());
+console.log(queue.isEmpty());
 queue.print();
 ```
 7. Circular Queue
