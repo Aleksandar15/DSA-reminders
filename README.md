@@ -1363,7 +1363,77 @@ By using the modulus operator `%` with `this.size`, the indices will always stay
 		- 3:00 Visual explanation.
 		- Similar to Arrays we have to treat them so that nodes are positioned `0`, `1` and `2`.
 		- Let's say we need to insert a **new node** at index `2`. -> That is in **between** the **nodes** positioned currently `1` and `2`.
-		- -> What we have to do is: make the **new** node to point to the node that node `1` is pointing at & change the **next pointer** from node `1` to the **new node** -> to write this logic requires a bit more udnerstanding -> advanced topics.
+		- -> What we have to do is: make the **new** node to point to the node that node `1` is pointing at & change the **next pointer** from node `1` to the **new node** -> to write this logic requires a bit more understanding -> advanced topics.
+##### `removeFrom` operation ([source](https://youtu.be/D_kWagEfcx8?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=16)):
+- 0:12 `removeFrom` method will be a **removal** implementation from a **given index** as well across 3 scenarios:
+	- 0:20 **Scenario 1**: `index` is **less** than `0` or **greater** than the `size` of the **list**. -> In such a case we return `0` as **no** item can be removed.
+		- 0:55 condition is `if (index<0)` inside `removeFrom` method.
+	- 1:30 **Scenario 2:** `index` is `===` to `0` -> that is removing the **head node** which is the **first node** in the **list**. Removing the **node** involves pointing **head** at the second node in the list. -> In terms of code: **head** would point to its own next pointer which always points at the second node in the **list**. The first **node** is detach and garbage collected (*oh the old forgotten terms garbage collectors*) -> **head** will continue to point at the first node in the new list which is the expected ehavior.
+		- 2:10 if the list has only 1 node to begin with -> head will still point at its own-next pointer but that will just be `null`. -> if **head** is pointing at `null` then it indicates empty list!
+		- Code wise that is the variable `removedNode` that will hold a reference to the **node that will be removed**.
+		- Next we check if `index === 0` -> if yes then we'll store a reference to the **head** node in the `removedNode` variable to the `this.head`. We then change the head **node** from the first node to the second **node**.
+		- Next `this.head` = `this.head.next` -> if the list contains only 1 **node** -> **head** will now **point** at `null`.
+		- `this.size--` & `return removedNode.value` this code now takes care of invalid index and removing a node from the beginning of the list.
+	- 3:40 **Scenario 3**: `index` is valid AND greater `>` than `0`.
+	- (In meantime reading the comment "*you may delete your tail node, what do you do in that case?*" -> answer seems to be to modify the `for (let i = 0; i < index - 1; i++)` code into `for (let i = 0; i < this.size; i++)`.)
+		- We're going to treat the `index` similar to Arrays so the **nodes** are positioned at index `0`, `1` and `2` and `3`. -> if we need to remove the **node** at index `2` that's between `1` and `3` -> (4:14) the only **rule** we have to fulfill after deleting is that the nodes **must** point to the **next node** in the **right order.** - so we have to make the node at position `1` to point directly at position `3` -> that will effectievely detach node at position `2` from the list.
+		- 4:44 A **rule reminders** (*rules reminders*) whenever we have to **do** something that is **not** at the **head** of the list it generally involves a **temporary** pointer that moves across the list.
+		- Deeper Explanations (4:00):
+		- To delete a node at a given index we need to get a hold of the node previous to that index. For example to delete a node at index `2` we need a reference to node at index `1`. For that purpose we're going to use a temporary pointer called `previous`. We will start off with `previous` pointing at the head node. We will then traverse the list advancing the `previous` pointer until we reach the node that is `previous` to the index we need to delete from. 
+		- In our case example we need to delete from index `2` so we advanced the previous pointer until index `1`. At this point we will get hold of the node to be removed using `previous.next`. -> So, a new pointer called `removedNode` would be equal to `previous.next`. -> We then break the link from node at position `1` to node at position `1` and instead link node at position `1` to node at position `3`. That is point `previous.next` to `removedNode.next` -> Connect node `1` directly with node `3`. This will provide the continuity required. There is no way now to reach the removed node from the head and hence it will be garbage collected. As you can see **deletion** being similar to **insertion** is as **simple** as **changing** the **next pointer** of the individual nodes.
+		- The code is in the `else` block of inside `removeFrom`.
+##### `removeValue` operation ([source](https://youtu.be/RgrIXX3E2mY?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=26)):
+- `removeValue` method logic (*cude breakdown*): it will **remove** the first node that contains the value. It will `return` the `value` `if` the **node** was **removed** or `else` `return` `null` `if` the **node was not found**.
+- 0:25 Across 3 scenarios:
+	- 0.28 **Scenario 1**: The first scenario is where the list is empty. In such a case we will return `null` as no node can be removed.
+	- Let's call the method `removeValue` which accepts a `value` argument that a node might contain.
+	- `if (this.isEmpty())` conditional code is the Scenario 1 -> then `return null` ensuring at least 1 node is present in the list which might contain a value equal to the pasted value/passed value and we can proceed with removing such a **node** from a list. It's welcome to add a message before `return`ing from the method for more clarity in the log statement (? - why he didn't added a message or comment ?).
+	- 1:28 **Scenario 2:** where  **passed** **value** is equal to the value of the first node in the list: that is **removing** the head node. Removing the head node involves pointing head at the second node in the list. In terms of code head would point to the next poitner which always points in the second node in the list. The first node is  reachable and is garbage collected. Head will continue to point at the first node in the new list which is the expected behavior. If the list has only one node to begin with, head will still point at its own next pointer but that would just be `null`.  When you remove  the only node in the list  we would have an empty list.
+		- Code `if (this.head.next === value)`.
+		- Then we point **head** to its next pointer: `this.head = this.head.next`.
+		- `return value` is a business logical decisions -> we can return either the `value` or a `message` saying that the **node** has been deleted - if we wanted more empathy in the business logic decisions.
+	- 3:18 **Scenario 3:** where **value** is present in the **node** that is **not** the **head** OR the **value** is **not** present in the **list at all.**
+		- 3:30 visual explanations of what it means to remove a node somewhere in the middle of the list:
+		- Say we have 4 nodes in the nodes containing the values 10, 20, 25, 30, respectively.
+		- Let's say we try to remove the value `25`.
+		- The only rule we have to fulfill after deleting is that the noeds must point to the next node in the right order.
+		- So, make the node of value `20` to point to node with value `30` (4th; bcuz 3rd (`25`) will be removed).
+		- ([4:14](https://youtu.be/RgrIXX3E2mY?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=255) of YouTube video about `removeValue` and previous video at [4:44](https://youtu.be/D_kWagEfcx8?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=284) about `removeFrom`) Again from previous 2 videos **RULES REMINDERS**(*a rule reminders)*: **if we wanna do something that is not at the head of the list it generally involves a temporary pointer that moves across the list**. 
+		- -> And to delete a node that contains the given value, we need to get hold of the node previous of the node that contains the value.
+		- For example to delete node `25` -> we **need reference** for node `20` value.
+		- 4:44 For that purpose we're gonna use temporary pointer called `previous` & here's how:
+		- We'll start at `previous` pointing at the `head` node.
+		- 4:55 Then we'll **traverse** the list advancing the previous pointer until we reach the node that is `previous` to the node that contains value `25`.
+		- The condition will be to advance `previous` for as long as there exists a next node in the list `&&` the next node does **not** contain the passed in value.
+		- In our case we advance until node that contains `20` value, as the next node contains `25` which is the node we wanna remove.
+		- At this point `previous.next` **points** at the node that must be deleted (`25` value) AND `removedNode` points to the **node** that should now be linked to the previous node.
+		- 5:40 So all we have to do is change `previous.next` into `removednode.next`. This will provide the continuity required.
+		- 5:55 Node `25` will be garbage collected and we'll ahve the new list with 3 nodes and `head` still pointing at the first node.
+		- 6:06 **We have a case where the `value` may not be present in the list.**
+		- Such a scenario if `value` passed into `removeValue` method is `60` (**which does not exist in our list**). In this case our `previous` pointer would have advanced into the last node in the list as it does **not** find that `value` in any of the nodes. At that point in time we check if there is a `next` node -> if there's **no** `next` node -> it simply means that we have **reached** the **end** of the list without finding the node that contains the passed in `value`. in that case we simply return `null`.
+		- The code starts of inside `else` statement inside `removeValue` method:
+		- Initialize `previous` pointer to head: `let prev = this.head;`.
+		- Next we advance the `previous` pointer as long as there is a `next` as long as there is a `next` node in the list and that node does not contain the passed in `value` argument; code: `while (prev.next && prev.next.value !== value)` -> `prev = prev.next;`
+		- 7:47 When `while` loop exits; 1 of **2 things** are possible:
+			- #1 The `previous` pointer has **stopped** at the node `previous` to the node which has to be removed. -> So there does exists a **node-to-be-removed**; code: `if (prev.next)` -> we then store temporary variable as the **node-to-be-removed** in `removedNode = prev.next` equals to the node after the `previous` pointer (**`prev.next`**) AND we change `prev.next = removedNode.next`; 8:30 ALSO decrement the `size` as `this.size--` and `return value;` or `return` some message with empathy for the client / frontend user.
+			- 8:40 #2 `else` `if` the `previous` pointer reached the last node in the list `&&` there is **no next node** we'll `return null` as **no node could be deleted.**
+		- 10:50 Time Complexity: **Linear Time Complexity O(n):**
+			- Big O Notations calculations ->: removing the **HEAD** **NODE** is **ALWAYS** Constant Time Complexity O(1) **HOWEVER** removing a node in general has **Linear Time Complexity O(n)** as the node to be **removed** might be the last node in the list. In certain articles you might find separate functions or methods to **remove head** and **remove node** separately, but in our implementations covers both.
+- **BUGS IN THE IMPLEMENTATIONs as per the comments in the YouTube Video about [`removeValue` by @codevolution](https://www.youtube.com/watch?v=RgrIXX3E2mY&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=55):**
+	- @Ali: "*What **if** we have to **remove** **last** value which has **`null`** in **next**. I have tried, but it **cannot** be **removed.***".
+	- By me: Since I'm studying all of this and have no idea what's the purpose of Data Structure as I don't understand the goal for Data Structures yet, here's ChatGPT answer for a **fix**(take with grain of salt):
+```js
+if (prev.value === value) {
+	this.head = null; // Set the head to null when removing the last value
+	this.size--;
+	return value;
+};
+```
+- So,
+	- Let's implement it inside the final code as well below!
+##### `search` operation ([source](https://www.youtube.com/watch?v=ZRIJuAIGJ4M&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=56)):
+- `search` method.
+### FINAL CODE LINKED LIST DATA STRUCTURE:
 ```js
 class Node {
   constructor(value) {
@@ -1458,7 +1528,7 @@ class LinkedList {
     if (this.head.value === value) {
       this.head = this.head.next;
       this.size--;
-      return value;
+      return value; // either retirn "value" or an empathetic message saying that the node has been deleted.
     } else {
       let prev = this.head;
       while (prev.next && prev.next.value !== value) {
