@@ -1321,17 +1321,49 @@ Similarly, when we dequeue an element, the `front` index is incremented by 1: `t
 
 By using the modulus operator `%` with `this.size`, the indices will always stay within the range of the array, ensuring that the circular behavior of the queue is maintained. It allows the indices to effectively wrap around to the beginning of the array when they reach the end, avoiding any index out-of-bounds errors.
 
-8. Linked List Data Structure
+8. **Linked List Data Structure**
+### **NOTES 13 June 2023:** I DO UNDERSTAND THE CODE BUT I DON'T UNDERSTAND THE GOAL OF THIS ALL? WHY'D I NEED TO MEMORIZE IT ALL? 
+#### (*I do understand some libraries that I'm using do use these stuff under the hood, but like in my case I've never encountered the need to use it and now I have to memorize it because, there's no "pain" that's pushing me to learn this since I've never encountered the needs of these Custom Data Structures. -> The question "why do I need these?" is the Spanish village while the code is easy to grasp.)
 - A Linked List is a linear Data Structure that includes a series of connected **nodes**.
 - Each **node** consists of a **data value** and a **pointer** that **points** to the **next node**.
-- The list items can be easily inserted or removed without reallocation or reorganization of the entire structure.
-- Random access of items is not feasible and accessing an item has linear Time Complexity (**O(n)**).
+- **ADVANTAGES OF LINKED LIST OVER ARRAYS:** The list items can be easily inserted or removed without reallocation or reorganization of the entire structure.
+- **DOWNSIDES OF LINKED LIST:** Random access of items is not feasible and **accessing** an item has Linear Time Complexity **O(n)**.
 - The linked list Data Structure supports **3 main operations:**
-	1. Insertion - to **add** an item at the beginning or end or at a given index in the list.
-	2. Deletion - to **remove** an item given its index or value.
-	3. Search - to **find** an item given its value.
+  1. Insertion - to **add** an item at the beginning or end or at a given index in the list.
+  2. Deletion - to **remove** an item given its index or value.
+  3. Search - to **find** an item given its value.
 - Visual Linked List explanation [YouTube video](https://youtu.be/3OsxH-huRc4?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=83) by @codevolution.
-##### Linked List Implementation (*will need to write notes later on*).
+- Linked List Usage:
+  - All applications of both **Stacks** and **Queues** are applications _of_ Linked Lists Data Structure.
+    - Here I'm not quite sure if it means that Linked List is made up of Stacks and Queues (*or can be made up of*) OR if ~Linked List is made up Stacks and Queues~ -> **NOPE** -> [1:50](https://youtu.be/3OsxH-huRc4?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=111) Linked List can be **used** to **implement Stacks** and **Queues**.
+  - Image viewer (real world example: you can look at photos continuously in a slideshow
+  - Linked List is asked in asked in interviews (*frequent interview questions*).
+#### Linked List Implementation.
+- EXPLANATIONS:
+##### `prepend` operation: Constant Time Complexity **O(1)**
+  - Linked List **PREPEND** EMPTY LIST ([source](https://youtu.be/NAPQ0ua02CA?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=104)) #1 if a lists is **Empty**->then we make HEAD to point at the newly created **NODE** meaning the very first item in the list!
+  - #2 2:40 Linked List **PREPEND** a list when it's **not** Empty (meaning Existing list); **HEAD** points the first **node** AND **last** **node** points at **null*.
+##### `print` operation:
+  - ([source](https://youtu.be/A-9tzPuE1eA?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=116)) How do we know if we have covered **all** the **nodes** in a **list**? -> Once all the **nodes** have been covered then **current** pointer points at `null` and thus implies we have covered all the **nodes** in the list.
+##### `append` operation: Linear Time Complexity **O(n)** *(we have `while` loop)*
+- `append` method **adds** a new **node** at the end of the **list**.
+- `append` method implementation in 3 steps ([source](https://youtu.be/3e6Xfnr5ME8?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=13)).
+	- **0:15 Step 1:** We have to create a new **node** that will be added to the list. -> The **node** will contain a value and a next pointer pointing at `null`.
+	- 1:20 **Step 2:** If list is **empty list** we have to make the **head** pointing at the newly created **node** (*the very first **node** in the list*).
+	- 2:10 **Step 3:** When the list is **not** empty. (*this is the `else` block as per 4:00*) -> Let's assume we start with a list that contains 3 **nodes**: **head** is pointing at the **first node**; and each consecutive is pointing at the **next node**; and the **last node** points at **`null`** -> so instead to **add** a new **node** at the **end** we must make the **last node in the list** to point at the newly created **node** in the list (*most recently added **node***).
+		- The condition would be `previous.next !== null`. -> That will ensure the previous pointer lands at the very last **node** in the list. -> Once we **do** end up at the last **node** we make `previous.next` point at the new **node**. -> This will `append` the new **node** to the existing list.
+	- 6.55: "Well it is possible to **`append`** a **new node** in **constant time** but that involves **maintaing** a **tail pointer** that **always poitns** at the **last node** in the **list**-> I will briefly talk about that later in the course, but for now I want you to understand the very **basic imlpementation of a linked list** with **just** the **head pointer**. -> For beginners starting with the simplest code possible is the goal.".
+##### `insert` operation ([source](https://www.youtube.com/watch?v=Sd9Nps5nAdU&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=53)):
+- `insert` method will **insert** a new **node** at a given **index** in the **list**. -> In this case the `insert` method will accept the **node** `value` as well as the `index` at which the **node** needs to be **inserted**.
+- There's 3 scenarios:
+	- 0:30 **Scenario 1:** when the `index` is **less** than `0` or **greater** than the `size` of the **list**. In such a scenario we simply `return;` from the function.
+	- 1:40 **Scenario 2:** when the `index` is **equal** to `0` that is **inserting** the new **node** as the **first node** in the **list**. -> **Inserting** a new **node** at the beginning is the same as `prepend`ing -> since we already have a **`prepend` method** for that we can **reuse** it (*following DRY principle*).
+		- 2:25 `prepend` method will take care of adding the **node** either to an **empty** list or an **existing** list. -> make sure to not *increment* the `size` here (**"here**: the `if (index === 0)` condition inside of the `insert` method) as that is handled by the `prepend` method itself.
+	- 2:45 **Scenario 3:** where `index` is **valid** and **greater** than `0`.
+		- 3:00 Visual explanation.
+		- Similar to Arrays we have to treat them so that nodes are positioned `0`, `1` and `2`.
+		- Let's say we need to insert a **new node** at index `2`. -> That is in **between** the **nodes** positioned currently `1` and `2`.
+		- -> What we have to do is: make the **new** node to point to the node that node `1` is pointing at & change the **next pointer** from node `1` to the **new node** -> to write this logic requires a bit more udnerstanding -> advanced topics.
 ```js
 class Node {
   constructor(value) {
@@ -1354,6 +1386,7 @@ class LinkedList {
     return this.size;
   }
 
+	// Constant Time Complexity O(1)
   prepend(value) {
     const node = new Node(value);
     if (this.isEmpty()) {
@@ -1365,6 +1398,7 @@ class LinkedList {
     this.size++;
   }
 
+	// Linear Time Complexity O(n)
   append(value) {
     const node = new Node(value);
     if (this.isEmpty()) {
@@ -1373,11 +1407,11 @@ class LinkedList {
       let curr = this.head;
       while (curr.next) {
         curr = curr.next;
-      }
+      };
       curr.next = node;
-    }
+    };
     this.size++;
-  }
+  };
 
   insert(value, index) {
     if (index < 0 || index > this.size) {
@@ -1390,12 +1424,12 @@ class LinkedList {
       let prev = this.head;
       for (let i = 0; i < index - 1; i++) {
         prev = prev.next;
-      }
+      };
       node.next = prev.next;
       prev.next = node;
       this.size++;
-    }
-  }
+    };
+  };
 
   removeFrom(index) {
     if (index < 0 || index >= this.size) {
@@ -1473,15 +1507,16 @@ class LinkedList {
       console.log("List is empty");
     } else {
       let curr = this.head;
-      let list = "";
+      let listValues = "";
       while (curr) {
-        list += `${curr.value}->`;
+      // This While Loop will repeat until `curr` points after the last node === null -> Loop's Base Case & Exits.
+        listValues += `${curr.value}->`;
         curr = curr.next;
-      }
-      console.log(list);
-    }
-  }
-}
+      };
+      console.log(listValues);
+    };
+  };
+};
 
 const l = new LinkedList();
 
