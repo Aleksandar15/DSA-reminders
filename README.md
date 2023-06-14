@@ -1664,8 +1664,9 @@ l.print();
 console.log(l.getSize());
 l.print();
 ```
-9. Linked List with Tail Data Structure
-- Has Head Pointers & Tail Pointers. 
+9. **Linked List with Tail Data Structure**
+- Has Head Pointers & Tail Pointers.
+- *(Also called Linked List with a Head and a Tail Pointers / Linked List with a Head Pointer and a Tail Pointers.)*
 - NOTES:
 - I've noticed there's Linked List Stack DS; Linked List Queue DS; Doubly Linked List DS
 - Next,
@@ -1688,7 +1689,7 @@ l.print();
 ##### Case 5: `delete` only one node:
 - 2:50 **Scenario 1:** when there's only 1 **node** in the List: deleting that node involves making **head** point at `null`. -> With a `tail` deleting that node involves making **both head and tail point at `null`**.
 - 3:09 **Scenario 2:** if the List contains **more than 1 items** - deleting a **node** from the **start** is the same for both the cases: make **head** point to its **next node**. -> While deleting a **node from the end** is mostly similar: the only difference is that we have to **re-position** the **tail pointer**: so to **delete* a node in both the cases we obtain a reference to the node `previous` to the last node. Then,  we point that `previous` node to `null` **which effectively removes the  last node from the List (*reminder this is technially removing the  last node from the list***).
-- 3:45 **Scenario 3:** with the **tail** pointer we update the tail pointer to point to that `previous` **node** which is the **new last node in the list.** -> 3:53 so Deleting from the **start** has Constant Time Complexity **O(1)** VS deleting from the **end** has a Linear Time Complexity **O(n).**
+- 3:45 **Scenario 3:** with the **tail** pointer we update the tail pointer to point to that `previous` **node** which is the **new last node in the list.** -> 3:53 Deleting from the **start** has Constant Time Complexity **O(1)** VS deleting from the **end** has a Linear Time Complexity **O(n).**
 ##### IMPORTANT about Linked List with Tail Overview:
 - 4:10 While `insert`ing and `remove` method: removing a node **in between** the **first** and **last** **nodes** AND `search`ing for a **node** in the **List** and `reverse` method: reversing the List is the **same in both the Cases *(with and without a Tail).***
 ##### Linked List with Tail Implementation of the `insert`ion and `remove` method ([source](https://www.youtube.com/watch?v=ADZfDxftXQ0&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=59)):
@@ -1709,6 +1710,7 @@ removeFromFront() {
 	//...
 };
 ```
+- 3rd Comment is a question about Big O Notations Calculations of `removeFromEnd` method and that seems to be of a Linear Time Complexity **O(n)** as the `while` loop is used inside of it.
 - 0:40 `isEmpty`, `getSize` and `print` methods are **same as before**.
 - 1:11 In [this video](https://www.youtube.com/watch?v=ADZfDxftXQ0&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=59) there will be 4 methods implemented for the Linked List with a Tail:
 - `prepend(value)`.
@@ -1716,7 +1718,7 @@ removeFromFront() {
 - `removeFromFront()`.
 - `removeFromEnd()`.
 - 1:20 Starting with `prepend` method & explanations will be shorter now (*yet video lasts 10 mins because he says:*) I will be showing you visual explanations after each method implemented.
-- *(Well here I stop writing things down, as I do understand the logic behind the **CODE**, but I don't understand the real life use cases, so I consider this to be enough, as well as because @codevolution will keep repeating himself from the previous videos I already took very lengthy notes.)*
+- *(Well here I stop writing things down, as I do understand the logic behind the **CODE flow**, but I don't understand the real life use cases, so I consider this to be enough, as well as because @codevolution will keep repeating himself from the previous videos I already took very lengthy notes.)*
 ### FINAL CODE Linked List WITH A Tail CODE IMPLEMENTATIONS:
 ```js
 class Node {
@@ -1778,6 +1780,7 @@ class LinkedList {
     return value;
   }
 
+	// Linear Time Complexity O(n) -> because of the WHILE Loop.
   removeFromEnd() {
     if (this.isEmpty()) {
       return null;
@@ -1843,6 +1846,270 @@ list.print();
 list.removeFromEnd();
 list.print();
 */
+```
+##### Linked List Stack Data Structure ([source](https://www.youtube.com/watch?v=-0ZIresFUZI&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=60))
+- 0:10 Starts with a mistake calling it simply a "Stack Data Structure" by me: I think that's wrong way of calling it as it'll cause confusion with the Stack Data Structure itself!
+- **0:30 He mentions the fact that below I've already noticed & written notes about: the `linked-list-tail` must be `export`ed and then `import`ed inside `linked-list-stack` if working with repl.it OR *by me: copy paste the code into a single console(VSCode, etc.)*.**
+- 0:40 Reminders: Stack Data Structure follows LIFO principle **last in first one** -> in other words: we **insert** from **one end** AND ALSO **remove** from that very same **end.**
+- 0:55 In A Linked List We can treat `insert`ing a node at the **start** of the List as the `push` method in Arrays AND **removing** the **node** from the **start** as the `pop` method in Arrays Data Structure.
+- 2:10 Hence why there's 3 main methods in Linked List Stack Data Structure:
+- `push(value)`.
+- `pop`.
+- `peek`.
+- As well as a few **helper methods**:
+- `isEmpty`.
+- `getSize`.
+- `print`.
+- *(Well here I stop writing notes, as I do understand the logic behind the **CODE flow**, but I don't understand the real life use cases, so I consider this to be enough of a notes.)*
+### Linked List Stack IMPLEMENTATIONS:
+# WARNING/NOTICE of a Possible BUGS:
+- **I NOTICE THAT Linked List with a Tail has to be imported and included in the same file if I do use repl.it or CodeSandBox OR included in the same file by copy-paste `linked-list-tail` code inside the code `linked-list-stack` for the part below to work:**
+```js
+const LinkedList = require("./linked-list-tail");
+
+class LinkedListStack {
+  constructor() {
+    this.list = new LinkedList();
+  }
+
+  push(value) {
+    this.list.prepend(value);
+  }
+
+  pop() {
+    return this.list.removeFromFront();
+  }
+
+  peek() {
+    return this.list.head.value;
+  }
+
+  isEmpty() {
+    return this.list.isEmpty();
+  }
+
+  getSize() {
+    return this.list.getSize();
+  }
+
+  print() {
+    return this.list.print();
+  }
+}
+
+const stack = new LinkedListStack();
+console.log(stack.isEmpty());
+stack.push(20);
+stack.push(10);
+stack.push(30);
+console.log(stack.getSize());
+stack.print();
+console.log(stack.pop());
+stack.print();
+console.log(stack.peek());
+```
+##### Linked List Queue Data Structure ([source](https://www.youtube.com/watch?v=15q-fLZqo_0&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=61))
+- 0:20 Reminders: Queue Data Structure follows the FIFO principle: **first in first out** -> in other words we **insert from one end** and **remove from the other end.**
+- In A Linked List we can treat `insert`ing a **node at the end of the List** as the `enqueue` operation AND **removing a node from the start of the List** as the `dequeue` methods operations.
+- 0:50 Again, here we **import** the ~`linked-list`~ -> wait he has a mistake importing `linked-list` instead of as per his correct [replit](https://replit.com/@Codevolution/JavaScript-Data-Structures#linked-list-queue.js) importing the `linked-list-tail` Class -> _OR perhaps it doesn't matter for this Linked List Queue Data Structure whether the `-tail` part of the Linked List or the normal non-`tail` Class is imported both should work just as fine_ (*importing using `require`*).
+- 1:30 3 Main Methods Operations in Linked List Queue DS:
+	- `enqueue(value)`.
+	- `dequeue()`.
+	- `peek()`.
+- And a few helper methods:
+	- `isEmpty()`.
+	- `getSize()`.
+	- `print()`.
+- 2:00 The `enqueue` method will **insert** a value at the rear end of a Queue.->For better understanding let's consider the `tail` of the List as the **rear end of the Queue.**-> To **insert a value at the `tail`** we can call `append` method on the List like so: `this.list.append(value)`.
+### Linked List Queue IMPLEMENTATIONS:
+# WARNING/NOTICE of a Possible BUGS:
+- **I NOTICE THAT Linked List with a Tail has to be imported and included in the same file if I do use repl.it or CodeSandBox OR included in the same file by copy-paste `linked-list-tail` code inside the code `linked-list-queue` for the part below to work:**
+```js
+const LinkedList = require("./linked-list-tail");
+
+class LinkedListQueue {
+  constructor() {
+    this.list = new LinkedList();
+  }
+
+  enqueue(value) {
+    this.list.append(value);
+  }
+
+  dequeue() {
+    return this.list.removeFromFront();
+  }
+
+  peek() {
+    return this.list.head.value;
+  }
+
+  isEmpty() {
+    return this.list.isEmpty();
+  }
+
+  getSize() {
+    return this.list.getSize();
+  }
+
+  print() {
+    return this.list.print();
+  }
+}
+
+const queue = new LinkedListQueue();
+console.log(queue.isEmpty());
+queue.enqueue(10);
+queue.enqueue(20);
+queue.enqueue(30);
+console.log(queue.getSize());
+queue.print();
+console.log(queue.dequeue());
+queue.print();
+console.log(queue.peek());
+```
+##### Doubly Linked List ([source](https://www.youtube.com/watch?v=MZhQB8R33xw&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=62))
+- 0:10: What we have learned so far is Singly Linked List Data Structure -> contains nodes which have a `value` field as well as `next` field which points to the next node in the line of Nodes.
+- 0:25 The other type is Doubly Linked List DS: each node contains the `value` field, the `next` **node link**, as well as a second link pointing to the `previous` node in the sequence -> this makes `insert`ion and `removal` in Constant Time Complexity **O(1)** but at the expense of more Space Complexity -> so, tradeoffs are Space Complexity increases.
+- 0:55 [Visual explanation video by YouTube](https://youtu.be/MZhQB8R33xw?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=55) @codevolution.
+- A node in doubly linked list ontains **2 pointers:** `previous` and `next`.
+- With this in mind lets understand the **3 methods/operations**:
+	- `insert`.
+	- `delete`.
+	- `traversal` operations.
+- Quick timestamps though:
+- 1:11 `prepend` method in Doubly Linked List:
+	- **Case 1:** If the list is empty -> the new node is both the Head and Tail of the List. 
+	- **Case 2** However if the List already exists -> we point `node.next` to `this.head` ; `this.head.previous` to `node`; and assign `this.head =` to the **new node which is the first node in the updated List**.
+- 1:45 `append` method:
+	- **Case 1** if the list is empty then the new node is both the Head and the Tail of of the List. However,
+	- **Case 2** if a list already exists: `tail.next` will point at the **new node** and `node.previous` will point back at **Tail** ; finally we assign `tail` to the **new node** which is the **last node in the updated List**.
+- 2:10 `removeFromFront` a node from the **front**: All you have to do is point the **head node** to its `next` **node.** -> The **first node** will effectively be removed in doing so (meaning: *technically removed/logically removed without a **direct** removal*).
+- 2:28 `removeFromEnd` we have 2 scenarios:
+	- **Case 1** if the list contains only 1 node->both head and tail of the List shoudl be pointed to `0`. This will effectively remove the node from the List (meaning automatically will be removing the node from the List without manually removing it) ->
+	- 2:45 **Case 2** if the list contains **more than 1 node** -> you get hold of the node `previous` to the `tail` using `tail.previous` -> then Update the new `tail` pointer `next` field to null: meaning assigning `tail.next = null`
+	- 3:00 Deletiong at both ends in both ends has Constant Time Complexity **O(1) in Doubly Linked List Data Structure**.
+	- To `print` the list -> start at **head** and travel until the **tail** using `next` field on each node.
+	- To `print` the list **in Reverse** -> start at **tail** and travel until the **head** using the `previous` field on each node -> it really is that simple.
+- 3:40 Code Breakdown won't be provided, but Code itself is already in the replit / repl.it
+- Doubly Linked List is much easier to be understood than Linked List.
+### Double Linked List IMPLEMENTATIONS:
+```js
+class Node {
+  constructor(value) {
+    this.value = value;
+    this.prev = null;
+    this.next = null;
+  }
+}
+
+class DoublyLinkedList {
+  constructor() {
+    this.head = null;
+    this.tail = null;
+    this.size = 0;
+  }
+
+  isEmpty() {
+    return this.size === 0;
+  }
+
+  getSize() {
+    return this.size;
+  }
+
+  prepend(value) {
+    const node = new Node(value);
+    if (this.isEmpty()) {
+      this.head = node;
+      this.tail = node;
+    } else {
+      node.next = this.head;
+      this.head.prev = node;
+      this.head = node;
+    }
+    this.size++;
+  }
+
+  append(value) {
+    const node = new Node(value);
+    if (this.isEmpty()) {
+      this.head = node;
+      this.tail = node;
+    } else {
+      this.tail.next = node;
+      node.prev = this.tail;
+      this.tail = node;
+    }
+    this.size++;
+  }
+
+  removeFromFront() {
+    if (this.isEmpty()) {
+      return null;
+    }
+    const value = this.head.value;
+    this.head = this.head.next;
+    this.size--;
+    return value;
+  }
+
+  removeFromEnd() {
+    if (this.isEmpty()) {
+      return null;
+    }
+    const value = this.tail.value;
+    if (this.size === 1) {
+      this.head = null;
+      this.tail = null;
+    } else {
+      this.tail = this.tail.prev;
+      this.tail.next = null;
+    }
+    this.size--;
+    return value;
+  }
+
+  print() {
+    if (this.isEmpty()) {
+      console.log("List is empty");
+    } else {
+      let curr = this.head;
+      let list = "";
+      while (curr) {
+        list += `${curr.value}<->`;
+        curr = curr.next;
+      }
+      console.log(list);
+    }
+  }
+
+  printReverse() {
+    if (this.isEmpty()) {
+      console.log("List is empty");
+    } else {
+      let curr = this.tail;
+      let list = "";
+      while (curr) {
+        list += `${curr.value}<->`;
+        curr = curr.prev;
+      }
+      console.log(list);
+    }
+  }
+}
+
+const list = new DoublyLinkedList();
+list.append(1);
+list.append(2);
+list.append(3);
+list.prepend(0);
+list.print();
+list.printReverse();
+list.removeFromEnd();
+list.print();
+list.removeFromFront();
+list.print();
 ```
 10. Hash Table Data Structure
 - NOTES:
