@@ -1434,7 +1434,7 @@ if (prev.value === value) {
 - So,
 	- Let's implement it inside the final code as well below!
 ##### `search` operation ([source](https://www.youtube.com/watch?v=ZRIJuAIGJ4M&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=56)):
-- 0:10 `search` method implementation we will **return** the **first `index`** or position at which the `value` is present or `-1` if the `value` is **not** found in the list OR business logic: we can return the **nude** itself (***by me that's a `find` method under the hood***).
+- 0:10 `search` method implementation we will **return** the **first `index`** or position at which the `value` is present or `-1` if the `value` is **not** found in the list OR business logic: we can return the **node** itself (***by me that's a `find` method under the hood***).
 - 0:25 `search` method implementation is very similar to the `print` method and falls under 2 categories:
 - 0:33 **Scenario 1:** when the list is **empty**. -> IN such a case we return `-1` as **no** **node** can be found.
 	- 0:55 To handle **scenario 1** we make use of `if` statement: the code of inside `search` method: `if (this.isEmpty())` condition -> then `return -1` -> we make sure that at least 1 node is present in the List which might continue a `value` equal to the passed in `value`. -> for business logic choices you can `return` a message instead.
@@ -1667,10 +1667,186 @@ l.print();
 9. Linked List with Tail Data Structure
 - Has Head Pointers & Tail Pointers. 
 - NOTES:
-- There's Linked List Stack; Linked List Queue; Doubly Linked List.
+- I've noticed there's Linked List Stack DS; Linked List Queue DS; Doubly Linked List DS
+- Next,
+##### Linked List with Tail Overview ([source](https://www.youtube.com/watch?v=sw7fCZeFTdc&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=58))
+- In the past 10 Videos about Linked List!.. There has been 10 videos solely focused on this topic; and there's more..:
+- 0:20 `prepend` method AKA **insertion** at the beginning of the list has a Constant Time COmplexity **O(1)** BUT `aappend` method AKA **insertion** at the end has Linear Time Complexity O(n) (Hint:**bad**) -> this can be improved by having to a Constant Time COmplexity (1) by keeping track of an additional pointer called **tail** which **always** points at the **last node** in the List.
+- 0:50 This video is an Overview of how the Linked List Data Structure works with both the **Head** Pointer & **Tail** Pointer.
+##### Case 1: When the List is **empty**:
+- 1:11 When the List is **empty** and we have just the **head** pointer pointing at `null`.
+- While with a **tail**: we have both the **head and tail** pointing at `null`.
+##### Case 2: To `insert` first node in the List:
+- 1:30 We'll create a **node** and point `head` at that **node**. 
+- While with a **tail**: to `insert` the first **node** in the List -> we create a **node** and point point both `head` and `tail` at that **node**.
+	- When there's only 1 **node** it is both the **first node and the last node**.
+##### Case 3: To `prepend` a node:
+- 1:50 TO `prepend` a node it is same in both the cases: Create a **new** **node**, point its `next` pointer at the **head node** AND point `head` at the **new node**.
+##### Case 4: `append`ing is where there is a difference:
+- 2:10 With just the **head node** to `append` a new node we obtain a reference to the last node AND point its `next` pointer at the new node.
+- While with a **tail**: We already have a reference to the `last` node. -> All we have to do is **create a new node;** point `tail.next` to the **new node** AND assign the **newly created node as the Tail node for the List.** -> 2:40 In such case **insertion** in both ends has a Constant Time COmplexity **O(1).**
+##### Case 5: `delete` only one node:
+- 2:50 **Scenario 1:** when there's only 1 **node** in the List: deleting that node involves making **head** point at `null`. -> With a `tail` deleting that node involves making **both head and tail point at `null`**.
+- 3:09 **Scenario 2:** if the List contains **more than 1 items** - deleting a **node** from the **start** is the same for both the cases: make **head** point to its **next node**. -> While deleting a **node from the end** is mostly similar: the only difference is that we have to **re-position** the **tail pointer**: so to **delete* a node in both the cases we obtain a reference to the node `previous` to the last node. Then,  we point that `previous` node to `null` **which effectively removes the  last node from the List (*reminder this is technially removing the  last node from the list***).
+- 3:45 **Scenario 3:** with the **tail** pointer we update the tail pointer to point to that `previous` **node** which is the **new last node in the list.** -> 3:53 so Deleting from the **start** has Constant Time Complexity **O(1)** VS deleting from the **end** has a Linear Time Complexity **O(n).**
+##### IMPORTANT about Linked List with Tail Overview:
+- 4:10 While `insert`ing and `remove` method: removing a node **in between** the **first** and **last** **nodes** AND `search`ing for a **node** in the **List** and `reverse` method: reversing the List is the **same in both the Cases *(with and without a Tail).***
+##### Linked List with Tail Implementation of the `insert`ion and `remove` method ([source](https://www.youtube.com/watch?v=ADZfDxftXQ0&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=59)):
+- By me: To begin with, there's a comment or multiple of comments pointing out at the **mistake** he made for the `reverse` method making the issue for `removeFromEnd()` "*and the fix is to add `this.tail = this.head;` **BEFORE** the `while` loop begins.*".
+	- Comment stands: "*I also want to note if you kept the code from previous videos, that the reverse() method will cause removeFromEnd() to **crash.*".**
+	- **NOTE** in repl.it @ https://replit.com/@Codevolution/JavaScript-Data-Structures#linked-list-tail.js -> that's **ALREADY SEEM TO HAVE BEEN FIXED inside `reverse` method** *(the mistake is inside the Video **only**)*.
+- By me2: And another issues/mistakes/bugs with his code is with `removeFromFront`; and in the reply seciton the fix seems to be: "*`if (head === null)` condition then `tail = null;` AND the `return` should be removed from the above as it breaks the flow of code and save the `return`able value into a static variable which can be `return`ed at the end of all the conditional statements.*".
+	- The comment explaining the issue stands: "*There is a bug in removeFromFront method, when there is one node in linked list and head and tail both point to it, the head will become nulll but the tail will still point to the same node, tail should also have been set to `null`*.".
+	- Well if so, I have to make a code that would be a fix for this second bug because it hasn't been updated in his repl.it.
+	- Of inside `removeFromFront` method *(at [repl.it](https://replit.com/@Codevolution/JavaScript-Data-Structures#linked-list-tail.js))*:
+	- But there do I place it I have no idea if order matters, so I asked ChatGPT told me that I can even use `if (this.size === 1)` condition.
+	- Since I don't understand I think such a condition may be an issue if the `size` doesn't matter in a case where there is a reversal traversal of removing an item? -> or wait, actually the method name is pretty clear `removeFromFront` so all we fix is the **logic removing a Node from Front** which now makes sense that th condition would work *(and I don't need 2 of them just 1 is **enough):***
+```js
+removeFromFront() {
+	if (this.head === null || this.size === 1) { // Both Conditions does the same.
+		this.tail = null;
+	};
+	//...
+};
+```
+- 0:40 `isEmpty`, `getSize` and `print` methods are **same as before**.
+- 1:11 In [this video](https://www.youtube.com/watch?v=ADZfDxftXQ0&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=59) there will be 4 methods implemented for the Linked List with a Tail:
+- `prepend(value)`.
+- `append(value)`.
+- `removeFromFront()`.
+- `removeFromEnd()`.
+- 1:20 Starting with `prepend` method & explanations will be shorter now (*yet video lasts 10 mins because he says:*) I will be showing you visual explanations after each method implemented.
+- *(Well here I stop writing things down, as I do understand the logic behind the **CODE**, but I don't understand the real life use cases, so I consider this to be enough, as well as because @codevolution will keep repeating himself from the previous videos I already took very lengthy notes.)*
+### FINAL CODE Linked List WITH A Tail CODE IMPLEMENTATIONS:
+```js
+class Node {
+  constructor(value) {
+    this.value = value;
+    this.next = null;
+  }
+}
+
+class LinkedList {
+  constructor() {
+    this.head = null;
+    this.tail = null;
+    this.size = 0;
+  }
+
+  isEmpty() { // No changes in Linked List with a Tail IMPLEMENTATIONS
+    return this.size === 0;
+  }
+
+  getSize() { // No changes in Linked List with a Tail IMPLEMENTATIONS
+    return this.size;
+  }
+
+  prepend(value) {
+    const node = new Node(value);
+    if (this.isEmpty()) {
+      this.head = node;
+      this.tail = node;
+    } else {
+      node.next = this.head;
+      this.head = node;
+    }
+    this.size++;
+  }
+
+  append(value) {
+    const node = new Node(value);
+    if (this.isEmpty()) {
+      this.head = node;
+      this.tail = node;
+    } else {
+      this.tail.next = node;
+      this.tail = node;
+    }
+    this.size++;
+  }
+
+  removeFromFront() {
+    if (this.isEmpty()) {
+      return null;
+    }
+    const value = this.head.value;
+    this.head = this.head.next;
+		if (this.head === null || this.size === 1) { // Both Conditions does the same.
+			this.tail = null;
+		};
+    this.size--;
+    return value;
+  }
+
+  removeFromEnd() {
+    if (this.isEmpty()) {
+      return null;
+    }
+    const value = this.tail.value;
+    if (this.size === 1) {
+      this.head = null;
+      this.tail = null;
+    } else {
+      let prev = this.head;
+      while (prev.next !== this.tail) {
+        prev = prev.next;
+      }
+      prev.next = null;
+      this.tail = prev;
+    }
+    this.size--;
+    return value;
+  }
+
+  reverse() {
+    let current = this.head;
+    let prev = null;
+    let next = null;
+    while (current) {
+      next = current.next;
+      current.next = prev;
+      prev = current;
+      current = next;
+    }
+    this.tail = this.head; // This is already fixed in the repl.it; whereas it was pointes as a "fix" inside the YouTube comments.
+    this.head = prev;
+  }
+
+  print() { // No changes in Linked List with a Tail IMPLEMENTATIONS
+    if (this.isEmpty()) {
+      console.log("List is empty");
+    } else {
+      let curr = this.head;
+      let list = "";
+      while (curr) {
+        list += `${curr.value}->`;
+        curr = curr.next;
+      }
+      console.log(list);
+    }
+  }
+}
+
+module.exports = LinkedList;
+
+/** Uncomment when testing only this file */
+/**
+const list = new LinkedList();
+list.append(1);
+list.append(2);
+list.append(3);
+list.prepend(0);
+list.print();
+console.log(list.getSize());
+list.removeFromFront();
+list.print();
+list.removeFromEnd();
+list.print();
+*/
+```
 10. Hash Table Data Structure
 - NOTES:
-- Hash Table Collisions
+- There's Hash Table Collisions
 11. Tree Data Structure
 
 12. Binary Search Tree Data Structure
