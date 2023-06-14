@@ -1423,6 +1423,8 @@ By using the modulus operator `%` with `this.size`, the indices will always stay
 	- @Ali: "*What **if** we have to **remove** **last** value which has **`null`** in **next**. I have tried, but it **cannot** be **removed.***".
 	- By me: Since I'm studying all of this and have no idea what's the purpose of Data Structure as I don't understand the goal for Data Structures yet, here's ChatGPT answer for a **fix**(take with grain of salt):
 ```js
+// The code should be places inside `class LinkedList`
+// Then inside `removeValue` ONLY before `return null`
 if (prev.value === value) {
 	this.head = null; // Set the head to null when removing the last value
 	this.size--;
@@ -1432,7 +1434,53 @@ if (prev.value === value) {
 - So,
 	- Let's implement it inside the final code as well below!
 ##### `search` operation ([source](https://www.youtube.com/watch?v=ZRIJuAIGJ4M&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=56)):
-- `search` method.
+- 0:10 `search` method implementation we will **return** the **first `index`** or position at which the `value` is present or `-1` if the `value` is **not** found in the list OR business logic: we can return the **nude** itself (***by me that's a `find` method under the hood***).
+- 0:25 `search` method implementation is very similar to the `print` method and falls under 2 categories:
+- 0:33 **Scenario 1:** when the list is **empty**. -> IN such a case we return `-1` as **no** **node** can be found.
+	- 0:55 To handle **scenario 1** we make use of `if` statement: the code of inside `search` method: `if (this.isEmpty())` condition -> then `return -1` -> we make sure that at least 1 node is present in the List which might continue a `value` equal to the passed in `value`. -> for business logic choices you can `return` a message instead.
+- 1:30 **Scenario 2:** when the list is **not empty**. Very similarly to `print` method. However, instead of `console.log`ging the node `value` to the `console` we instead `return` the `index` of that node.
+- 1:50 Here's how: we're gonna create a variable `i` to keep track of the node `index` and a temporary pointer `current` to **traverse the list**. -> At the beginning `current` will point at the **head node**.
+	- 2:05 Then, we'll use the `next` pointer in **each node** to advance the `current` pointer and check `if` the **node** contains the `search`'s `value` -> `if` it does then we'll `return index` value (*AKA `return i` in the code below*).
+	- 2:22 An example: trying to find a node with value `30` in a nodes of: **10, 20, 30, 40** values (*reminder by me: `40` will point at `null` but `null` is **not** a value, but it's just the **last node**'s **pointer**s*).
+	- 2:28 That node of value `30` is at index `2` (*Linked List is `0` based index*) using the `current` pointer.
+	- 2:40 `if` we reach a state where `current` pointer **points at `null`** (*AKA the last node of `40` value in this case example*) -> we've crossed the last **node** in the list and we did **not** encounter the `search` `value` argument then we'll `return -1`.
+	- 3:00 The code `let i = 0;` `let curr = this.head`
+	- 3:21 **Traverse definition: loop over the Linked List** -> in this case we'll traverse with `while` loop's condition `while (curr)` -> shortcut meaning: `curr !== null` -> then **compare** if the `curr` node `value` is `===` to the passed in `value` **argument** -> then `return index`
+		- That explanation in code: `if (curr.value === value) { return i; }`.
+	- 3:40 `else` is ommitted instead we continue the code flow: 3:48 **Advance the `current` pointer and increment the `index++`** (*again, in final code it's shortened to `i++`*):
+		- `curr = curr.next; i++;`.
+- 4:04 when `while` loop exits we can infer that the **node** was **not found in the list** and we'll `return -1` (*outside below the `while` loop*).
+#### **REVERSE A LINKED LIST** ([source](https://www.youtube.com/watch?v=S9kMVEUg-x4&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=57)):
+- Empathy: 0:15 code would **not** make any sense if you **don't** have the mental image of what happesn when you **reverse the Linked List**. Rather focus on the visual representation than the actual code ->
+	- (*So, the downsides for my by me now **is that all the while** it's the understanding that matters and not memorizing it; on top of it all I dont really understand the use cases since I've never encountered the need for these Data Structures and that's what stopping me from creating a visual understanding rather than I'm trying to memorize it because I never had the pain o fneeding any of these solutions -> so i'm memorizing logical solutions because  I never had real experience where I struggled with it and I was in pain and needed to look up this Linked List Data Structure.*)
+- Example the **logic breakdown**:
+	- 0:40 Say we have a normal Linked List with **3 nodes**: **1, 2, 3**
+	- `1` is the **head node** and points at `2` points at `3` points at `null`.
+	- 0:50 **The Reversed Linked List** contains **3, 2, 1,**
+	- `3` is the **head node** and points at `2` points at `1` points at `null`.
+- 1:11 Here's how the code breakdown logic:
+	- We're going to create **2 Temporary Pointers**: `previous` which does **not** point at any nodes OR technically it means that it points at `null`; AND `current` pointer points at **Head**.
+- 1:30 For every **node** in the List we execute **4 Steps:**
+	- 1:35 **Step 1:** We create a **new temporary pointer** called `next` and **point it to** `current.next`.
+	- 1:50 **Step 2:** Node `2` is the **next node** in our example -> We then **set** `current.next = previous` -> meaning `1` now **points at** `null` instead of pointing at `2` -> the Direction has **reversed**.
+	- 2:08 **Step 3:** We then update `previous` to `current` **meaning** `previous` now **points** at `1` AND `current` points at `next` **meaning** `current` points at `2`.
+	- 2:28 We **repeated** the **same** operations for the 2nd and 3rd **node**s:
+		- `next` points at `current.next`.
+		- `current.next` points at `previous`.
+		- `previous` points at `current`.
+		- `current` points at `next`.
+	- 2:55 **repeat** the same for the `3`rd **node** and we have the **REVERSED LINKED LIST!** -> now `3` pointing at `2` points at `1` points at `null`.
+	- 3:10 One last **final** change though is to assign the `previous` node as the **head node**. -> **Remember** **head** should **always** point at first node in the List.
+	- "*If this was slightly confusing please rewatch the past few minutes*" - No, I do understand it all I just don't memorize it because, again, I had never the emotional pain of needing to build such a Data Structure.
+##### 3:30 (*of the same video*) The Code will implement `reverse` method:
+- Code begins with `let prev = null; let curr = this.head;`.
+- `while (curr)` condition has **4 steps** code explanations
+	- 4:06 **Step 1** create temporary `next` pointer that **points** to the `next` **node** after `current`; code: `let next = curr.next`.
+	- 4:22 **Step 2** make the `curr`ent node to **point in REVERSE**; the code: `curr.next = prev`.
+	- 4:34 **Step 3** advance the `previous` pointer; code: `prev = curr`.
+	- 4:40 **Step 4** advance the `curr`ent pointer; code: `curr = next`.
+- This `while` loop **exits when** **all** the **node** in the List have been covered (*here he means all the nodes in the Linked List have been Traversed AKA Looped over*).
+- 4:55 At this stage make sure to **set** **head** to the **new** first item in the List; code: `this.head = prev`ious.
 ### FINAL CODE LINKED LIST DATA STRUCTURE:
 ```js
 class Node {
@@ -1540,9 +1588,17 @@ class LinkedList {
         this.size--;
         return value;
       }
+      
+      // ChatGPT fix for the comment above (read notes about `removeValue`):
+			if (prev.value === value) {
+				this.head = null; // Set the head to null when removing the last value
+				this.size--;
+				return value;
+			};
+			
       return null;
-    }
-  }
+    };
+  };
 
   search(value) {
     if (this.isEmpty()) {
