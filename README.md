@@ -2114,6 +2114,117 @@ list.print();
 10. Hash Table Data Structure
 - NOTES:
 - There's Hash Table Collisions
+##### Hash Table Overview ([source](https://www.youtube.com/watch?v=-Df9ipREbuM&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=63))
+- A Hash Table also known as Hash Map (*or Hashtable*) is a Data Structure that is used to store key-value pairs.
+- Given a Key, you can associate a value with that Key for very fast lookup.
+- 0:30 You might ask "If we have JavaScript Objects why do we need Hash Tables?" - yes and the differences:
+- JavaScript's Object is a special implementation of the **Hash Table** Data Structure. However, Object **Class** adds its own Keys. Keys that you input may conflict and overwrite the ihnerited default properties.
+- Maps Objects which were introduces in ECMASCRIPT 2015 ES6 allows you to store key-value pairs -> 1:11 and to be honest that is what you should use when writing code.
+- 1:20 Altough JavasCirpt already has two Hash Table implementations (Maps and Objects) -> writing your own Hash Table is a very popular JavaScirpt interview questions
+- 1:50 Hash Table store key value pairs; Hash Table example:
+	- `in` key => `India` value
+	- `au` key => `Australia` value, etc.
+- We store the key value pairs in a fixed size Array.
+- Arrays have a number index. -> But a Stringified one.
+- How to go from using **string** as an index to number as an index? -> The answer is the Hashing Function:
+- A Hashing Function accepts the string key, converts it into a Hash Code using a defined logic and then map it into a numeric index that is within the bounds of the Array. -> Once we have the index:
+- Using the index we store the `value`.
+- The same Hashing Function is reused to `retrieve` the value given a key.
+- A hash table supports 3 main methods / operations:
+	- `set` to store a key value pair
+	- `get` to retrieve a value given its key
+	- `remove` to delete a key value pair
+- [3:15](https://youtu.be/-Df9ipREbuM?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=214) timestamps Hash Table Visualization.
+- 3:33 Hash Table Usge:
+	- Hash Tables are tpyically implemented where Constant time lookup and insertion are required such examples are:
+		- Database indexing;
+		- Caches.
+##### Hash Table Implementation ([source](https://www.youtube.com/watch?v=y3CcHKEM8r8&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=64)]
+- Hash Table breakdown logic:
+	- 3 Main operations/methods `set`, `get` and `remove`.
+	- Additionally we need to implement Hasing Function to convert a **string** key to a **numeric index** (*index of **number** data type!*).
+- [**`hash` method**](https://youtu.be/y3CcHKEM8r8?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=111) accepts `key` argument which is of type **string** data type.
+- 2:00 The logic to convert `key` into number index can vary in complexity -> we want complex hashing functions that **do not produce** the same indexes for different Keys. (*by me: we should **never** have duplicate indexes clashing*. Oh, **UPDATE: that's called collisions definitions: [at 0m in the next video about Hash Table Collissions](https://www.youtube.com/watch?v=kTh5nAqCkOA&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=65): if `hash` method produces the same indexes for different Keys resulting in a loss of data!** Aha-moments! -> Also as an example he [showed](https://youtu.be/y3CcHKEM8r8?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=530) using 2 different Keys (`name` and `mane`) but same `charCodeAt` AND it still overwritten the **first** Key Value pair of a key `'name'`.) -> However for beginners perspective we'll use a very simply logic `hash` method -> using the `charCodeAt` built-in method to **convert** **each character** in the Key into a **numeric value**. -> Then we will **add** all the values to give us one **number** which we can use.
+- 3:15 To make sure the index is in bounds/borders/limits of the Array's total amount of items -> we'll use the modulus operator against the `size` of the Array; code-wise: `return total % this.size;` inside `hash` method.
+- `set`;`get`.
+- 5:50 `remove(key)` method You can **add** an `if` condition inside `remove` method to **check** if **Value** exists **before** deleting; but for our implementations this works just as fine.
+- `display` method by me: seems to be of Linear Time Complexity O(n) because it uses a `for` loop.
+#### Hash Table Collisions ([source](https://www.youtube.com/watch?v=kTh5nAqCkOA&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=65))
+
+### Hash Table Implementations code-wise:
+```js
+class HashTable {
+  constructor(size) {
+    this.table = new Array(size);
+    this.size = size;
+  }
+
+  hash(key) {
+    let total = 0;
+    for (let i = 0; i < key.length; i++) {
+      total += key.charCodeAt(i);
+    };
+    return total % this.size;
+  };
+
+  set(key, value) {
+    const index = this.hash(key);
+    const bucket = this.table[index];
+    if (!bucket) {
+      this.table[index] = [[key, value]];
+    } else {
+      const sameKeyItem = bucket.find((item) => item[0] === key);
+      if (sameKeyItem) {
+        sameKeyItem[1] = value;
+      } else {
+        bucket.push([key, value]);
+      }
+    }
+  }
+
+  get(key) {
+    const index = this.hash(key);
+    const bucket = this.table[index];
+    if (bucket) {
+      const sameKeyItem = bucket.find((item) => item[0] === key);
+      if (sameKeyItem) {
+        return sameKeyItem[1];
+      }
+    }
+    return undefined;
+  }
+
+  remove(key) {
+    let index = this.hash(key);
+    const bucket = this.table[index];
+    if (bucket) {
+      const sameKeyItem = bucket.find((item) => item[0] === key);
+      if (sameKeyItem) {
+        bucket.splice(bucket.indexOf(sameKeyItem), 1);
+      }
+    }
+  }
+
+  display() {
+    for (let i = 0; i < this.table.length; i++) {
+      if (this.table[i]) {
+        console.log(i, this.table[i]);
+      }
+    }
+  }
+}
+
+const table = new HashTable(10);
+table.set("name", "Bruce");
+table.set("age", 25);
+table.display();
+console.log(table.get("name"));
+table.set("mane", "Clark");
+table.set("name", "Diana");
+console.log(table.get("mane"));
+table.remove("name");
+table.display();
+```
 11. Tree Data Structure
 
 12. Binary Search Tree Data Structure
