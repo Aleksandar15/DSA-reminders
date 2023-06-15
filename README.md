@@ -2148,10 +2148,64 @@ list.print();
 - 3:15 To make sure the index is in bounds/borders/limits of the Array's total amount of items -> we'll use the modulus operator against the `size` of the Array; code-wise: `return total % this.size;` inside `hash` method.
 - `set`;`get`.
 - 5:50 `remove(key)` method You can **add** an `if` condition inside `remove` method to **check** if **Value** exists **before** deleting; but for our implementations this works just as fine.
+- UPDATE FROM ME OK, BUT he has mistakes in his supposed to be fixes "Hash Table Collisions Video.
+- -> his previous code was `this.table[index] = undefined;` well, if that was wrong; now he has it even worse in the next video at [5:50](https://youtu.be/kTh5nAqCkOA?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=350) he has unnecessarily 3 methods calls and the **good** part is he *at least* avoided Cubic Time Complexity O(n^3) -> but the **worst** part is that he still calls `indexOf` method as the argument to the `splice` method which seems to be Linear Time Complexity O(n^2). Below in my next video-setion-notes I will try to implement my own fixes.
 - `display` method by me: seems to be of Linear Time Complexity O(n) because it uses a `for` loop.
-#### Hash Table Collisions ([source](https://www.youtube.com/watch?v=kTh5nAqCkOA&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=65))
-
-### Hash Table Implementations code-wise:
+#### Hash Table Collisions ([source](https://www.youtube.com/watch?v=kTh5nAqCkOA&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=65)).
+- 1:20 The changes required for the fix are modifying `set` and `remove` methods as well **as the main `get` method** (so, `get` method was the **main issue**).
+- So here's the **previously wrong code** (*which do not exist in the final code I have below is the **fixed HashTable***):
+- **Previously wrong** `set` method (which in the final code gets much more wordy):
+```js
+set(key, value) {
+  const index = this.hash(key);
+  this.table[index] = value;
+};
+```
+- **Previously wrong** `get` method (which in the final code gets much more wordy):
+```js
+get(key) {
+  const index = this.hash(key);
+  return this.table[index];
+};
+```
+- **Previously wrong** `remove` method (which in the final code remains simple, just with _modified logic_):
+```js
+remove(key) {
+  const index = this.hash(key);
+  this.table[index] = undefined;
+}
+```
+- **5:20** His previous code was `this.table[index] = undefined;` well, if that was wrong; now he has it even worse in this same video at [5:50](https://youtu.be/kTh5nAqCkOA?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=350) he has unnecessarily 3 methods calls and the **good** part is he *at least* avoided Cubic Time Complexity O(n^3) -> but the **worst** part is that he still calls `indexOf` method as the argument to the `splice` method which seems to be Quadratic Time Complexity O(n^2). Below I will try to implement my own fixes:
+#### FIX #1 using `findIndex` to avoid calling `indexOf` as an argument to the `splice` method (*again, that's inside `remove` method*):
+- Also I've renamed `sameKeyItem` into `sameItemIndex` for a better naming convention.
+```js
+// ...
+if (bucket) {
+	const sameItemIndex = bucket.findIndex((item) => item[0] === key);
+	if (sameItemIndex !== -1) {
+		bucket.splice(sameItemIndex, 1);
+	};
+};
+```
+#### Fix #2 **only using `filter`** method meaning: omitting `splice`:
+- Explanations: because `filter` method `return`s an empty Array literal `[]` if no items matches the condition, its result is safe to be assigned to `bucket`.
+	- Again, I could have used an `if` condition to manually assign `bucket = []` but that's unnecessarily redundant.
+	- Explanation further: Viewing my code AND comparing it to the original code creates confusion as if where's the **deleted item** which `splice` method with 2nd argument of `1` removes that item at a `indexOf` the `sameKeyItem` inside the `bucket` Array (original code: `bucket.splice(bucket.indexOf(sameKeyItem), 1)`) -> and instead in my code "filters out the Array" which Array is the key value pairs, again reminders: Key is at `0` index and Value at `1` index **-** that's a maximum of 2 items strict rule.
+- **A worthy note** is that previously I had a bug: `bucket = filteredBucket` is **wrong** because in this way the **code** will **only** update the **value** of the `bucket` variable **within the function scope**. It **won't** update the actual `this.table[index]` **value**.
+	- That's a very tricky bugs (keywods: new aha-moments; tricky parts of JavaScript I never knew existed; I'd have totally failed answering such a question have I been asked about it correctly - instead I'd have given a wrong answer saying they are the same thinking tis the `this.table[index]` pointer that's being updated by using `bucket` variable but, turns out it's **not**).
+```js
+// ...
+if (bucket) {
+	const filteredBucket = bucket.filter((item) => item[0] !== key);
+	this.table[index] = filteredBucket;
+};
+```
+- **7.50:** increasing teh SIZE oF the Array iS **NOT** the BEST Solution to handling collisions-> Sure it may **reduce** the number of collisions **but** the **possibility** of **data loss remains!**
+- Typically whenever the Hash Table reaches half the capacity or more -> the Array capacity is doubled and the Key Value pairs are rehashed.
+- 8:20 Time Complexities:
+  - Having Array method `find` being called in all 3 of the `set`, `get` and `remove` methods we have a Linear Time Complexity
+  - However, with Hash Tables the collision is very minimal and it can be reduced to a great extent by having a better `hash`ing functions -> because of that we generally consider the **Average Case Time Complexity** instead of **Worst Case Time Complexity** when it comes to **Hash Tables** -> the **Average Time Case Complexity** is **Constant Time Complexity O(1)** -> that is the reason Hash Tables are a **prime** **choice** when solving problems.
+### Final Hash Table Implementations code-wise (*with the collisions fixed by the modified `get` and `remove` methods.*):
 ```js
 class HashTable {
   constructor(size) {
@@ -2198,12 +2252,19 @@ class HashTable {
     let index = this.hash(key);
     const bucket = this.table[index];
     if (bucket) {
-      const sameKeyItem = bucket.find((item) => item[0] === key);
-      if (sameKeyItem) {
-        bucket.splice(bucket.indexOf(sameKeyItem), 1);
-      }
-    }
-  }
+    // // Below code is O(n^2) Linear Time Quadratic Time Complexity:
+    // // Calling `indexOf` as an argument to `splice` - that's wrong; as it can be better.
+    // const sameKeyItem = bucket.find((item) => item[0] === key);
+    // if (sameKeyItem) {
+        // bucket.splice(bucket.indexOf(sameKeyItem), 1);
+    // }
+	
+    // Instead a (#2) fix would be of a Linear Time Complexity:
+        const filteredBucket = bucket.filter((item) => item[0] !== key);
+        this.table[index] = filteredBucket;
+    };
+};
+
 
   display() {
     for (let i = 0; i < this.table.length; i++) {
@@ -2216,13 +2277,15 @@ class HashTable {
 
 const table = new HashTable(10);
 table.set("name", "Bruce");
-table.set("age", 25);
-table.display();
+table.set("age", 25); // NOTE to avoid confusion: That's a key-value pair irrelative of the `name: Bruce`.
+console.log('-- Display 1:');
+table.display(); // Chrome's DevTools would rather print the FINAL HashTable that's below at the bottom.
 console.log(table.get("name"));
 table.set("mane", "Clark");
 table.set("name", "Diana");
 console.log(table.get("mane"));
 table.remove("name");
+console.log('-- Display 2:');
 table.display();
 ```
 11. Tree Data Structure
