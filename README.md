@@ -2305,6 +2305,17 @@ table.display();
   - Dynamic Programming
   - Backtracking
   - etc. (A few more exist but these are most important.)
+#### Another confusion of mine clarified: calling multiple O(n) methods in a single function: still remains the same worst case scenario of O(n), however since I have multiple consecutive `map` calls in my code below, the **overall time complexity would be O(k * n),** where `k` is the number of consecutive `map` calls.
+- So that's a Time Complexity I've never seen before!
+```js
+function random(arr) {
+  arr.map();
+  arr.map();
+  arr.map();
+  arr.map();
+  arr.map();
+};
+```
 ---
 My most helpful JavaScript based DSA course on YouTube by @Codevolution:
 #### https://www.youtube.com/playlist?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP
