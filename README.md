@@ -2288,8 +2288,64 @@ table.remove("name");
 console.log('-- Display 2:');
 table.display();
 ```
-11. Tree Data Structure
-
+11. Tree Data Structure AKA _almsot always referred to as_ Binary Search Tree Data Structure
+##### Helpful video by [@codevolution](https://www.youtube.com/watch?v=c-LEpmYikFY&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=66) again.
+- A Tree is a hierarchical data structure that consists of nodes connected by edges
+- A **Tree** is a **non-linear** Data Structure, compared to Arrays, Linked Lists, STacks and Queues which are all Linear Data Structures. -> That is very important because:
+- In Linear Data Structures, the time required to Search is proportional to the **Size** of the Data Set.
+- Trees however, owing to the nonlinear nature allow quicker and easier access to the Data.
+- A tree will **not** contain any loops or cycles.
+- 1:00 Visualization: each **Nodes** are **connected** by **Edges.**
+- Tree Data Structure usages:
+  - File Systems for directory structure
+  - A family tree
+  - An organisation tree
+  - More relatable examples:
+    - DOM
+    - Chat bots
+    - Abstract syntax trees, etc.
+- Trees are often asked about during interviews (by me: well everyone can ask everything from DSA, nobody can tell you its real world usage because it doesn't exist, *unless you are inventing a new Database from scratch*; so I don't care about which, but I care about memorizing the most of the basics so I can branch off of them.)
+- Tree terminology (/Binary Search Tree Data Structure Terms):
+  - Nodes
+  - Edges
+    - Parent node - a node that is an immediate predecessor of any node.
+    - Child node - a node that is an immediate successor of any node.
+    - Root node - the node from which the *Tree* originates. -> It does **not** have a parent node.
+    - Leaf nodes - nodes that do **not** have any child nodes (_the last nodes; at the bottom of a Tree_).
+    - Siblings nodes - nodes with the same parent.
+    - Ancestor nodes - such as parent's parent (_something like a grandparent_).
+  - More Terms:
+    - Path - the **sequence** of **nodes** and **edges** from **one node** to **another**. -> Something like Ancestor nodes to its GrandChildren node or in reverse - the Path from one end to the other end is the Path definition.
+    - Distance - along similar lines we have **distance** which is the **number** of **edges** along the **shortest path** between **2** nodes (*by me: is this edge cases I'm not sure*).
+  - **NODE Properties** (he perhaps means TREE Properties?):
+Visual example:
+```
+       A
+     / | \
+    B  C  D
+   /\
+  E  F
+```
+- **NODE PROPERTIES explanations:**
+	- **The **Degree** of a Node** is a **total number** of **child nodes** it **has**.
+		- Example: Degree of a Tree is the **maximum** Degree of a Node in the Tree.
+		- Degree of `B` is `2`.
+	- **The **Degree** of a Tree** is the **maximum degree of a node in a tree.**
+	- **The **Degree** of a Tree VC** (What's VC? _[3:50](https://youtu.be/c-LEpmYikFY?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=230) visual explanations_).
+		- Google 0 Results for "*What is VC of a Tree in programming*"; except for one closely related to - a [stackexchange question](https://stats.stackexchange.com/questions/231089/what-is-the-vc-dimension-of-a-decision-tree) -> which has a hyperlink to wikipedia [Vapnik–Chervonenkis dimension](https://en.wikipedia.org/wiki/Vapnik%E2%80%93Chervonenkis_dimension).
+		- Anyways I don't understand what that is but,
+		- Example: the degree of the Tree VC is `3` which is the **degree of node `1`.** -> which is the **degree of node `A`** -> Not sure why he says that without any explanations? My best guess would be that it's the **root node's children numbers** - like their total closest children, but not their grandchildren nor total nodes in the Tree, I guess.
+	- **The **Depth** of a Node** is the **number of Edges** from the Root up to that Node. -> It's like the Path starting from `0` / TOP Node / Node `A` in this example, up to that given Node: so, the **"amount of Nodes connecting up until that given Node"** is the **Depth of a Node**, I guess.
+		- Example: the **depth** of **root node** is **always `0`.**
+		- Depth of node `E` is `2`.
+	- The **Height** of a Node is the **number of Edges from the deepest leaf up to that Node.**
+		-  Example: the **height** of the **root node** is considered the **height** of the **whole Tree**, whichever that amount is, in this case `2`.
+		-  Height of node `B` is `1`.
+		-  So, I guess by that definition that the height of `E` and `F` and **even** `C` and `D` is `0` for all of them.
+	-  (*These terms needs to be memorized after they are understood, there's no way around it.*)
+- For Tree interview questions you are rarely asked to implement a generic **Tree**, but rather a specific type of **Tree** which is the **Binary Search Tree.**
+- (*That's frustrating learning DSA to pass an interview is cheating; rather than learning anything that will be actually useful and show my problem solving skills, I have to memorize solutions to a problem which anyone else who does that as well doesn't showcase a problem solver employee but they're being good at a memory game in order to bypass the interviews for the most of the companies out there (even big and small sized ones).*) That's sad.
+- Characteristics of Binary Search Tree Data Structure are described using those Terms and Properties. -> So, they're important to be **memorized** in **order** for me to **understand** Binary Search Tree. (*Okay, pause here, this needs a bit of **repetition** before I proceed, so that I'll struggle less with BST.*)
 12. Binary Search Tree Data Structure
 
 13. Graph Data Structure
