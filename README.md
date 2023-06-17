@@ -2346,8 +2346,252 @@ Visual example:
 - For Tree interview questions you are rarely asked to implement a generic **Tree**, but rather a specific type of **Tree** which is the **Binary Search Tree.**
 - (*That's frustrating learning DSA to pass an interview is cheating; rather than learning anything that will be actually useful and show my problem solving skills, I have to memorize solutions to a problem which anyone else who does that as well doesn't showcase a problem solver employee but they're being good at a memory game in order to bypass the interviews for the most of the companies out there (even big and small sized ones).*) That's sad.
 - Characteristics of Binary Search Tree Data Structure are described using those Terms and Properties. -> So, they're important to be **memorized** in **order** for me to **understand** Binary Search Tree. (*Okay, pause here, this needs a bit of **repetition** before I proceed, so that I'll struggle less with BST.*)
-12. Binary Search Tree Data Structure
+12. Binary Search Tree Data Structure (BST DS)
+- A Binary Tree is a Tree Data Structure in which each node has at most **2 children** (maximum 2 children nodes).
+- They are referred to as **left child** and **right child.**
+- Binary Search Tree has the following 2 properties:
+	- The value of each **left node** **must** be **smaller** than the parent node.
+	- The value of each **right node** **must** be **greater** than the parent node.
+	- This is all in addition, each node has at most 2 children nodes.
+	- (_So they are branching off of it, like each node can hold 2 more nodes and so on._)
+- Visual representation where each node has a maximum of **2 child nodes:**
+```
+    10
+    / \
+   5  15
+  /\
+ 3  7
+```
+- Binary Search Tree operations:
+- `insert`ion - to **add** a node to the tree.
+- `search` - to **find** a node given its value.
+- DFS & BFS - to **visit** all nodes in the tree.
+  - Explanations: Depth First Search & Breadth First Search -> ok these are terms I don't fully understand. Needs review/revisit on my side.
+- `delete` - deletion - to **remove** a node given its value.
+- Binary Search Tree usages:
+  - Searching
+  - Sorting
+  - To implement abstract Data Types such as lookup tables and priority queues.
+    - Spanish village, needs review/revisit.
+    - He suggests googling these terms and understanding the concepts (_so @codevolution won't explain it in every details_).
+    - "This is a very high level use case for BST, but I want you to make a note to google about these contexts, once we're done implementing it".
+    - "When you learn how **performant** BST are with th different operations you will realize why it is a good choice" -> so BST are great choice.
+#### Binary Search Tree Class ([source](https://www.youtube.com/watch?v=kIVkBsfB-SM&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=68))
+- -> In this video is implemented the Node Class and the Binary Search Tree Class with the `consturctor` and `isEmpty` methods.
+- In the _next video_ `search`, `traversal` and `delete` operations will be explained.
+- Each Node contains a Data Value and optional pointers to the left and right child nodes.
+- In an isolated Node it contaisn a Data Value and the left and right pointers pointing at `null`.
+- (I may or may not write whole lengthy notes in here, but final code I'll paste from [replit](https://replit.com/@Codevolution/JavaScript-Data-Structures#binary-search-tree.js) by @codevolution YouTube series in Video's descriptions.)
+- 2:05 A new Node will not have any child nodes to begin with (*so perhaps the subsequent nodes will do have?* -> YEP he then says we'll add a new Node to the Tree in the next video).
+- Back at the Visual Slide with a Tree with 5 Nodes:
+- To work with Binary Search Tree we always make a Pointer to the Root Node in the Tree. That Poitner is cruical to almsot every operations we perform on a BST. However, when the a Tree is empty, there's no Root to point to that, hence the Root Pointer will point at `null`. (so that's the logic behind BST.)
+  - Code wise: `this.root = null` (of inside `consturctor` inside `BinarySearchTree`). 
+#### Binary Search Tree Insert ([source](https://www.youtube.com/watch?v=zOgsIjM-a7g&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=69))
+- 0:20 Recursion is very important when it comes to BST -> so Recursive functions simplifies BST code.
+- 0:25 Empathy: you may not understand the code right away, you might need to spend a time tracing the function execution of each method with a sample Tree using a pen and a paper => by me: I rather take digital notes.
+- 1:50 2 Scenarios real life cases.
+- **I'll skip the next notes and keep this in mind and try to go to LeetCode. Because I lose motivation trying to memorize them but not seeing any real life application of them - not that any exists, but at least to be 'humanized' as is the case with LeetCodes. **
+- (*Of course, that is, after I'm done with copying the Graph Data Structure **below** as well with a very minumum notes; so that way I'll finish the @codevolution free series on YouTube playlist and come back as per needed once I struggle with LeetCodes & learn something new OR rewatch his implementations.*)
+### Binary Search Tree code implementations (by [replit](https://replit.com/@Codevolution/JavaScript-Data-Structures#binary-search-tree.js) of the @codevolution YouTube video series):
+```js
+class Node {
+  constructor(value) {
+    this.value = value;
+    this.left = null;
+    this.right = null;
+  }
+}
 
+class BinarySearchTree {
+  constructor() {
+    this.root = null;
+  }
+
+  isEmpty() {
+    return this.root === null;
+  }
+
+  insert(value) {
+    const newNode = new Node(value);
+    if (this.isEmpty()) {
+      this.root = newNode;
+    } else {
+      this.insertNode(this.root, newNode);
+    }
+  }
+
+  insertNode(root, newNode) {
+    if (newNode.value < root.value) {
+      if (root.left === null) {
+        root.left = newNode;
+      } else {
+        this.insertNode(root.left, newNode);
+      }
+    } else {
+      if (root.right === null) {
+        root.right = newNode;
+      } else {
+        this.insertNode(root.right, newNode);
+      }
+    }
+  }
+
+  search(root, value) {
+    if (!root) {
+      return false;
+    }
+    if (root.value === value) {
+      return true;
+    } else if (value < root.value) {
+      return this.search(root.left, value);
+    } else {
+      return this.search(root.right, value);
+    }
+  }
+
+  min(root) {
+    if (!root.left) {
+      return root.value;
+    } else {
+      return this.min(root.left);
+    }
+  }
+
+  max(root) {
+    if (!root.right) {
+      return root.value;
+    } else {
+      return this.max(root.right);
+    }
+  }
+
+  delete(value) {
+    this.root = this.deleteNode(this.root, value);
+  }
+
+  deleteNode(root, value) {
+    if (root === null) {
+      return root;
+    }
+    if (value < root.value) {
+      root.left = this.deleteNode(root.left, value);
+    } else if (value > root.value) {
+      root.right = this.deleteNode(root.right, value);
+    } else {
+      if (!root.left && !root.right) {
+        return null;
+      }
+      if (!root.left) {
+        return root.right;
+      } else if (!root.right) {
+        return root.left;
+      }
+      root.value = this.min(root.right);
+      root.right = this.deleteNode(root.right, root.value);
+    }
+    return root;
+  }
+
+  inOrder(root) {
+    if (root) {
+      this.inOrder(root.left);
+      console.log(root.value);
+      this.inOrder(root.right);
+    }
+  }
+
+  preOrder(root) {
+    if (root) {
+      console.log(root.value);
+      this.preOrder(root.left);
+      this.preOrder(root.right);
+    }
+  }
+
+  postOrder(root) {
+    if (root) {
+      this.postOrder(root.left);
+      this.postOrder(root.right);
+      console.log(root.value);
+    }
+  }
+
+  levelOrder() {
+    /** Use the optimised queue enqueue and dequeue from queue-object.js instead.
+     * I've used an array for simplicity. */
+    const queue = [];
+    queue.push(this.root);
+    while (queue.length) {
+      let curr = queue.shift();
+      console.log(curr.value);
+      if (curr.left) {
+        queue.push(curr.left);
+      }
+      if (curr.right) {
+        queue.push(curr.right);
+      }
+    }
+  }
+
+  height(node) {
+    if (!node) {
+      return 0;
+    } else {
+      const leftHeight = this.height(node.left);
+      const rightHeight = this.height(node.right);
+      return Math.max(leftHeight, rightHeight) + 1;
+    }
+  }
+
+  printLevel(node, level) {
+    if (!node) {
+      return;
+    }
+    if (level === 1) {
+      console.log(`${node.element} `);
+    } else if (level > 1) {
+      this.printLevel(node.left, level - 1);
+      this.printLevel(node.right, level - 1);
+    }
+  }
+
+  isBST(node, min, max) {
+    if (!node) {
+      return true;
+    }
+    if (node.value < min || node.value > max) {
+      return false;
+    }
+    return (
+      this.isBST(node.left, min, node.value) &&
+      this.isBST(node.right, node.value, max)
+    );
+  }
+}
+
+// TODO level order and delete
+
+const bst = new BinarySearchTree();
+console.log(bst.isEmpty());
+bst.insert(10);
+bst.insert(5);
+bst.insert(15);
+bst.insert(3);
+bst.insert(7);
+bst.insert(13);
+bst.insert(17);
+bst.insert(2);
+console.log(bst.search(bst.root, 10));
+console.log(bst.search(bst.root, 7));
+bst.inOrder();
+bst.preOrder();
+bst.postOrder();
+bst.levelOrder();
+bst.printLevel(bst.root, 3);
+console.log(bst.min());
+console.log(bst.max());
+console.log(bst.height(bst.root));
+```
 13. Graph Data Structure
 - NOTES:
 - There's multiple exercises Adjacency Matrix of a Graph; Adjacency List of a Graph; Graph Add Vertex and Edge; Graph Display and HasEdge; Graph Remove Edge and Vortex.
