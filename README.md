@@ -2592,9 +2592,109 @@ console.log(bst.min());
 console.log(bst.max());
 console.log(bst.height(bst.root));
 ```
-13. Graph Data Structure
+13. Graph Data Structure ([source](https://www.youtube.com/watch?v=bLtm94mvfjE&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=75))
 - NOTES:
-- There's multiple exercises Adjacency Matrix of a Graph; Adjacency List of a Graph; Graph Add Vertex and Edge; Graph Display and HasEdge; Graph Remove Edge and Vortex.
+- I noticed There's multiple exercises Adjacency Matrix of a Graph; Adjacency List of a Graph; Graph Add Vertex and Edge; Graph Display and HasEdge; Graph Remove Edge and Vortex.
+- Anyways, notes from the YouTube [video](https://www.youtube.com/watch?v=bLtm94mvfjE&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=75) by @codevlution:
+- A graph is a non-linear Data Structure that consists of a finite number of Vertices -> also called Nodes -> connected by Edge.
+- Trees themselves are a specific type of Graph Data Structure (*hm, that confuses me*).
+- The graph has a set of Vetices (/Nodes) represented as Cricles and a set of Edges represented as Lines. -> As opposed to a Tree which is generally represented OR Red Top Down, instead there is **n** Hierarchy in Graphs and there is **no** Set way to represent or read a Graph.
+- Visual representations (visual examples):
+```
+                   B
+ (A points at B) /  \ (B points at C)
+                A    C
+```
+- Types of Graphs (2 types of graphs):
+	- #1 Directed
+		- A Graph in which the Edges have a direction.
+		- Edges are usually represented by arrows pointing in the direciton the graph can be traversed.
+		  - In the example above -> we can **only traverse** from `A` -> `B` -> `C` ; but we **can't** traverse from `C` -> `B` -> `A`!
+	- #2 Undirected
+	  - A Graph in which the edges are biderecitonal.
+      - The Graph can be traversed in either direction.
+      - The absence of an arrow tells us taht the Graph is undirected.
+        - In the example above we can traverse from both `A` -> `B` -> `C` as well as `C` -> `B` -> `A`.
+- There's even **MORE TYEPS of Graphs!** Which I, of course, won't post them visually, here's the [YouTube video](https://youtu.be/bLtm94mvfjE?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=125) by @codevolution.
+  - Here's their names for CTRL+F lookup:
+  - Only vertices with no edges.
+  - Multiple edges from 1 node.
+  - Cycles in the Graph.
+  - Self-loops on a Node.
+  - "Maybe disconnected".
+  - May contain weights on Edges representing the costs of traversing that Edge.
+  - "*We will not be diving into implementing all of these variants (types) of Graphs*".
+- Graph Usages in real life:
+  - Google Maps
+    - Where cities are represented as Vertices (*or Nodes*) and Roads as Edges -> to help build a Navigation system.
+  - In social media apps / websites -> Users are considered as Vertices (*/Nodes*) and Edges are the links between Connections (linkings).
+    - Example: facebook, instagram, linkedin all use Graph Data Structures to show **mutual connecitons,** **posts suggestions** and other **recommendations.** (*FAANGs examples use this Data Structure: Graphs, nicey!*).
+### Graph Data Structure implementations in code:
+```js
+class Graph {
+  constructor() {
+    this.adjacencyList = {};
+  }
+
+  addVertex(vertex) {
+    if (!this.adjacencyList[vertex]) {
+      this.adjacencyList[vertex] = new Set();
+    }
+  }
+
+  addEdge(vertex1, vertex2) {
+    if (!this.adjacencyList[vertex1]) {
+      this.addVertex(vertex1);
+    }
+    if (!this.adjacencyList[vertex2]) {
+      this.addVertex(vertex2);
+    }
+    this.adjacencyList[vertex1].add(vertex2);
+    this.adjacencyList[vertex2].add(vertex1);
+  }
+
+  removeEdge(vertex1, vertex2) {
+    this.adjacencyList[vertex1].delete(vertex2);
+    this.adjacencyList[vertex2].delete(vertex1);
+  }
+
+  removeVertex(vertex) {
+    if (!this.adjacencyList[vertex]) {
+      return;
+    }
+    for (let adjacentVertex of this.adjacencyList[vertex]) {
+      this.removeEdge(vertex, adjacentVertex);
+    }
+    delete this.adjacencyList[vertex];
+  }
+
+  hasEdge(vertex1, vertex2) {
+    return (
+      this.adjacencyList[vertex1].has(vertex2) &&
+      this.adjacencyList[vertex2].has(vertex1)
+    );
+  }
+
+  display() {
+    for (let vertex in this.adjacencyList) {
+      console.log(vertex + " -> " + [...this.adjacencyList[vertex]]);
+    }
+  }
+}
+
+const graph = new Graph();
+graph.addVertex("A");
+graph.addVertex("B");
+graph.addVertex("C");
+graph.addEdge("A", "B");
+graph.addEdge("A", "C");
+graph.addEdge("B", "C");
+graph.display();
+graph.removeEdge("A", "B");
+graph.display();
+graph.removeVertex("A");
+graph.display();
+```
 ---
 ### DEFINITIONS & EXTRAS
 - **Traverse** definition: In programming, _Array traversing_ or to **traverse** typically refers to the act of iterating or moving through a data structure, such as an array, list, tree, or graph, in order to access or process its elements. -> Traversing a data structure involves visiting each element or node in a systematic manner according to a specific order or pattern.
