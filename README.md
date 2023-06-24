@@ -1583,7 +1583,8 @@ class LinkedList {
         prev = prev.next;
       }
       if (prev.next) {
-        removedNode = prev.next;
+        // removedNode = prev.next; // in Strict Mode this is a Reference Error "removedNode is not defined"
+        const removedNode = prev.next; // const or let would both work in this case.
         prev.next = removedNode.next;
         this.size--;
         return value;
@@ -1644,25 +1645,25 @@ class LinkedList {
   };
 };
 
-const l = new LinkedList();
+const list = new LinkedList();
 
-console.log(l.isEmpty());
-l.append(50);
-l.prepend(20);
-l.append(80);
-l.insert(60, 2);
-console.log(l.getSize());
-l.print();
-l.reverse();
-l.print();
-console.log(l.search(60));
-l.removeFrom(4);
-console.log(l.getSize());
-l.print();
-l.removeValue(80);
-l.print();
-console.log(l.getSize());
-l.print();
+console.log(list.isEmpty());
+list.append(50);
+list.prepend(20);
+list.append(80);
+list.insert(60, 2);
+console.log(list.getSize());
+list.print();
+list.reverse();
+list.print();
+console.log(list.search(60));
+list.removeFrom(4);
+console.log(list.getSize());
+list.print();
+list.removeValue(80);
+list.print();
+console.log(list.getSize());
+list.print();
 ```
 9. **Linked List with Tail Data Structure**
 - Has Head Pointers & Tail Pointers.
