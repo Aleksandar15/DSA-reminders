@@ -1613,7 +1613,9 @@ class LinkedList {
       }
       curr = curr.next;
       i++;
-    }
+    };
+    // Exiting the while loop means `curr.next` is now pointing at `null` -> reached the end;
+    // at which point the `value` is not found.
     return -1;
   }
 
@@ -1750,9 +1752,12 @@ class LinkedList {
       this.head = node;
       this.tail = node;
     } else {
+      // Unshifting the List technically:
+      // by assigning NEXT to the this.head
       node.next = this.head;
+      // and this.head becomes the new NODE
       this.head = node;
-    }
+    };
     this.size++;
   }
 
@@ -1762,9 +1767,12 @@ class LinkedList {
       this.head = node;
       this.tail = node;
     } else {
+      // Pushing a Node technically by assigning the 
+      // what's-to-become-a-previous-to-the-(to-be-new)-last-node's NEXT to point at the new NODE
       this.tail.next = node;
+      // and assigning Tail to the Newly Created NODE
       this.tail = node;
-    }
+    };
     this.size++;
   }
 
@@ -1774,9 +1782,12 @@ class LinkedList {
     }
     const value = this.head.value;
     this.head = this.head.next;
+    // Fix for a bug when there's only 1 Node left in the List -> Tail should point at NULL:
+    // (BTW I'm thinking maybe it should be moved above, but not really, this is rather a case where
+    // `size > 0` -> and EXACTLY `size === 1` means: last NODE will be removed, so point TAIL to NULL)
 		if (this.head === null || this.size === 1) { // Both Conditions does the same.
 			this.tail = null;
-		};
+		}; // Fix ends here; the below is the original code
     this.size--;
     return value;
   }
@@ -1812,7 +1823,8 @@ class LinkedList {
       prev = current;
       current = next;
     }
-    this.tail = this.head; // This is already fixed in the repl.it; whereas it was pointes as a "fix" inside the YouTube comments.
+    this.tail = this.head; // This is a fix for a bug that's already fixed 
+    // in his repl.it; because it was pointed as a "fix" inside the YouTube comments.
     this.head = prev;
   }
 
@@ -2629,7 +2641,7 @@ console.log(bst.height(bst.root));
   - Google Maps
     - Where cities are represented as Vertices (*or Nodes*) and Roads as Edges -> to help build a Navigation system.
   - In social media apps / websites -> Users are considered as Vertices (*/Nodes*) and Edges are the links between Connections (linkings).
-    - Example: facebook, instagram, linkedin all use Graph Data Structures to show **mutual connecitons,** **posts suggestions** and other **recommendations.** (*FAANGs examples use this Data Structure: Graphs, nicey!*).
+    - Example: facebook, instagram, linkedin all use Graph Data Structures to show **mutual connecitons,** **posts suggestions** and other **recommendations.** (*FAANGs examples use this Data Structure: Graphs, nicey!;* Yet a YouTube comment guy wrote that he was **never** asked about Graphs during his FAANG interviews (*I can't recall the video, yet it doesn't even matter, each to their own experience I may have it come up during an interview (the comment was posted like 5 years ago when I read it on June 2023 and went like "still in college" and then in the replies people asked him "what happened now" and the guy replied he was "hired working with Unity" & didn't mention company name; comment was maybe at the [YouTube Linked List by HackerRank](https://www.youtube.com/watch?v=njTh_OwMljA) or [YouTube Hash Tables by HackerRank](https://www.youtube.com/watch?v=njTh_OwMljA).).).).
 ### Graph Data Structure implementations in code:
 ```js
 class Graph {
