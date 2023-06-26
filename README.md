@@ -1045,7 +1045,7 @@ stack.print();
   - `isEmpty()` - **check** if the Queue is empty.
   - `size()` - **get** the number of items in the queue (*count the total amount of items in the Queue*).
   - `print()` - **visualize** the items in the Queue.
-##### Queue Array Implementation Code-Wise
+#### Queue Array or Array Queue Implementation Code-Wise
 - Queue Array or Array Queue is still made up for Array literal `[]`.
 ```js
 class Queue {
@@ -1092,9 +1092,18 @@ console.log(queue.dequeue());
 console.log(queue.peek());
 queue.print();
 ```
-##### Object Queue or Queue Object Implementation Code
-- `if(!item) return;` -> this is the line to fix the bugs if AND/OR when when `queue.dequeue()` is called without an argument (*meaning @codevolution has [bugs](https://www.youtube.com/watch?v=ba15sgOiAOg&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=45) in his explanations.).
-- Additionally, as per the concerns in the comments, I had added a private reset method `resetIndices` that resets the `head` and `tail` to `0` if the queue ever completely empties.
+#### Queue Object or Object Queue Implementation Code
+##### Fixing bugs as per in the comments (*which turned out to not really be a bug, #2 was concerns, and #1 was a typo on commenteer part*):
+- #1 `if(!item) return;` -> this is the line to fix the bugs if AND/OR when when `queue.dequeue()` is called ~without an argument~ (*meaning @codevolution has [bugs](https://www.youtube.com/watch?v=ba15sgOiAOg&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=45) in his explanations*.).
+  - That was my misconception about it, `dequeue` is always called without an Argument, because it removes from the *Front* AKA the very first item added AKA the item at index `0` -> AND if no item exists at `items[front]`: meaning it's empty (*I guess that's the only way when it doesn't exist*) we'll `return;` AKA exiting the function executions. But, however I could have used `isEmpty` method to begin it - at the top scope inside `dequeue` - as a condition of `if (isEmpty())`, but yeah I'll just keep the current implementation as-is.
+    - Which I'm not entirely sure if condition `if (!item)` technically means the same condition as `if (this.isEmpty())`; at which point the second condition will never be reached inside `dequeue` method; that would mean I need to use the logic of `resetIndices` method or call it inside `if (!item)` since currently as-is the `dequeue` still won't reset `front` and `rear` both to `0`.
+      - And looking at it I'm also confused why'd I need 1 call of `dequeue` on an already-empty Queue in order to set `front` and `rear` to `0`; it seem like way-too-late thing to do, as if I had to do it way before it -> so that the condition could have been `if (front === 0 && rear === 0)`.
+  - I asked  ChatGPT for `if (!item)`: "If item is **falsy**, it means that the queue is **empty**, and there are **no** items to dequeue."
+  - And also: "`isEmpty` method checks if the difference between the `rear` and `front` indices is **zero**, indicating an **empty** queue."
+  - Which by me: it means that indeed the first condition is enough to handle an empty Queue, but I'm not entirely sure if I still need to set both `rear` and `front` to `0` so that I can technically "empty out the Queue" AKA to be garbage collected? But still! The main issue remains in the fact that I'll be setting them to `0` **only once `dequeue` is called on an already empty Queue` -> but that is so that I avoid checking if Queue is empty on every call because .. wait but that won't increase the Time Complexity to Linear O(n), since `isEmpty` method is O(1) Constant Time Complexity.
+- Wait wait wait, for one: the dude in the comment had a typo, and when I better understand the comment that condition is useless when `item = this.items[this.front]` is not found then the `item` is set to `undefined` and: `return item` returns `undefined` -> The same thing he is doing with `if (!item) return;` is as same as `if (!undefined) return;` -> which `!undefined` is `true` -> *but* since `item` is already `undefined` the condition function `dequeue` would continue to `return item;` which would technically mean I'm already returning the same that - and that is `return undefined;`. -> ***This is why I'll remove the `if (!item)` condition below the code inside `dequeue` but keep the `if (this.isEmpty())`.*** -> **But, `if (this.isEmpty())` MUST be moved above or on top-level, so to make sure that `this.front++` is never even reached, but then I'll need a hanging `return;` *again* inside the `if (this.isEmpty())` condition.**
+- #2 Additionally, as per the concerns in the another comment, I have added a private reset method `resetIndices` that resets the `head` and `tail` to `0` if the queue ever completely empties.
+  - Looking back at this this didn't needed additional method `resetIndices` helper function is rather so short & never re-used, but yeah I'll keep the method.
 ```js
 class Queue {
   constructor() {
@@ -1109,14 +1118,23 @@ class Queue {
   };
 
   dequeue() {
+    if (this.isEmpty()) {
+      this.resetIndices(); // Call the resetIndices method if the queue becomes completely empty
+      return; // Exit and return undefined (since no removal can be done on an Empty Queue).
+    };
+    
     const item = this.items[this.front];
-    if(!item) return; // this is the line to correct the bugs if when when "queue.dequeue()".
+    
+    // Condition "if (!item)" is unnecessary, instead I'll keep the `this.isEmpty()` condition.
+    // if (!item) return; // this is the line to correct the bugs if when "queue.dequeue()".
+    
     delete this.items[this.front];
     this.front++;
-    
-    if (this.isEmpty()) {
-     this.resetIndices(); // Call the resetIndices method if the queue becomes completely empty
-    };
+
+    // // Instead I'll move this way above on top, so that "this.front++" is never even reached.
+    // if (this.isEmpty()) {
+    //  this.resetIndices(); // Call the resetIndices method if the queue becomes completely empty
+    // };
     
     return item;
   };
@@ -1308,6 +1326,7 @@ class CircularQueue{
 #### EXPLANATIONS of the V2:
 - Since I don't understand the parts that uses `% this.size` modulus calculations? -> There's this ChatGPT explanations:
 Let's say we have a circular queue with a capacity of 5, represented by an array with indices 0 to 4. The `this.size` is set to 5 to match the capacity of the queue.
+  - But by me: this.front+1 will never be above the this.size; so lets say 0+1=2 -> 2%5=2 modulus.
 
 Initially, the `rear` and `front` indices are both set to `-1`.
 When we enqueue an element, the `rear` index is incremented by 1: `this.rear = (this.rear + 1) % this.size`.
@@ -1700,7 +1719,7 @@ list.print();
 	- Comment stands: "*I also want to note if you kept the code from previous videos, that the reverse() method will cause removeFromEnd() to **crash.*".**
 	- **NOTE** in repl.it @ https://replit.com/@Codevolution/JavaScript-Data-Structures#linked-list-tail.js -> that's **ALREADY SEEM TO HAVE BEEN FIXED inside `reverse` method** *(the mistake is inside the Video **only**)*.
 - By me2: And another issues/mistakes/bugs with his code is with `removeFromFront`; and in the reply seciton the fix seems to be: "*`if (head === null)` condition then `tail = null;` AND the `return` should be removed from the above as it breaks the flow of code and save the `return`able value into a static variable which can be `return`ed at the end of all the conditional statements.*".
-	- The comment explaining the issue stands: "*There is a bug in removeFromFront method, when there is one node in linked list and head and tail both point to it, the head will become nulll but the tail will still point to the same node, tail should also have been set to `null`*.".
+	- The comment explaining the issue stands: "*There is a bug in removeFromFront method, when there is one node in linked list and head and tail both point to it, the head will become `null` but the tail will still point to the same node, tail should also have been set to `null`*.".
 	- Well if so, I have to make a code that would be a fix for this second bug because it hasn't been updated in his repl.it.
 	- Of inside `removeFromFront` method *(at [repl.it](https://replit.com/@Codevolution/JavaScript-Data-Structures#linked-list-tail.js))*:
 	- But there do I place it I have no idea if order matters, so I asked ChatGPT told me that I can even use `if (this.size === 1)` condition.
