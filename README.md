@@ -26,7 +26,7 @@ console.log(fibonacci(8888) // remains super fast
 1.1 **Recursive Fibonacci Sequence**
 - Time Complexity O(2^n) -> Quadratic worst case time because there's 2 calls for each 1 `n`th number. Past `n=40` gets too laggy (2^40).
 - Iterative solution (#1) is better & faster than this recursive setup.
-```
+```js
 const recursiveFibonacci = (n) => {
   if (n < 2) {
     return n;
@@ -65,7 +65,7 @@ console.log('fibArray[8888]:',fibArray[8888]); // Infinity // but the Algorithm 
 - `const fibonacciResult = fibRec(8888);` runs as fast with `8888` as `888` however there's Chrome's _Range Error: Maximum call stack size exceeded._ -> Otherwise there's no infinitive loop or anything; everything is smooth.
   - The reason why #1.2 doesn't run into *Range Error* is because it returns **Array** of elements (numbers) incrementing up to the `n` number but somehow looking for the index in this code #1.2.1 is running into *Range Error*.
     - Altough I see at #1.2 I do can access the `8888`th index which is `Infinity` (hence why it seem to cause *Range Error* in here (#1.2.1) when _not_ returning an `array`, but instead an **index**; new foundings).
-```
+```js
 const fibRec = (n, memo = {}) => {
   if (n in memo) {
     return memo[n];
@@ -2424,6 +2424,107 @@ Visual example:
 - 1:50 2 Scenarios real life cases.
 - **I'll skip the next notes and keep this in mind and try to go to LeetCode. Because I lose motivation trying to memorize them but not seeing any real life application of them - not that any exists, but at least to be 'humanized' as is the case with LeetCodes. **
 - (*Of course, that is, after I'm done with copying the Graph Data Structure **below** as well with a very minumum notes; so that way I'll finish the @codevolution free series on YouTube playlist and come back as per needed once I struggle with LeetCodes & learn something new OR rewatch his implementations.*)
+---
+- _Coming back with new notes, I'm rewatching and understanding it all, however I still don't see where would I apply any of this knowledge, I only appreciate the fact that I can be more aware of the Space Complexity and Time Compexity of my code, but anything beyond it like trying to build Data Structures that I, if ever, would have to use is kinda pointless, since I will still Google or I will still come back to my notes or plainly using Sets or Maps as per needed._
+  - _Oh and I also learned that usually improving Time Complexity comes at a cost of Space Complexity and Vice Versa._
+#### Binary Search Tree Search method is too easy ([source](https://www.youtube.com/watch?v=lml2E9SIJHo&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=70&pp=iAQB)). 
+- Checking if `root.value === value` then `return true`, otherwise we check if `value` is less or bigger (/greater) than the `root.value` then we accordingly call `search` method recursively like so:
+  - `if (value < root.value)` then we `return this.search(root.left, value);` (because `value` is smaller than `root.value` then we traverse the **left subtree**) -> otherwise `else` (when `value` is greater than `root.value` we traverse the **right subtree*): `return this.search(root.right, value);` -> until base cases returns a `Boolean` at either the first condition `if (!root) return false;` or the second base case condition `if (root.value === value) return true;`.
+#### Binary Search Trees Depth First Search - BST DFS ([source](https://www.youtube.com/watch?v=n6_Ruq1qvjU&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=71)):
+- DFS Algorithm starts at **root node** and explores as far as possible along each branching before backtracking (*by me: we visit every possible **leafs** terms as they are usually called).
+- We need to visit the root node, visit all the nodes in the **left subtree** and visit all the node sin the *8right subtree**.
+- Visual representation of a BST example for better understanding:
+```
+    10
+    /\
+   5 15
+  /\
+ 3  7
+`````
+There are 3 types of DSA traversals:
+  1. Preorder algorithm:
+     1. Read the data of the node.
+      2. Visit the left subtree.
+      3. Visit the right subtree.
+     4. -> So, the preorder traversal for this BST is: 10, 5, 3, 7, 15.
+  2. Inorder Algorithm:
+      1. Visit the left subtree.
+      2. Read the data of the node.
+      3. Visit the right subtree.
+      4. -> So, the inorder traversal for this BST is: 3, 5, 7, 10, 15 (*Visiting Root Node 10, then 5 (left) then 3 (left)* -> since no more subtrees on the left, then 2nd Step: Read the data-> **3** has no right subtree either, so go back to the parent **5** -> **5**'s left subtree has been **visited** so step 2: Read the node **5** so step 3: visit the right subtree of **5** -> node **7** has no left subtree so read its value, so node **7** does not have any right subtree so go back to the parent 5 but which has been read already -> so 	go back to the parent which is now the Root Node (meaning: whole left subtree of the Root Node has been visited) -> now we read the Root Node value **10** -> next we visit the right subtree -> there's only one node **15** and no further left subtrees to visit so Read the node value of **15** -> there's no right subtree to visit either -> at this stage all the nodes has been visited -> and 3, 5, 7, 10, 15 is the Inorder Traversal for our BST.).
+  3. Postorder Algorithm:
+      1. Visit the left subtree.
+      2. Visit the right subtree.
+      3. Read the data of the node.
+      4. -> So, postorder traversal for this BST: 3, 7, 5, 15, 10. -> Here's my own breakdown: Starts at Root Node -> checks the deepest leaf node (hence the term **Depth Search** - the node at the bottom) on the left subtree: 3 -> checks for node 3's right subtree: none -> so goes up to the parent 5: does it have a right subtree node -> it does: 5 -> then goes up to 7 -> 7 has been visited and already read -> so 'push' (incorrect term I use for better understanding) 7 as well -> again at the Root Node 10 -> does it have right subtree -> it does have 15 -> 15 is 'pushed' -> 15 does not have right subtree -> we go back at Root Node 10 -> 10 is finally pushed as the last Node whose all its children AKA both subtrees has been read and visited already.
+#### Breadth First Search BFS ([source](https://www.youtube.com/watch?v=H0i3gk1h0lI&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=72)).
+- BFS explores all nodes at the present **depth** prior to moving on to the nodes at the **next depth level.**
+- For example with visual representations BFS for easier understanding:
+```
+    10
+    /\
+   5 15
+  /\
+ 3  7
+`````
+- BFS Traversal example: BST with 5 nodes: 10, 5, 15, 3, 7. Explanations: 1. BFS visits the Root Node first: 10 -> 2. Move onto the Nodes on the next level (below it; left subtree for example): 5 -> 3. Then visits the right subtree: **15** -> 4. And the levels afterwards, so from Parent Node 5 left subtree onto the: **3** -> 5. Then right subtree of 5: node **7.** As the name indicates: traverse the **Breadth First.**
+- BFS Traversal Approach:
+  1. Step 1: Create a queue.
+  2. Step 2: Enqueue the **root node.**
+  3. Step 3: As long as a node exists in teh queue, perform the following operations:
+      1. Dequeue the node from the front.
+      2. Read the node's value.
+      3. Enqueue the node's left child if it exists.
+      4. Enqueue the node's right child if it exists.
+- Operations forthis is inside the `levelOrder` method.
+#### Binary Search Tree Min Max ([source](https://www.youtube.com/watch?v=mrzE5SqzoQY&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=73)).
+- Finding Min and Max is a prerequisite for the next section: Delete method.
+- It's very easy, since the most left leaf node is the smallest value in the tree, and the rightmost leaf node is the largest value in the tree. -> So, if it's not the first `root.left` or `root.right` value respectively for whoever we are searching for -> then, we keep calling the function recursively.
+#### Binary Search Tree Delete - BST Delete ([source](https://www.youtube.com/watch?v=80GhW9X1MGI&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=74)).
+- Visual examples:
+```
+    10
+    /\
+   5 15
+  /\
+ 3  
+`````
+- There's 3 scenarios to `delete` method:
+  - Scenario 1: the **node** to be deleted is a **leaf node** which means: it has no **child nodes** -> for example Node **3.** 
+  - Scenario 2: the **node** to be deleted has one child node -> lets say **5** -> in this case remove the node **5** and **replace** it with its child node **3** -> it's applicable for both left or child node.
+  - Scenario 3: the **node** to be deleted has three children nodes -> in this example say it's **10** AKA the **Root Node** -> in this case we **COPY** the value of the **Inorder successor** to the node **&** **DELETE** the very same **Inorder successor** -> AND -> the **Inorder successor** of a Node in a Binary Search Tree is the **next node** in the **Inorder traversal sequence** -> AND -> in a Binary Search Tree the **Inorder successor** is the node with the **least value** in its right subtree (so by me I guess that's ~*the last leaf in the right subtree AKA the rightmost node?*~-> and I was wrong! Since rightmost leaf node is the **highest** value, but my confusion remains (read below)). -> In our example the right subtree for the **root node 10** has just one node **15** -> which automatically becomes the minimum value -> so replace the Root Node's value with the minimum Node's value which is **15** & **remove** that corresponding *node 15***.**
+   - By me I'm still confused: that is too simple of an example for the **most complex step 3!** What if node **15** had 2 children nodes? What happens to the right subtree? Does it vanishes forever? -> Because, if **15** had 2 children: 14 on the left, 16 on the right, who would replace 15? Since "both will" is impossible -> because we already have left subtree with parent node **5** and its child node **3**, so we can't overwrite them either? I guess that's an edge case he has yet to talk about (@codevolution)?
+- Next, I don't understand his `if (root === null) return root;` is more important he says at 4:04m into the video, as if there's multiple nodes so that recursion will keep working, huh? Whereas he says if it `return null` then, then he actually says nothing but indirectly suggests as if that's not gonna work out?
+- Code breakdown:
+- Condition `if (value < root.value)` -> then we traverse the left subtree: `root.left = this.deleteNode(root.left, value)`. -> `else if (value > root.value)` then we traverse the right subtree `root.right = this.deleteNode(root.right, value)` -> `else` if both these conditions failed then we have found the **node** whose value is equal to the passed in `value` argument -> and in here it is where we need to address the 3 Scenarios from the visual breakdown (above):
+  - Scenario 1: the *node to be deleted* is a **leaf node** that means it has no child nodes: `if (!root.left && !root.right)` then `return null;`
+  - Scenario 2: the *node to be deleted* has **one child node** -> in this case remove the **node** and replace it with its **child node:** `if (!root.left) {return root.right} else if (!root.right) {return root.left}`.
+  - Scenario 3: If both scenarios checks above have failed then the *node to be deleted* has **two children nodes** -> in this scenario we **COPY** the value of the **Inorder successor* to the *node-to-be-deleted* and then **DELETE** the **Inorder successor.** -> The **Inorder successor** of a node is the **minimum** value in the `right` subtree. -> So, update the **root node**'s `value` property with the node that contains the **minimum `value`** in the right subtree: `root.value = this.min(root.right)` -> then we **delete** that node: `root.right = this.deleteNode(root.right, root.value)` -> finally to make sure the changes to the **root node** are reflected we `return root`.
+  - **HE STILL DID NOT MENTION IF RIGHT SUBTREE HAS CHILDREN NODES!**
+  - So I had to test it all by myself:
+```js
+bst.insert(10);
+bst.insert(5)
+bst.insert(15);
+bst.insert(3);
+bst.insert(14);
+bst.insert(16);
+bst.levelOrder(); // logs: 10, 5, 15, 3, 14, 16
+bst.delete(10); //delete root node
+bst.levelOrder(); // logs: 14, 5, 15, 3, 16
+// I did not expect this. I guess recursive calls are happening.
+```
+- I did not expect this. I guess recursive calls are happening.
+- I guess the calls to `min` method is happening because we must find the **lowest** node value in the **right subtree**, and once we found it and re-assigned it to the `root.value` property, then on the line of `root.right = this.deleteNode(root.right, root.value)` -> which `root.right` acts as the `root` argument#1 of the `deleteNode` method **&&**  `root.value` which now represents the **most minimum node value of the right subtree** is passed as the `value` argument#2 of the `deleteNode` method when called recursively.
+- So, in my code trial above, I guess that order in human words is: 1. Found node **14** as the `min`imum node value on the **right subtree** -> 2. (Recursively calls/) Re-calls `deleteNode` method with now `root.right=15` **&&** `root.value=14`
+- And I guess visually this would like this:
+```js
+    14
+    /\
+   5 15
+  /    \
+ 3     16
+`````
 ### Binary Search Tree code implementations (by [replit](https://replit.com/@Codevolution/JavaScript-Data-Structures#binary-search-tree.js) of the @codevolution YouTube video series):
 ```js
 class Node {
