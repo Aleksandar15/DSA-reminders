@@ -2479,7 +2479,9 @@ There are 3 types of DSA traversals:
 - Operations forthis is inside the `levelOrder` method.
 #### Binary Search Tree Min Max ([source](https://www.youtube.com/watch?v=mrzE5SqzoQY&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=73)).
 - Finding Min and Max is a prerequisite for the next section: Delete method.
-- It's very easy, since the most left leaf node is the smallest value in the tree, and the rightmost leaf node is the largest value in the tree. -> So, if it's not the first `root.left` or `root.right` value respectively for whoever we are searching for -> then, we keep calling the function recursively.
+- It's very easy, since the most left leaf node is the smallest value in the tree, and the rightmost leaf node is the largest value in the tree. -> So, if it's not the first `root.left` or `root.right` value respectively for whoever we are searching for -> then, we keep calling the function recursively until:
+  - For `min` method: until there's **no more** `root.left` Nodes (*on the left===smaller nodes*) -> then we `return root.value` => which is the lowest-`value`d-node.
+  - For `max` method: until there's **no more** `root.right` Nodes (*on the right===bigger nodes*) -> then we `return root.value` => which is the highest-`value`d-node.
 #### Binary Search Tree Delete - BST Delete ([source](https://www.youtube.com/watch?v=80GhW9X1MGI&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=74)).
 - Visual examples:
 ```
@@ -2529,13 +2531,17 @@ bst.levelOrder(); // logs: 14, 5, 15, 3, 16
 - Oh and ChatGPT continue about the `root.right = this.deleteNode(root.right, root.value);`: "..This recursive call will delete the node with the minimum value from the right subtree. By doing this, we ensure that the node with the `min`imum value is effectively **removed** from the tree." -> by me: I think removed & "copied" AKA returned as if the **new `root` node?** Because, exiting all these conditions seems to `return root;` -> which again confusion clarification: it is because `delete` method has called this `deleteNode` method and that `delete` method needs to re-assign the root node at its line of: `this.root = this.deleteNode(this.root, value);`. -> My last confusion is how does "`return root;`: this line returns the **modified** **root** **node** after performing the deletion operation." - while I do understand this ***already*** -> rather the part I'm confused about is inside the `deleteNode` method: `if (root === null) return root;` why does this returns? I know it's a base case so it's stops re-executing the recursive calls, but how does the last line ***outside all of these conditions*** returns `return root;` as the "*modified root*" huh?
   - I asked ChatGPT about it and his answer is: "*You are correct in pointing out that the base case `if (root === null)` seems redundant in its current form.*". && I asked him "are you sure?" then he apologizes: "it is possible to reach a point where the `value` you want to **delete** is not found in the tree" -> and so I tested this command call: `bst.delete(11);` -> and indeed I got an error: "`Type Error: Cannot read properties of null (reading 'value')`"; but since my root node was **10**, then the recursive calls to `deleteNode` itself still happened:
     - Code tracing breakdowns:
-    - I think I can break down the code like so #1: condition `else if (value=11 > root.value=10)` had ran the code: `root.right = this.deleteNode(root.right=15, value=11)` -> next #2: condition `if (value=11 < root.value=15)` then run: `root.left = this.deleteNode(root.left=14, value=11)` -> #3: condition: `if (value=11 < root.value=14)` then run: `root.left = this.deleteNode(root.left=null, value=11)` -> #4 Hence the limit is reached, there's no more nodes below to compare, so now the condition `if (root(null) === null)` runs and then returns `null` with `return root(null);`.
-    - Nicey, I think I'm correct, let's trace it for removing node **10** then:
-    - Trial#1: Step #1: None of the `if` and `else if` conditions aren't true, so we run inside the main `else` code block: none of these conditions apply either, so we go down at the code line of `root.value = this.min(root.right);` which assigns `root.value = 14` (*I guess now that we have a copy of it, we have to remove it & replace it as the new **root node***) -> #2: `root.right = this.deleteNode(root.right=15, root.value=14);` -> #2.1: `deleteNode(root=15, value=14)` is being run so, the condition: `if (value=14 < root.value=15)` runs the code: `this.left = this.deleteNode(root.left=14, value=14)` ***(wait so I realized that node `10` is gone)*** -> #2.2 `deleteNode(root=14, value =14)` runs, (*wait so now they are equal `root===value`*) -> so none of the topmost conditions apply then we enter the final `else` block: .. I see I'm tracing something wrongly, as I will reach the line of `root` being `null` again, until then, I don't know what did I missed but I'm just unable to reach the final #3 `return root;` at the bottom of inside `deleteNode` method? .. I would try and say #3: inside the `else` the condition `if (!root.left && !root.right)` is true and `return null;` which exits the recursive calls to finally `return root;`?
-    - Failed#1: It seem like `return root;` always runs ~and it assigns~ or rather it just returns the modified `root` as its `root.value=14` (`min`imum of the right subtree): so that's the step #3 when it exits, but I need to trace how `root.right` gets re-assigned since that should have a value of **15** because the `root(14).right(15)` should be **15** (in my case example, otherwise they don't need to differentiate only by a value of **`1`**, I just chosen it like that myself quickly).
-    - Failed#2: Let's go back at #2.1: `root.right(right node of 10 is 15) = root.deleteNode(root.right=15, root.value=14)` -> now I think by having it to return `null` means it removed the "copied" new-to-be-node & later makes it the new root wit hthe `return root;` -> but until now, continue: -> #2.2: **deleteNode** method receives these arguments: `deleteNode(root..` .. or rather it is an Object that is returned like so
-    - Trial#3: Step #2.1: `root.right({value: 15, left: 14, right: 16}) = this.deleteMethod(root.right({value: 15, left: 14, right: 16}), root.value=14)` -> #2.2: `deleteNode(root({value: 15, left: 14, right: 16}), value=14)` then the condition that is truthy is: `if (value=14 < root.value({value: 15,left:14, right:16}))` which makes it run: `root.left({value: 14, left: null, right: null}) = this.deleteNode(root.left({value: 14, left: null, right: null}), value=14)` then -> (*I realize this all could be wrong; rather that `return root;` had run and assigned `root.right` its returned value?*) #2.3: `deleteNode(root({value: 14, left: null, right: null}), value=14)` runs, and none of the topmost conditions are truthy (*again*) -> so we enter the `else` block the condition `if (!root.left && !root.right)` is true and `return null;` runs (*again!*) which exits the recursive call *indeed*, but however I shouldn't confuse myself about trying to re-assign the `root.right`: because that does **not** matter & **actually** it **rather** **must** **remain** the **same** because I *only* need to remove the node **14** & place it as the new **root node**.
-      - The assigning part is easy: `return root;` inside of `deleteNode` -> actually means `this.root = this.deleteNode(root, value)` that node **14** has been assigned as the **`this.root` node**. && At this point I'm left confused as to ***How is the node **14** removed in all of this code where `return null;` only happened when trying to re-assign `root.right` property?***
+## IMPORTANT NOTE: Rather Read Bottom-to-Top about the `deleteNode` method (*because I had new realizations & clarifications & mistaken visual understandings fixed*).
+### (So jump down & ignore the below text explanation! As the below text has mistakes in my steps-breakdowns & I might delete it later (*or at least parts of it; UPDATE1: still haven't removed anything; as it's good to reflect on the pastmistakes & I might keep them*).)
+#### (Jump down into CTRL+F: "BST deleteNode method - an improved understanding")
+---
+  - I think I can break down the code like so #1: condition `else if (value=11 > root.value=10)` had ran the code: `root.right = this.deleteNode(root.right=15, value=11)` -> next #2: condition `if (value=11 < root.value=15)` then run: `root.left = this.deleteNode(root.left=14, value=11)` -> #3: condition: `if (value=11 < root.value=14)` then run: `root.left = this.deleteNode(root.left=null, value=11)` -> #4 Hence the limit is reached, there's no more nodes below to compare, so now the condition `if (root(null) === null)` runs and then returns `null` with `return root(null);`.
+  - Nicey, I think I'm correct, let's trace it for removing node **10** then:
+  - Trial#1: Step #1: None of the `if` and `else if` conditions aren't true, so we run inside the main `else` code block: none of these conditions apply either, so we go down at the code line of `root.value = this.min(root.right);` which assigns `root.value = 14` (*I guess now that we have a copy of it, we have to remove it & replace it as the new **root node***) -> #2: `root.right = this.deleteNode(root.right=15, root.value=14);` -> #2.1: `deleteNode(root=15, value=14)` is being run so, the condition: `if (value=14 < root.value=15)` runs the code: `this.left = this.deleteNode(root.left=14, value=14)` ***(wait so I realized that node `10` is gone)*** -> #2.2 `deleteNode(root=14, value =14)` runs, (*wait so now they are equal `root===value`*) -> so none of the topmost conditions apply then we enter the final `else` block: .. I see I'm tracing something wrongly, as I will reach the line of `root` being `null` again, until then, I don't know what did I missed but I'm just unable to reach the final #3 `return root;` at the bottom of inside `deleteNode` method? .. I would try and say #3: inside the `else` the condition `if (!root.left && !root.right)` is true and `return null;` which exits the recursive calls to finally `return root;`?
+  - Failed#1: It seem like `return root;` always runs ~and it assigns~ or rather it just returns the modified `root` as its `root.value=14` (`min`imum of the right subtree): so that's the step #3 when it exits, but I need to trace how `root.right` gets re-assigned since that should have a value of **15** because the `root(14).right(15)` should be **15** (in my case example, otherwise they don't need to differentiate only by a value of **`1`**, I just chosen it like that myself quickly).
+  - Failed#2: Let's go back at #2.1: `root.right(right node of 10 is 15) = root.deleteNode(root.right=15, root.value=14)` -> now I think by having it to return `null` means it removed the "copied" new-to-be-node & later makes it the new root wit hthe `return root;` -> but until now, continue: -> #2.2: **deleteNode** method receives these arguments: `deleteNode(root..` .. or rather it is an Object that is returned like so
+  - Trial#3: Step #2.1: `root.right({value: 15, left: 14, right: 16}) = this.deleteMethod(root.right({value: 15, left: 14, right: 16}), root.value=14)` -> #2.2: `deleteNode(root({value: 15, left: 14, right: 16}), value=14)` then the condition that is truthy is: `if (value=14 < root.value({value: 15,left:14, right:16}))` which makes it run: `root.left({value: 14, left: null, right: null}) = this.deleteNode(root.left({value: 14, left: null, right: null}), value=14)` then -> (*I realize this all could be wrong; rather that `return root;` had run and assigned `root.right` its returned value?*) #2.3: `deleteNode(root({value: 14, left: null, right: null}), value=14)` runs, and none of the topmost conditions are truthy (*again*) -> so we enter the `else` block the condition `if (!root.left && !root.right)` is true and `return null;` runs (*again!*) which exits the recursive call *indeed*, but however I shouldn't confuse myself about trying to re-assign the `root.right`: because that does **not** matter & **actually** it **rather** **must** **remain** the **same** because I *only* need to remove the node **14** & place it as the new **root node**.
+    - The assigning part is easy: `return root;` inside of `deleteNode` -> actually means `this.root = this.deleteNode(root, value)` that node **14** has been assigned as the **`this.root` node**. && At this point I'm left confused as to ***How is the node **14** removed in all of this code where `return null;` only happened when trying to re-assign `root.right` property?***
   - Back to asking ChatGPT answers: "*A node is considered deleted when one of the following conditions is met: **a.** If the node to be deleted is a leaf node (has no left or right children), it is removed from the BST by returning `null`.*" -> ok so that condition I already reached hence why it was the leaf node **14** of the right subtree's leftmost leaf node, -> so that's how node **14** was deleted & then returned by `return root;` cause it to be re-assigned as the new `this.root` line of code inside `delete` method.
   - Okay ChatGPT confirmations: "*6. The `min`imum `value` 14 **replaces** the `value` of the node 10, **effectively "deleting"** the **node 10** by **replacing it** with the `min`imum `value`.*" -> so **technically** it **removes** node **10** by replacing it with the value of the `min`imum value at the root's `right` subtree of the leftmost leaf node found at the step where the code `root.value = this.min(root.right)` executes! -> ChatGPT: "7. The code then recursively calls deleteNode on the right subtree to delete the minimum value (`14`) from the right subtree." -> "8. The recursive call on the right subtree continues until the base case is reached. The base case is when the current `root` node becomes `null`." -> "9. When the base case is reached in the **right subtree**, the current `root` node becomes `null`, and the recursive calls stop." -> "10. The modified `root` node (after the deletion process) is returned from the `deleteNode` function and assigned to `this.root` in the `delete` method." -> YET I'm still confused how was the leaf node **14** deleted? -> Then ChatGPT modifies his answers:
   - ChatGPT starting only from the modified step: "8. Now, the `deleteNode` method is called with the root node of the right subtree (`15`) and the value `14`." -> "9. Since `14` is **less** than the root value `15`, the code continues to the **left subtree** of the **right subtree**." -> "10. The `deleteNode` method is called again with the left child of the right subtree (`14`) and the value `14`." -> ~"11. The base case is reached because the current `root` node (`14`) is `null`. In this case, the recursive calls stop, and `null` is returned."~: nope, he's wrong; base case is reached because **leaf node 14** doesn't have any left or right children! -> I hit him up with that and he modifies his answer's step:"11. The base case is reached because the current **`root` node** (`14`) is a **leaf node** with no **left** or **right child**. In this case, the recursive calls stop, and `null` is returned." -> "12. The `deleteNode` method in the previous call assigns the returned value (`null`) to `root.right`, effectively deleting the node with the value `14` from the **right subtree** of the **`root` node (15)."** -> "13. The modified root node of the **right subtree** (`15`) is returned to the previous call.": **I have no idea how is this done if previous call returned `null`?** -> "14. The `deleteNode` method in the initial call assigns the returned value (`15`) to `root.right`, updating the right child of the root node (`10`).": **WHAT?** Did he mean the new **root node 14** and **not** *10*?
@@ -2547,6 +2553,44 @@ bst.levelOrder(); // logs: 14, 5, 15, 3, 16
   /    \
  3     16
 `````
+- Indeed the `delete` method is the most hardest one to grab (*even with my logs below*), so I've modified the code to include some `console.log`s in order to trace the code for a better understanding as such:
+```js
+deleteNode(root, value) {
+  console.log('Entering root is:',root,'& value:',value);
+// ...
+  console.log('root.value BEFORE running `min` method:',root.value);
+  root.value = this.min(root.right);
+  console.log('root.value AFTER running `min` method:',root.value);
+  console.count('runs BEFORE root.right re-assignment');
+  console.log('root.right BEFORE running `min` method:',root.value);
+  root.right = this.deleteNode(root.right, root.value);
+  console.log('root.right AFTER running `min` method:',root.value);
+  console.count('runs AFTER root.right re-assignment');
+};
+console.log('FINAL root:',root);
+return root;
+```
+### BST deleteNode method - an improved understanding:
+- - - Tracing down the code executions for removing the **root node 10 *after it already has been removed*:**
+- (*I honestly can't breka it down without console.logs, even with them, it's still confusing how the thing that happened in the previous calls, gets returned in calls afterwards .. they stack up and boom all at once are returned*)
+- #1: Entering root: { value: 14, left: is a node with value 5 & its own properties, right: is a node with value 15 & its own properties }, & value: 10.
+- #2: Entering root: { value: 5, left: is a node of value 3, right: null }, & value: 10 ///// not sure how this Node became the `root` Node as the argument1: `root`, when all the recursive calls are calling the `root.left` or `root.right`?!? -> ***OH WAIT THAT'S IT! Aha-moment! This is my new realization: these calls that I'm talking about are ~returning a NODE~ (nope, "returning" means "ending the recursion"), but, rather: these calls were passing in a "NEW `ROOT` NODE" into the argument1: `root` - that is, either the `left` or `right` property (which can be a "null" or a "Child Node") of the CURRENT `root` Node (I repeat, hence the `root.left` or `root.right` placeholders for argument1 - one of them will become the NEW `root` NODE) -> & in the past my confusion rather rose up from the fact that I thought I was passing in as argument1 the `root.left.value` or `root.right.value` (that's how I wrongufully imagined it to be - in my head, and I got stuck for so long to this misleading & mistaken visual understandings into my mind - which was the root cause of me having a hard time trying to understand the `deleteNode` method's recursive calls!), but that was my BIG MISTAKE & NOW I FINALLY REALIZE why & how did all of this confused me in the past (up to this point)!***
+- #3: Entering root: **`null`** & value: 10.
+  - (*So that condition `if (root === null)` is truthy when trying to delete an already deleted node!*)
+- #4: Final root: { value: 5, left: is a Node value of 3, right: null }
+- #5: Final root: { value: 14, left: is a Node value of 5, right: is a Node value of 15 & its own properties }
+- - - Tracing down the code executions for removing the node **10** when it's a **root node** (meaning: Node 10 exists & it's not deleted yet (backwards code-breakdown, I know.. xD)):
+- #1: Entering root: { value: 10, left: is a Node of value 5 & its own properties, right: is a Node of value 15 & its own properties }, & value: 10.
+- #2: `root.value` **BEFORE** running `min` method: **10**
+- #3: `root.value` **AFTER** running `min` method: **14**
+- #4: `console.count`: "runs BEFORE root.right re-assignment:" **1** (*once, huh!?!*)
+- #5: `root.right` **BEFORE** running `min` method: **14**
+- #6: Entering root: { value: 15, left: null (but because Chrome Devtools considers it removed, otherwise it showed a "Node" which was 14 itself), right: is a Node of value 16 & its own properties (left & right both null), & value: **14.**
+- #7: Entering root: { value: 14, left: null, right: null }, & value: 14.
+- #8: Final root: { value: 15, left: null, right: is a Node of value 16 & its own properties (left & right both null)
+- #9: `root.right` **AFTER** running `min` method: **14**
+- #10: `console.count`: "runs AFTER root.right re-assignment:" **1** (*once, huh!?!*)
+- #11: Final root: { value: 14, left: is a Node of value 5 & its own properties, right: is a Node of value 15 & its own properties }
 ### Binary Search Tree code implementations (by [replit](https://replit.com/@Codevolution/JavaScript-Data-Structures#binary-search-tree.js) of the @codevolution YouTube video series):
 ```js
 class Node {
@@ -2625,6 +2669,7 @@ class BinarySearchTree {
   }
 
   deleteNode(root, value) {
+    console.log('Entering root is:', root, '& value:', value);
     if (root === null) {
       return root;
     }
@@ -2641,9 +2686,16 @@ class BinarySearchTree {
       } else if (!root.right) {
         return root.left;
       }
+    	console.log('root.value BEFORE running `min` method:',root.value);
       root.value = this.min(root.right);
+      console.log('root.value AFTER running `min` method:',root.value);
+      console.count('runs BEFORE root.right re-assignment');
+      console.log('root.right BEFORE running `min` method:',root.value);
       root.right = this.deleteNode(root.right, root.value);
+      console.log('root.right AFTER running `min` method:',root.value);
+      console.count('runs AFTER root.right re-assignment');
     }
+    console.log('FINAL root:',root);
     return root;
   }
 
@@ -2674,6 +2726,12 @@ class BinarySearchTree {
   levelOrder() {
     /** Use the optimised queue enqueue and dequeue from queue-object.js instead.
      * I've used an array for simplicity. */
+
+    // A fix for when root is empty to avoid the error "Cannot read properties of null":
+    if (!this.root) {
+      return `Binary Search Tree is empty`;
+    };
+
     const queue = [];
     queue.push(this.root);
     while (queue.length) {
@@ -2749,7 +2807,7 @@ console.log(bst.height(bst.root));
 ```
 13. Graph Data Structure ([source](https://www.youtube.com/watch?v=bLtm94mvfjE&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=75))
 - NOTES:
-- I noticed There's multiple exercises Adjacency Matrix of a Graph; Adjacency List of a Graph; Graph Add Vertex and Edge; Graph Display and HasEdge; Graph Remove Edge and Vortex.
+- I noticed There's multiple exercises: Adjacency Matrix of a Graph; Adjacency List of a Graph; Graph Add Vertex and Edge; Graph Display and HasEdge; Graph Remove Edge and Vortex.
 - Anyways, notes from the YouTube [video](https://www.youtube.com/watch?v=bLtm94mvfjE&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=75) by @codevlution:
 - A graph is a non-linear Data Structure that consists of a finite number of Vertices -> also called Nodes -> connected by Edge.
 - Trees themselves are a specific type of Graph Data Structure (*hm, that confuses me*).
@@ -2768,7 +2826,7 @@ console.log(bst.height(bst.root));
 	- #2 Undirected
 	  - A Graph in which the edges are biderecitonal.
       - The Graph can be traversed in either direction.
-      - The absence of an arrow tells us taht the Graph is undirected.
+      - The absence of an _arrow_ tells us that the Graph is undirected.
         - In the example above we can traverse from both `A` -> `B` -> `C` as well as `C` -> `B` -> `A`.
 - There's even **MORE TYEPS of Graphs!** Which I, of course, won't post them visually, here's the [YouTube video](https://youtu.be/bLtm94mvfjE?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=125) by @codevolution.
   - Here's their names for CTRL+F lookup:
@@ -2783,7 +2841,8 @@ console.log(bst.height(bst.root));
   - Google Maps
     - Where cities are represented as Vertices (*or Nodes*) and Roads as Edges -> to help build a Navigation system.
   - In social media apps / websites -> Users are considered as Vertices (*/Nodes*) and Edges are the links between Connections (linkings).
-    - Example: facebook, instagram, linkedin all use Graph Data Structures to show **mutual connecitons,** **posts suggestions** and other **recommendations.** (*FAANGs examples use this Data Structure: Graphs, nicey!;* Yet a YouTube comment guy wrote that he was **never** asked about Graphs during his FAANG interviews (*I can't recall the video, yet it doesn't even matter, each to their own experience I may have it come up during an interview (the comment was posted like 5 years ago when I read it on June 2023 and went like "still in college" and then in the replies people asked him "what happened now" and the guy replied he was "hired working with Unity" & didn't mention company name; comment was maybe at the [YouTube Linked List by HackerRank](https://www.youtube.com/watch?v=njTh_OwMljA) or [YouTube Hash Tables by HackerRank](https://www.youtube.com/watch?v=njTh_OwMljA).).).).
+    - Example: facebook, instagram, linkedin all use Graph Data Structures to show **mutual connecitons,** **posts suggestions** and other **recommendations.**
+    - (*FAANGs examples use this Data Structure: Graphs, nicey!;* Yet a YouTube comment guy wrote that he was **never** asked about Graphs during his FAANG interviews (*I can't recall the video title*, yet it doesn't really even matter, each to their own experience & I may have it come up during an interview or not (the comment was posted like 5 years ago when I read it on June 2023 and went like "still in college" and then in the replies people asked him "what happened now" and the guy replied he was "hired working with Unity" & didn't mention company name; comment was maybe at the [YouTube Linked List by HackerRank](https://www.youtube.com/watch?v=njTh_OwMljA) or [YouTube Hash Tables by HackerRank](https://www.youtube.com/watch?v=njTh_OwMljA).).).).
 ### Graph Data Structure implementations in code:
 ```js
 class Graph {
