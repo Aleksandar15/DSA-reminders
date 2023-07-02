@@ -2807,9 +2807,12 @@ console.log(bst.height(bst.root));
 ```
 13. Graph Data Structure ([source](https://www.youtube.com/watch?v=bLtm94mvfjE&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=75))
 - NOTES:
-- I noticed There's multiple exercises: Adjacency Matrix of a Graph; Adjacency List of a Graph; Graph Add Vertex and Edge; Graph Display and HasEdge; Graph Remove Edge and Vortex.
+- There's: Adjacency Matrix of a Graph; Adjacency List of a Graph; Graph Add Vertex and Edge; Graph Display and HasEdge; Graph Remove Edge and Vortex.
 - Anyways, notes from the YouTube [video](https://www.youtube.com/watch?v=bLtm94mvfjE&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=75) by @codevlution:
-- A graph is a non-linear Data Structure that consists of a finite number of Vertices -> also called Nodes -> connected by Edge.
+- A graph is a non-linear Data Structure that consists of a finite number of Vertices -> also called Nodes -> connected by Edge. -> That is definition for a Vertex.
+  - Multiple such Nodes === Vertices.
+  - -> But what is an Edge?
+  - Google results: "An edge (or link) of a network (or graph) is one of the connections between the nodes (or vertices) of the network" - [source: https://mathinsight.org/definition/network_edge](https://mathinsight.org/definition/network_edge).
 - Trees themselves are a specific type of Graph Data Structure (*hm, that confuses me*).
 - The graph has a set of Vetices (/Nodes) represented as Cricles and a set of Edges represented as Lines. -> As opposed to a Tree which is generally represented OR Red Top Down, instead there is **n** Hierarchy in Graphs and there is **no** Set way to represent or read a Graph.
 - Visual representations (visual examples):
@@ -2828,14 +2831,43 @@ console.log(bst.height(bst.root));
       - The Graph can be traversed in either direction.
       - The absence of an _arrow_ tells us that the Graph is undirected.
         - In the example above we can traverse from both `A` -> `B` -> `C` as well as `C` -> `B` -> `A`.
-- There's even **MORE TYEPS of Graphs!** Which I, of course, won't post them visually, here's the [YouTube video](https://youtu.be/bLtm94mvfjE?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=125) by @codevolution.
-  - Here's their names for CTRL+F lookup:
-  - Only vertices with no edges.
-  - Multiple edges from 1 node.
-  - Cycles in the Graph.
-  - Self-loops on a Node.
-  - "Maybe disconnected".
-  - May contain weights on Edges representing the costs of traversing that Edge.
+        - By me: but **not** from `C` to `A` nor `A` to `C`.
+- There's even **MORE TYPES of Graphs!** Visually, here's the [YouTube video](https://youtu.be/bLtm94mvfjE?list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&t=125) by @codevolution:
+- #1: A Graph can have only vertices with no edges:
+```
+ B
+A C
+```
+- #2: Munltiple edges from one node:
+```
+  B
+ / \
+A   C
+```
+- #3: Cycles in the Graph:
+```
+  B
+ / \
+A — C
+```
+#4 Self-loop on a Node:
+```
+      B
+     / \
+(A—)A   C
+```
+#5 Disconnected:
+```
+   B
+    \
+ A   C
+```
+#6 **Weights** on Edges **representing** the **cost** of **traversing** that **Edge:**
+```
+   B
+ ³/ \²
+ A   C
+```
   - "*We will not be diving into implementing all of these variants (types) of Graphs*".
 - Graph Usages in real life:
   - Google Maps
@@ -2843,7 +2875,148 @@ console.log(bst.height(bst.root));
   - In social media apps / websites -> Users are considered as Vertices (*/Nodes*) and Edges are the links between Connections (linkings).
     - Example: facebook, instagram, linkedin all use Graph Data Structures to show **mutual connecitons,** **posts suggestions** and other **recommendations.**
     - (*FAANGs examples use this Data Structure: Graphs, nicey!;* Yet a YouTube comment guy wrote that he was **never** asked about Graphs during his FAANG interviews (*I can't recall the video title*, yet it doesn't really even matter, each to their own experience & I may have it come up during an interview or not (the comment was posted like 5 years ago when I read it on June 2023 and went like "still in college" and then in the replies people asked him "what happened now" and the guy replied he was "hired working with Unity" & didn't mention company name; comment was maybe at the [YouTube Linked List by HackerRank](https://www.youtube.com/watch?v=njTh_OwMljA) or [YouTube Hash Tables by HackerRank](https://www.youtube.com/watch?v=njTh_OwMljA).).).).
-### Graph Data Structure implementations in code:
+#### Adjacency Matrix of a Graph ([source](https://www.youtube.com/watch?v=Gqwt45cHyoQ&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=76)):
+- An adjacency matrix is a 2D array of size `V x V` where `V` is the number of vertices in the Graph.
+- Each row and column represent a vertex.
+If the value of any element say, **`matrix[i][j]`** is **1**, it represents that there is an edge connecting vertex `i` and vertex `j`.
+- Adjacency Matrix Representations table:
+```
+ | A  | B  | C  
+A| 0  | 1  | 0
+B| 1  | 0  | 1
+C| 0  | 1  | 0
+```
+- Visual adjacency matrix representations visually:
+```
+   B
+  / \
+ A   C
+```
+- We have 3 vertices `A`, `B`, and `C`:
+- `1` in the table / `1` in the matrix represents an EDGE that is connecting the two vertices.
+- Since we have undirected graph:
+  - `A` is connected to `B`;
+  - `B` is connected to `A`;
+  - `B` is connected to `C`;
+  - `C` is connected to `B`.
+- To represent this Matrix in JavaScript we use 2D Array (*2D Array code* is Arrays nested inside of an Array):
+```js
+const matrix = [
+ [0, 1, 0],
+ [1, 0, 1],
+ [0, 1, 0]
+];
+
+console.log(matrix[0][1]); // Check if connection exist from A to B; result: 1 (connection exists)
+console.log(matrix[1][2]); // Check if connection exist from B to C; result: 1 (connection exists)
+console.log(matrix[0][0]); /** Check if connection exists from A to A;
+meaning: check if A has a self-loop; results: 0 (connection doesn't exist) */
+```
+- Code breakdown:
+- AHA-MOMENTS:
+- The first subarray: `A` is **not** connected to `A` itself (`0`); `A` is **connected** to `B` (`1`); `A` is **not** connected to `C` (`0`); code: `[0, 1, 0]`.
+- The second subarray: `B` is **connected** to `A` (`1`); `B` is **not** connected to `B` itself (`0`); and `B` is **connected** to `C` (`1`); code: `[1, 0, 1]`.
+- The third subarray: `C` is **not** connected to `A` (`0`); `C` is **connected** to `B` (`1`); and `C` is **not** connected to `C` itself (`0`); code: `[0, 1, 0]`.
+#### Adjacency List of a Graph ([source](https://www.youtube.com/watch?v=O7BtCGkkPBY&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=77)):
+- Adjacency List **form** of representations explanations: the vertices are stored in a map-like data structure, and every vertex stores a list of its adjacent vertices.
+- Adjacency List Representations:
+- Visually:
+```
+   B
+  / \
+ A   C
+```
+- Visual breakdown:
+  - `A —> B` (`A`'s adjacency list will contain `B`);
+  - `B —> A,C` (`B`'s adjacency list will contain `A` and `C`);
+  - `C —> B` (`C`'s adjacency list will contain `B`).
+- Adjacency List code:
+```js
+adjacencyList = {
+ 'A': ['B'],
+ 'B': ['A", 'C'],
+ 'C': ['B']
+};
+
+console.log(adjacencyList['A']); // Get list of all the Nodes that Node/Vertex A is connected to; results: ['B']
+```
+- Adjacency list code breakdown:
+- Adjacency list is equal to an Object (`{}`) which is map-like data structure:
+  - For vertex `A` we have an Array with `B` as its element.
+  - For vertex `B` we have an Array with `A` and `C` as elements.
+  - For vertex `C` we have an Array with `B` as its element.
+- Logs:
+  - `console.log(adjacencyList['A']);` // Get list of all the Nodes that Node **A** is connected to; results: `['B']`
+  - And so on for the rest of the Node/vertices (*it's too easy*).
+- Adjacency Matrix **VS** Adjacency List **PROS & CONS:**
+- #1: With an adjacency list, we only need to store the values for the **edges that exist.** While, with adjacency matrix, we store **values irrespective** of whether an edge exists or or not. -> Because of this, storage wise, an **adjacency list is way more efficient.**
+- #2: With adjacency list, inserting and finding adjacent nodes is Constant Time Complexity O(1) VS with adjacency matrix it is Linear Time Complexity O(n).
+- #3: An adjacency list allows you to store additional values with an edge such as **weight** of the edge. While, with adjacency matrix, such information would have to be stored **externally.**
+- -> Because of these reasons, our implementation will also **assume the adjacency list representation of a graph.** -> "*In the next video let's understand with code the implementatino of an undirected graph data structure in JavaScript*"(that video is titled: "Graph Add Vertex and Edge").
+#### Graph Add Vertex and Edge ([source](https://www.youtube.com/watch?v=Yy7T4bLhqUg&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=78)):
+- Let's create `Graph` Class & iplement methods to `add` a new Vertex to the Graph as well as `add` an Edge in between two vertices.
+- `addVertex(vertex)`'s logic from the [replit source](https://replit.com/@Codevolution/JavaScript-Data-Structures#graph.js) `addVertex` method code breakdown:
+  - #1: Check if the `vertex` already exists; "*in our case the parameter `vertex` is a simple string that identifies the `vertex`*" (well by me: it doesn't have to be, we rather should be checking if it's a string or not); code: `if(!this.adjacencyList[vertex])` -> That is: if the the Object does **not** contain a property with the key `vertex` then we **add** that `vertex` to the List and its value will be an Empty List of Edges (`[]`) - an empty array literal to begin with. -> While on the right hand side we could leave it as an Array literal, rather for better performance is rather better to use the `Set` data structure: `this.adjacencyList[vertex] = new Set()`:
+    - We are creating an entry in the adjacency list Object with **key** equal to the `vertex` && the List of adjacency vertices: ***empty** to begin with.
+    - We are done with `addVertex` and we can now instantiate the Graph Class and call the `addVertex` method:
+```js
+const graph = new Graph();
+graph.addVertex("A");
+graph.addVertex("B");
+graph.addVertex("C");
+```
+- Next, we implement a method to add an Edge between two vertices:
+  - Name the method `addEdge(vertex1, vertex2)`:
+  - We begin by checking if these 2 vertices exists & if they do **not** exist then we'll **add** them using the `addVertex` method; code: -> I won't paste it in here, since it's the `addEdge` method below (*or [replit source](https://replit.com/@Codevolution/JavaScript-Data-Structures#graph.js)*) & it's so easy to understand.
+  - Once we made sure that the 2 vertices exist, all we have to do next is to **add** the vertices to the adjacent vertices list; code:
+    - `this.adjacencyList[vertex1].add(vertex2);` -> Here `add` is a method avaialble on the `Set` data structure (`Set` Object!); & since we are dealing with undirected Graphs we need to ensure `Vertex1` is added as an Adjacent Vertex to `Vertex2`; code: `this.adjacencyList[vertex2].add(vertex1);`.
+  - Now we can call `addEdge` like so:
+```js
+graph.addEdge("A", "B");
+graph.addEdge("B", "C");
+```
+- And because this is an **undirected graph** it's why the Edges will also exist from `C` to `B` and `B` to `A` as well (by me: "in reverse they are connected/linked as well").
+#### Graph Display and HasEdge ([source](https://www.youtube.com/watch?v=TQ1LlaRHaow&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=79)):
+- We'll implement 2 helper methods:
+- #1 `display` method to print out the adjacency list and the second #2: `hasEdge` method to check if an Edge exist between 2 given Vertices.
+- #1 Inside the `display` method we use a `for...in` loop to iterate over the key-value pairs -> then `console.log(vertex + " -> " + [...this.adjacencyList[vertex]])` - because we are using `Set` data structure we'll use spread operator to convert it into an Array.
+  - We could have used `for...of` loop to iterate over the `Set` for a more verbose `log` statement (*I don't want the more wordy one anyways*).
+  - Simply called like `graph.display()` will **display:**
+```
+A -> B
+B -> A,C
+C -> B
+```
+- #2 `hasEdge(vertex1, vertex2)` method's body will use the `has` method on the `Set` data structure to check if a value exist in the adjacency list of a vertex; code: `return (this.adjacencyList[vertex1].has(vertex2) && this.adjacencyList[vertex2].has(vertex1))` -> Also, if we're sure that our `addEdge` method works correctly, we don't have to check for both conditions, but for easier understanding of the Logic we'll *make sure* that Edge exists in both directions.
+  - Calling `console.log(graph.hasEdge("A", "B"))` -> returns `true` in the console, because an Edge (or Link) exists between `A` and `B` OR `A` and `B are Connected / Linking to each other.
+  - `console.log(graph.hasEdge("A", "C"))` -> returns `false`.
+#### Graph Remove Edge and Vertex / Graph Delete Edge and Vertex ([source](https://www.youtube.com/watch?v=75JAn8ejI_I&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=80)):
+- They are separate methods: `removeEdge(vertex1, vertex2)` and `removeVertex(vertex)`.
+- #1 `removeEdge` method accepts 2 parameters: `vertex` and `vertex2`
+  - To remove an Edge we'll **delete** the entry from the **adjacent vertex list.**
+  - Firstly, **delete** `vertex2` from `vertex1`; code: `this.adjacencyList[vertex1].delete(vertex2); this.adjacencyList[vertex2].deleete(vertex1);` - similarly **delete** `vertex1` from `vertex2`.
+  - Calling it like `graph.removeEdge("A", "B"); graph.display()` will **display:**
+```
+A ->
+B -> C
+C -> B
+```
+- We can see the Connection between `A` and `B` has been **removed.**
+  - He calls it "Connection" when referring to "Edge", yet I had to google to confirm, but he uses the terms interchangeably which causes confusion for beginners in DSA.
+- #2 `removeVertex` method which accepts a parameter `vertex` to be **deleted.**
+- First check if such `vertex` exist in the graph; code: `if (!this.adjacencyList[vertex])` -> we simply `return;` from the function.
+- Otherwise we need to **remove** **edges** from the **vertex** and all its adjacent vertices; code is using a `for...of` loop: `for (let adjacentVertex of this.adjacencyList[vertex])` -> then call the `removeEdge` method we've created: `this.removeEdge(vertex, adjacentVertex)` -> then when the `for...of` loop exist it means that **all** the **edges** from the **vertex** and its **adjacent vertices** have been **removed** -> at this point we can safely **delete** the **vertex** as well; code: `delete this.adjacencyList[vertex];`.
+  - By me: a little bit confusing; so he says it's use cases is: "instead of _removing_ the **edge**, we'll rather _remove_ the **vertex** `B`"; code: `graph.removeVertex("B"); graph.display();` will **display:**
+```
+A ->
+C ->
+```
+- Because we've removed the **Vertex `B`** (or also called **Node `B`)** -> we now have only `A` and `C` as Vertices (remaining; or "Nodes remaining") and both of them do **not** have any **edges** **nor** **vertices** (and by me: I also guess it could be said that they don't have **adjacent vertices** as well in this particular case scenario).
+- Overall almost all the methods have a **Constant Time Complexity O(1)** except for `removeVertex` whose **Time Complexity** depends on the number of Adjacent Vertices.
+- Additionally, I've read comments of that video where it states that @codevolution is missing a few more helper methods/checkers functions/helper functions, I quote [him](https://www.youtube.com/watch?v=75JAn8ejI_I&lc=Ugwky0FAEQIux3xxl4l4AaABAg): "**1)** Check if there a path exists between two given vertices (optimized); **2)** How long the minimum path length from vertex one to second given, **3)** Traversal amd find path of Graph given source, destination and intermediate point(s),  **4)** Searching in graph. At least **1** & **2** as they are common use case."
+  - So I may need myself to ask ChatGPT or Google them (which Google results are a little rarer for JavaScript since they're mostly in Python - as it's the simpliest programming language syntax-wise).
+  - Uh, I found the answers by ChatGpt but they are such a verbose methods code-wise, I'll rather post the answers by ChatGPT, **but** below the finalized code by @codevolution I have below. (*Just scroll below.*)
+### Graph Data Structure implementations in code ([source](https://replit.com/@Codevolution/JavaScript-Data-Structures#graph.js)):
 ```js
 class Graph {
   constructor() {
@@ -2909,6 +3082,102 @@ graph.display();
 graph.removeVertex("A");
 graph.display();
 ```
+- Again, referring to the comments I've read of this last [video in the series by @codevolution](https://www.youtube.com/watch?v=75JAn8ejI_I&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=80) where the commenteer states that the video-creator is missing a few more helper methods/checkers functions/helper functions, I quote [him](https://www.youtube.com/watch?v=75JAn8ejI_I&lc=Ugwky0FAEQIux3xxl4l4AaABAg): "**1)** Check if there a path exists between two given vertices (optimized); **2)** How long the minimum path length from vertex one to second given, **3)** Traversal amd find path of Graph given source, destination and intermediate point(s),  **4)** Searching in graph. At least **1** & **2** as they are common use case. At least **1** & **2.**"
+- So, here's the ChatGPT answer for **1** & **2**:
+```js
+// ... The rest of Graph methods
+// ... 1 & 2:
+  hasPath(source, destination) {
+    const visited = new Set();
+    const queue = [source];
+
+    while (queue.length > 0) {
+      const currentVertex = queue.shift();
+
+      if (currentVertex === destination) {
+        return true; // Path found
+      }
+
+      visited.add(currentVertex);
+
+      const neighbors = this.vertices.get(currentVertex);
+      for (let neighbor of neighbors) {
+        if (!visited.has(neighbor)) {
+          queue.push(neighbor);
+        }
+      }
+    }
+
+    return false; // No path found
+  }
+
+  shortestPathLength(source, destination) {
+    const visited = new Set();
+    const queue = [[source, 0]];
+
+    while (queue.length > 0) {
+      const [currentVertex, currentDistance] = queue.shift();
+
+      if (currentVertex === destination) {
+        return currentDistance; // Minimum path length found
+      }
+
+      visited.add(currentVertex);
+
+      const neighbors = this.vertices.get(currentVertex);
+      for (let neighbor of neighbors) {
+        if (!visited.has(neighbor)) {
+          queue.push([neighbor, currentDistance + 1]);
+        }
+      }
+    }
+
+    return -1; // No path found
+  }
+// ... The rest of Graph methods
+```
+- He, ChatGPT explains / code breakdown:
+  - "In the code above, we have a **Graph Class** that represents an **undirected** graph using an **adjacency list**. The `hasPath` method checks if a path **exists** between **two vertices** using the **BFS algorithm**. The `shortestPathLength` method calculates the **minimum** path **length** between **two vertices** using **BFS algorithm** as well."
+  - "Here's an example of how you can use these methods:"
+```js
+// Create a graph
+const graph = new Graph();
+
+// Add vertices
+graph.addVertex("A");
+graph.addVertex("B");
+graph.addVertex("C");
+graph.addVertex("D");
+graph.addVertex("E");
+
+// Add edges
+graph.addEdge("A", "B");
+graph.addEdge("B", "C");
+graph.addEdge("C", "D");
+graph.addEdge("D", "E");
+
+// Check if there is a path between two vertices
+console.log(graph.hasPath("A", "E")); // Output: true
+
+// Calculate the minimum path length between two vertices
+console.log(graph.shortestPathLength("A", "E")); // Output: 4
+```
+- His explanations: "In this example, we create a graph with five vertices `(A, B, C, D, E)` and add edges to connect them. Then, we use the `hasPath` method to check if there is a path between **vertex** `"A"` and **vertex** `"E"`. We also use the `shortestPathLength` method to calculate the minimum path length between the same two vertices."
+- Since I'm still confused, I will copy paste the part of the answer where he re-explains their logic (*I didn't even asked for directly*):
+  - Checking if a path exists **between two** given **vertices**: This functionality allows you to determine whether there is a connection or path between two specific vertices in a graph. It can be useful in various scenarios, such as determining if two nodes are reachable or if there is a route **between** **two locations** in a **transportation** **network** (by me: Graph is usually referred to as "Network").
+  - Calculating the minimum path length **between two vertices:** This functionality helps you **find** the **shortest path** between two vertices in a graph. It is often used in **optimization problems**, network routing algorithms, and finding the most efficient way to traverse a graph.
+- I honestly don't really grasp the concept of these 2/4 methods, as for the rest of the **2 logics** (*mentioned in that comment*) I won't even search for for now, until & unless I come up to such an "optimization problems" on LeetCode.
+- However I proceeded to ask ChatGPT about their Time Complexities & Space Complexties, and that's yet another Time Complexity I have never seen before or maybe he just used different letters "V" and "E" to represent O(n+m) like a O(V+E) instead.
+   - I asked him about that and he confirmed:
+     - "While I mentioned **O(V + E)** as the time complexity for the **BFS algorithm** in the context of the provided implementation, it is possible for the time complexity to be expressed as **O(n + m)** in certain cases."
+     - "So, in essence, **O(n + m) is equivalent to O(V + E)** in terms of time complexity. Both notations represent the linear relationship with the number of vertices and edges in the graph. Therefore, if you come across a resource or implementation that expresses the time complexity as O(n + m), it is essentially the same as O(V + E) and represents the linear complexity based on the size of the graph."
+- Okay, I proceed to paste the original answer about Time Complexity & Space Complexity:
+  - "Checking if a path exists between two given vertices **(`hasPath` method):**
+    - Time Complexity: O(V + E), where V is the number of vertices and E is the number of edges. In the **worst case,** the BFS algorithm visits **all** vertices and edges once.
+    - Space Complexity: O(V), where V is the number of vertices. This is because we use a visited set and a queue to store vertices during the **BFS traversal.** The visited set can contain **all** vertices, and the **queue** can store a maximum of V vertices in the **worst case.**
+  - Calculating the minimum path length between two vertices **(`shortestPathLength` method):**
+    - Time Complexity: O(V + E), where V is the number of vertices and E is the number of edges. Similar to the `hasPath` method, the BFS algorithm visits **all** vertices and edges in the **worst case.**
+    - Space Complexity: O(V), where V is the number of vertices. We use a visited set and a queue to store vertices during the **BFS traversal** and they can each contain a maximum of V vertices in the **worst case."**
 ---
 ### DEFINITIONS & EXTRAS
 - **Traverse** definition: In programming, _Array traversing_ or to **traverse** typically refers to the act of iterating or moving through a data structure, such as an array, list, tree, or graph, in order to access or process its elements. -> Traversing a data structure involves visiting each element or node in a systematic manner according to a specific order or pattern.
