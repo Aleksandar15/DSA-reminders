@@ -3178,6 +3178,14 @@ console.log(graph.shortestPathLength("A", "E")); // Output: 4
   - Calculating the minimum path length between two vertices **(`shortestPathLength` method):**
     - Time Complexity: O(V + E), where V is the number of vertices and E is the number of edges. Similar to the `hasPath` method, the BFS algorithm visits **all** vertices and edges in the **worst case.**
     - Space Complexity: O(V), where V is the number of vertices. We use a visited set and a queue to store vertices during the **BFS traversal** and they can each contain a maximum of V vertices in the **worst case."**
+#### Summary ([source](https://www.youtube.com/watch?v=kRYZmOZDlY0&list=PLC3y8-rFHvwjPxNAKvZpdnsr41E0fCMMP&index=81)):
+- There's a few more Data Structures & Algorithms:
+  - #1: With Queues we can focus on a variant that is: **Priority Queue.**
+  - #2: With Linked List we can focus on: **Circular Linked List.**
+  - #3: With Trees we can focus on: **AVL Trees, red black trees and tries.**
+  - #4: With Graphs we can learn about: **Directyed acyclic graphs** - which have a number of real world applications.
+  - #5: A few more Graph algorithms: **Prim's, Kruskal's and Floyd's** algorithms.
+- Finally, make sure to solve problems that utilize these data structures (*meaning: apply them in LeetCode*).
 ---
 ### DEFINITIONS & EXTRAS
 - **Traverse** definition: In programming, _Array traversing_ or to **traverse** typically refers to the act of iterating or moving through a data structure, such as an array, list, tree, or graph, in order to access or process its elements. -> Traversing a data structure involves visiting each element or node in a systematic manner according to a specific order or pattern.
